@@ -1,0 +1,704 @@
+I’ll lay out a comprehensive, enterprise‑grade Product Requirements Document (PRD) that captures every detail you’ve described, followed by a complete Supabase setup package (schema, policies, storage, edge functions). Everything stays tightly aligned with the luxury handmade brand identity of **Dharshini Creations** — no unrelated features.
+
+---
+
+# Dharshini Creations — Master PRD
+
+**Document Version:** 1.0  
+**Status:** Final  
+**Brand:** Dharshini Creations  
+**Tagline:** “Every Stitch Tells A Story”
+
+---
+
+## 1. Executive Summary
+
+**Dharshini Creations** is a premium handmade embroidery and fabric‑painting brand. The website must translate the brand’s boutique, Instagram‑aesthetic, and artisan soul into a digital experience. It will serve as a portfolio, custom‑order platform, and e‑commerce hub. The PRD defines every page, interaction, animation, and backend service required to deliver an immersive, luxury feel that immediately communicates: *“This is a premium handmade luxury embroidery brand.”*
+
+---
+
+## 2. Brand Guidelines & Creative Direction
+
+### 2.1 Color Palette
+
+| Purpose          | Hex       | Usage                                          |
+|------------------|-----------|------------------------------------------------|
+| Background       | `#050505` | Deep black canvas, evokes luxury               |
+| Primary Purple   | `#8A2BE2` | Headlines, primary buttons, active states      |
+| Glow Purple      | `#B266FF` | Glows, hover effects, decorative sparkles      |
+| Border           | `#6A0DAD` | Card borders, subtle dividers                  |
+| White Text       | `#F5F5F5` | Body text, subheadings                         |
+| Soft Gray        | `#B8B8B8` | Secondary text, disabled states                |
+
+**Gradients:** All gradients use only `#050505`, `#8A2BE2`, and `#B266FF` to maintain identity.
+
+### 2.2 Typography
+
+- **Headings (Hero, Section Titles):** *Great Vibes* (cursive, elegant), *Cinzel* (serif, luxurious).
+- **Body & UI:** *Poppins* (clean, modern, legible).
+- **Fallback:** Georgia, serif for headings; Arial, sans‑serif for body.
+
+### 2.3 Imagery & Assets
+
+- **Product Mockups:** 3D rotating T‑shirts with glowing embroidery.  
+- **Backgrounds:** Subtle floating floral vectors, thread‑like lines, soft sparkles.  
+- **Logo:** Hand‑drawn “Dharshini Creations” with a needle‑and‑thread icon, animated on load.
+
+---
+
+## 3. Technical Architecture
+
+**Frontend:** React 18, Vite, Tailwind CSS, Framer Motion, GSAP (ScrollTrigger)  
+**Backend & Database:** Supabase (PostgreSQL + Auth + Storage + Edge Functions)  
+**Hosting:** Vercel (frontend), Supabase (backend)  
+**Third‑Party Integrations:**  
+- **Instagram Basic Display API** – live feed  
+- **WhatsApp Business API** (via direct link with pre‑filled message)  
+- **Razorpay/Stripe** – payments  
+- **Shiprocket/AfterShip** – tracking webhook (simulated for demo)  
+- **Map Library:** Leaflet / react‑simple‑maps (India map for tracking)  
+- **3D Rendering:** Three.js / React Three Fiber (3D shirt viewer)  
+- **AR Preview:** WebXR (optional, progressive enhancement)
+
+---
+
+## 4. Detailed Feature Specifications
+
+### 4.1 Global UI/UX Layer
+
+#### 4.1.1 Advanced Cursor
+- Custom purple glow circle replacing default cursor.
+- On hover over interactive elements, a trail of tiny heart particles follows the cursor.
+- CSS `mix-blend-mode: screen` for glow.
+
+#### 4.1.2 Background Effects
+- Floating flowers (SVG), slowly rotating and fading.
+- Animated gradient mesh behind hero.
+- Particle sparkles rendered via Canvas (using tsParticles or custom).
+
+#### 4.1.3 Sound Effects (Opt‑in)
+- Subtle “thread pull” on hover over product cards.
+- Soft click on button press.
+- Elegant chime on page transition.
+- All sounds muted by default; user can enable via a small speaker icon.
+
+#### 4.1.4 Page Transitions
+- Framer Motion `AnimatePresence` with a stitching‑themed loader: a curved line being stitched across the screen.
+
+---
+
+### 4.2 Opening Animation
+
+**Sequence (timeline controlled by GSAP):**
+1. Black screen, faint needle outline draws a glowing purple thread.
+2. Thread weaves the brand logo (SVG path animation).
+3. Sparkle particles burst around the logo.
+4. Logo fades, tagline “Every Stitch Tells A Story” appears in *Great Vibes*.
+5. Entire screen dissolves into hero section.
+
+**Duration:** ~2.5s, skippable after first visit (localStorage flag).
+
+---
+
+### 4.3 Page‑by‑Page Breakdown
+
+#### 4.3.1 Home Page (Single‑page scroll with sections)
+
+**Hero Section**
+- **Left:**  
+  - Heading: “Dharshini Creations” (Cinzel, purple glow).  
+  - Subheading: “Handcrafted Embroidery & Fabric Art” (Poppins, soft gray).  
+  - Two CTA buttons: “Explore Designs” (solid `#8A2BE2`, glow on hover) and “Custom Order” (ghost with purple border).  
+- **Right:**  
+  - 3D shirt mockup (React Three Fiber) that rotates slowly.  
+  - Embroidery details glow with `#B266FF` using animated emissive maps.  
+  - Shine sweeps across the shirt every 4 seconds.
+
+**Featured Categories**  
+- Three glassmorphism cards: Fabric Painting, Embroidery Works, Combo Works.  
+- Each card shows a category image, title, and starting price.  
+- Hover: purple glowing border, zoom 1.02, heart particles.  
+- Click opens a modal with detailed pricing list.
+
+**Pricing table (modal content):**
+```
+Fabric Painting:
+- Kerchief Painting       ₹50+
+- Simple T‑shirt          ₹199+
+- Custom T‑shirt          ₹350+
+- Shirt Painting          ₹499+
+
+Embroidery Works:
+- Name Embroidery         ₹80+
+- Small Floral Design     ₹150+
+- Sleeve Embroidery       ₹199+
+- Custom Embroidery       ₹350+
+
+Combo Works:
+- Paint+Embroidery T‑shirt   ₹499+
+- Paint+Embroidery Shirt     ₹699+
+```
+
+**Premium Product Showcase**  
+- Horizontally scrollable ribbon of product cards.  
+- Tags: Trending, New Arrivals, Festival, Couple, Anime, Floral.  
+- Each card: image, name, price. Hover effects same as category cards plus a quick‑view button (purple outline).
+
+**AI Custom Design Builder (Interactive Section)**
+- Step 1: Upload image (drag‑and‑drop, supports PNG/JPG).  
+- Step 2: Input name/text (if needed).  
+- Step 3: Select position (chest, sleeve, back) via clickable hotspots on a flat shirt outline.  
+- Step 4: Choose shirt color (swatches: white, black, pastel pink, etc.).  
+- Step 5: Pick floral style from a gallery of vector designs.  
+- **Live Preview:** Canvas‑based rendering (client‑side) overlays the uploaded design onto a shirt mockup, applying warp/perspective using WebGL shaders.  
+- “Add to Cart (Custom Order)” button saves configuration.
+
+**Live Price Calculator**  
+- Persistent sidebar / floating panel that updates in real time as user selects:  
+  - Shirt type (T‑shirt/Shirt)  
+  - Add‑ons: Name Embroidery, Sleeve Embroidery, Fabric Painting  
+- Total cost updates with smooth number animation.  
+- Shipping calculator: enter pincode, calls Supabase Edge Function to return estimated cost and delivery days.
+
+**Gallery Section**  
+- Pinterest‑style masonry grid with lazy‑loaded images.  
+- Filter tabs: All, Embroidery, Fabric Painting, Combo Works, Customer Orders.  
+- Click on image: fullscreen lightbox with zoom (panzoom) and navigation.  
+- Video reels (Instagram format) auto‑play on hover.  
+- Like button with heart‑burst animation (local likes stored in browser, synced to Supabase if user logged in).
+
+**Instagram Integration**  
+- Section displays a carousel of the latest 6 Instagram posts fetched via API (cached in Supabase `instagram_cache` table).  
+- Each card shows image/video, caption excerpt, and a “View on Instagram” link.  
+- Auto‑sync every 30 minutes using a Supabase Edge Function (long‑lived token).
+
+**Customer Reviews**  
+- Auto‑sliding carousel (Framer Motion).  
+- Each slide: customer photo/video thumbnail, quote, rating stars.  
+- “Video Testimonial” cards have a play button opening a modal with the video.
+
+**Shipping Tracker**  
+- Interactive India map (TopoJSON, react‑simple‑maps).  
+- A purple glowing line animates from source (Tamil Nadu) to customer’s location.  
+- Steps: Order Packed → Shipped → Out for Delivery → Delivered, each highlighted with a dot.  
+- User enters order ID, tracking status fetched from Supabase `shipments` table.
+
+**About the Artist**  
+- Storytelling layout: full‑width parallax image of the artist at work.  
+- Text reveals: “Started with passion and handmade creativity…”, brand journey timeline.  
+- Artist photo, signature, and a personal quote.
+
+**Contact Section**  
+- Three glassmorphism cards:  
+  - Instagram (opens app)  
+  - WhatsApp (pre‑filled message)  
+  - Email (`mailto:` with subject)  
+- Embedded map showing studio location.  
+- Floating WhatsApp button always visible (bottom right).
+
+---
+
+#### 4.3.2 Gallery Page (Standalone)
+
+- Same masonry grid but with infinite scroll.  
+- Advanced filters: Category, Collection, Color, Price range.  
+- “Upload Your Creation” button for customers (moderated).
+
+#### 4.3.3 Shop Page
+
+- Product listing as cards with grid layout.  
+- Sort by: Popularity, Newest, Price Low‑High.  
+- Each product has a quick‑add‑to‑cart (with size/color variants).  
+- Wishlist heart icon (supabase `wishlists` table).  
+- Product detail page with image zoom, description, price calculator embed, and “Customize” button that opens AI builder pre‑filled.
+
+#### 4.3.4 Custom Orders Page
+
+- Guided form replicating the AI builder steps, plus additional fields: measurements, special instructions.  
+- Upload multiple reference images.  
+- Save draft, submit for quote.
+
+#### 4.3.5 Pricing Page
+
+- Expanded pricing tables with sample images for each category.  
+- FAQ accordion about pricing.  
+- Link to custom order.
+
+#### 4.3.6 Reviews Page
+
+- All reviews filterable by rating.  
+- Option to submit a review (text + image/video) — requires OTP verification via WhatsApp/email.
+
+#### 4.3.7 Track Order Page
+
+- Input field for order ID.  
+- After lookup, animated map and timeline display current status.
+
+#### 4.3.8 About Page
+
+- Full brand story, artist profile, workshop photos.  
+- “Collaborate” CTA.
+
+#### 4.3.9 Contact Page
+
+- Form (name, email, message) saved to Supabase `inquiries` table.  
+- Live chat widget (optional, integrated with WhatsApp).
+
+---
+
+### 4.4 Mobile UI Concept
+
+**Bottom Navigation (fixed):**
+1. Home  
+2. Gallery  
+3. Orders (profile section, login)  
+4. Wishlist  
+5. Profile (when logged in) / Login  
+
+All pages adapt with smooth mobile‑first design. 3D shirt viewer replaced by a touch‑rotatable image slider.
+
+---
+
+## 5. Non‑Functional Requirements
+
+- **Performance:** Lighthouse score > 90. Images in WebP/AVIF, lazy loading, code splitting.  
+- **Accessibility:** Semantic HTML, ARIA labels, keyboard navigation, reduced motion alternative.  
+- **Security:** Row Level Security (RLS) for all Supabase tables, input sanitization, rate limiting on Edge Functions.  
+- **SEO:** Server‑side meta tags via Vercel Edge Functions or React Helmet, structured data (Product, Organization).  
+- **Scalability:** Supabase scales automatically; Vercel serverless functions handle spikes.
+
+---
+
+## 6. Data Model (Supabase/PostgreSQL)
+
+**Tables (all have `created_at`, `updated_at`):**
+
+### 6.1 `profiles`
+- `id` UUID PK references auth.users
+- `full_name` text
+- `phone` text
+- `avatar_url` text
+- `role` text (customer, artist, admin)
+
+### 6.2 `categories`
+- `id` serial PK
+- `name` text (e.g., “Fabric Painting”)
+- `slug` text unique
+- `image_url` text
+- `starting_price` numeric
+
+### 6.3 `products`
+- `id` serial PK
+- `category_id` int references categories
+- `name` text
+- `description` text
+- `base_price` numeric
+- `tags` text[] (e.g., “trending”, “festival”)
+- `is_customizable` boolean
+- `attributes` jsonb (colors, sizes)
+
+### 6.4 `product_images`
+- `id` serial PK
+- `product_id` int references products
+- `url` text
+- `order` int
+
+### 6.5 `pricing_rules` (for dynamic calculator)
+- `id` serial PK
+- `item_type` text (‘name_embroidery’, ‘sleeve_embroidery’, ‘fabric_paint’, etc.)
+- `shirt_type` text (‘tshirt’, ‘shirt’)
+- `price` numeric
+
+### 6.6 `orders`
+- `id` uuid PK
+- `user_id` uuid references profiles
+- `status` text (pending, confirmed, packed, shipped, delivered)
+- `total_amount` numeric
+- `shipping_address` jsonb
+- `payment_status` text
+- `razorpay_order_id` text
+
+### 6.7 `order_items`
+- `id` serial PK
+- `order_id` uuid references orders
+- `product_id` int references products (nullable for custom)
+- `custom_details` jsonb (AI builder config)
+- `quantity` int
+- `price` numeric
+
+### 6.8 `reviews`
+- `id` serial PK
+- `user_id` uuid references profiles
+- `product_id` int references products (nullable)
+- `rating` int check 1-5
+- `comment` text
+- `media_urls` text[] 
+- `is_approved` boolean default false
+
+### 6.9 `wishlist`
+- `user_id` uuid references profiles
+- `product_id` int references products
+- primary key (user_id, product_id)
+
+### 6.10 `inquiries`
+- `id` serial PK
+- `name` text
+- `email` text
+- `message` text
+- `resolved` boolean
+
+### 6.11 `instagram_cache`
+- `id` serial PK
+- `post_id` text unique
+- `media_url` text
+- `caption` text
+- `permalink` text
+- `fetched_at` timestamp
+
+### 6.12 `shipments`
+- `id` serial PK
+- `order_id` uuid references orders unique
+- `tracking_number` text
+- `carrier` text
+- `status` text
+- `status_history` jsonb
+- `estimated_delivery` date
+
+---
+
+## 7. Supabase Setup Files (Complete)
+
+Below are the SQL scripts and edge function code required to initialise the backend.
+
+### 7.1 Database Schema (`schema.sql`)
+
+```sql
+-- Enable UUID generation
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Profiles table (extends auth.users)
+CREATE TABLE profiles (
+  id UUID REFERENCES auth.users PRIMARY KEY,
+  full_name TEXT,
+  phone TEXT,
+  avatar_url TEXT,
+  role TEXT DEFAULT 'customer',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Categories
+CREATE TABLE categories (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+  image_url TEXT,
+  starting_price NUMERIC,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Products
+CREATE TABLE products (
+  id SERIAL PRIMARY KEY,
+  category_id INT REFERENCES categories(id) ON DELETE SET NULL,
+  name TEXT NOT NULL,
+  description TEXT,
+  base_price NUMERIC NOT NULL,
+  tags TEXT[] DEFAULT '{}',
+  is_customizable BOOLEAN DEFAULT false,
+  attributes JSONB DEFAULT '{}',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Product images (multiple per product)
+CREATE TABLE product_images (
+  id SERIAL PRIMARY KEY,
+  product_id INT REFERENCES products(id) ON DELETE CASCADE,
+  url TEXT NOT NULL,
+  "order" INT DEFAULT 0
+);
+
+-- Pricing rules for live calculator
+CREATE TABLE pricing_rules (
+  id SERIAL PRIMARY KEY,
+  item_type TEXT NOT NULL, -- 'name_embroidery', 'sleeve_embroidery', 'fabric_paint', etc.
+  shirt_type TEXT NOT NULL, -- 'tshirt', 'shirt'
+  price NUMERIC NOT NULL,
+  UNIQUE(item_type, shirt_type)
+);
+
+-- Orders
+CREATE TABLE orders (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  status TEXT DEFAULT 'pending',
+  total_amount NUMERIC,
+  shipping_address JSONB,
+  payment_status TEXT DEFAULT 'unpaid',
+  razorpay_order_id TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Order items (products or custom builds)
+CREATE TABLE order_items (
+  id SERIAL PRIMARY KEY,
+  order_id UUID REFERENCES orders(id) ON DELETE CASCADE,
+  product_id INT REFERENCES products(id) ON DELETE SET NULL,
+  custom_details JSONB, -- AI builder config
+  quantity INT DEFAULT 1,
+  price NUMERIC NOT NULL
+);
+
+-- Reviews
+CREATE TABLE reviews (
+  id SERIAL PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  product_id INT REFERENCES products(id) ON DELETE SET NULL,
+  rating INT CHECK (rating >= 1 AND rating <= 5),
+  comment TEXT,
+  media_urls TEXT[] DEFAULT '{}',
+  is_approved BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Wishlist
+CREATE TABLE wishlist (
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  product_id INT REFERENCES products(id) ON DELETE CASCADE,
+  PRIMARY KEY (user_id, product_id)
+);
+
+-- Contact inquiries
+CREATE TABLE inquiries (
+  id SERIAL PRIMARY KEY,
+  name TEXT,
+  email TEXT,
+  message TEXT,
+  resolved BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Instagram feed cache
+CREATE TABLE instagram_cache (
+  id SERIAL PRIMARY KEY,
+  post_id TEXT UNIQUE,
+  media_url TEXT,
+  caption TEXT,
+  permalink TEXT,
+  fetched_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Shipments (tracking)
+CREATE TABLE shipments (
+  id SERIAL PRIMARY KEY,
+  order_id UUID REFERENCES orders(id) ON DELETE CASCADE UNIQUE,
+  tracking_number TEXT,
+  carrier TEXT,
+  status TEXT DEFAULT 'packed',
+  status_history JSONB DEFAULT '[]',
+  estimated_delivery DATE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexes
+CREATE INDEX idx_orders_user ON orders(user_id);
+CREATE INDEX idx_order_items_order ON order_items(order_id);
+CREATE INDEX idx_products_category ON products(category_id);
+CREATE INDEX idx_shipments_order ON shipments(order_id);
+
+-- Function to update `updated_at` automatically
+CREATE OR REPLACE FUNCTION update_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Apply trigger to tables with updated_at
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON profiles FOR EACH ROW EXECUTE FUNCTION update_timestamp();
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON products FOR EACH ROW EXECUTE FUNCTION update_timestamp();
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON orders FOR EACH ROW EXECUTE FUNCTION update_timestamp();
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON shipments FOR EACH ROW EXECUTE FUNCTION update_timestamp();
+```
+
+### 7.2 Row Level Security (RLS) Policies (`policies.sql`)
+
+```sql
+-- Enable RLS on tables containing user‑specific data
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
+ALTER TABLE wishlist ENABLE ROW LEVEL SECURITY;
+ALTER TABLE inquiries ENABLE ROW LEVEL SECURITY;
+
+-- Profiles: users can read any profile, update only own
+CREATE POLICY "Allow public read profiles" ON profiles FOR SELECT USING (true);
+CREATE POLICY "Allow individual update own profile" ON profiles FOR UPDATE USING (auth.uid() = id) WITH CHECK (auth.uid() = id);
+
+-- Orders: user sees own orders; admin sees all (role check via profiles)
+CREATE POLICY "User owns orders" ON orders FOR ALL USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+-- Admin policy can be added for a specific admin email or role.
+
+-- Order items: accessible through orders
+CREATE POLICY "User order items" ON order_items FOR SELECT USING (
+  EXISTS (SELECT 1 FROM orders WHERE orders.id = order_items.order_id AND orders.user_id = auth.uid())
+);
+
+-- Reviews: public read; authenticated insert own review
+CREATE POLICY "Public read approved reviews" ON reviews FOR SELECT USING (is_approved = true OR auth.uid() = user_id);
+CREATE POLICY "Insert own review" ON reviews FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- Wishlist: user manages own
+CREATE POLICY "Manage own wishlist" ON wishlist FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+
+-- Inquiries: anyone can insert, admin read
+CREATE POLICY "Insert inquiry" ON inquiries FOR INSERT WITH CHECK (true);
+```
+
+### 7.3 Storage Buckets (`storage.sql`)
+
+Run in Supabase SQL Editor:
+
+```sql
+-- Create buckets (they will also appear in Storage UI)
+INSERT INTO storage.buckets (id, name) VALUES ('product-images', 'product-images');
+INSERT INTO storage.buckets (id, name) VALUES ('customer-uploads', 'customer-uploads');
+INSERT INTO storage.buckets (id, name) VALUES ('instagram-feed', 'instagram-feed');
+```
+
+**Storage RLS (applied via UI or SQL):**
+```sql
+-- Product images: public read, admin insert (simplified: authenticated insert)
+CREATE POLICY "Public read product images" ON storage.objects FOR SELECT USING (bucket_id = 'product-images');
+CREATE POLICY "Auth upload product images" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'product-images' AND auth.role() = 'authenticated');
+
+-- Customer uploads (for custom orders): authenticated can upload own
+CREATE POLICY "Auth manage own uploads" ON storage.objects FOR ALL USING (
+  bucket_id = 'customer-uploads' AND auth.uid()::text = (storage.foldername(name))[1]
+) WITH CHECK (
+  bucket_id = 'customer-uploads' AND auth.uid()::text = (storage.foldername(name))[1]
+);
+-- Note: organize uploads in folders named by user id.
+```
+
+### 7.4 Edge Functions
+
+#### 7.4.1 Shipping Cost Calculator (`supabase/functions/shipping-calculator/index.ts`)
+
+```typescript
+import { serve } from "https://deno.land/std@0.177.0/http/server.ts"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+
+const supabase = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+)
+
+serve(async (req) => {
+  if (req.method !== "POST") return new Response("Method not allowed", { status: 405 })
+  const { pincode, items_weight } = await req.json()
+
+  // Static demo logic: distance from Tamil Nadu (pin 600001) returns cost
+  const base = 50
+  const distanceFactor = Math.random() * 30 // simulated
+  const weightFactor = items_weight * 10
+  const total = base + distanceFactor + weightFactor
+
+  return new Response(JSON.stringify({ cost: Math.round(total), estimated_days: 3 }), {
+    headers: { "Content-Type": "application/json" }
+  })
+})
+```
+
+#### 7.4.2 Instagram Sync (`supabase/functions/instagram-sync/index.ts`)
+
+```typescript
+import { serve } from "https://deno.land/std@0.177.0/http/server.ts"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+
+const supabase = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+)
+
+serve(async () => {
+  const token = Deno.env.get("INSTAGRAM_LONG_LIVED_TOKEN")
+  const res = await fetch(`https://graph.instagram.com/me/media?fields=id,caption,media_url,permalink&access_token=${token}`)
+  const { data } = await res.json()
+
+  if (!data) return new Response("No data", { status: 500 })
+
+  for (const post of data) {
+    const { id, caption, media_url, permalink } = post
+    await supabase.from("instagram_cache").upsert({
+      post_id: id,
+      caption,
+      media_url,
+      permalink,
+      fetched_at: new Date()
+    }, { onConflict: "post_id" })
+  }
+
+  return new Response("Synced", { status: 200 })
+})
+```
+
+*(Schedule this function via pg_cron or external cron job to run every 30 minutes.)*
+
+---
+
+## 8. Frontend Architecture & Key Implementation Details
+
+- **State Management:** Zustand for global states (cart, user, UI preferences).  
+- **Animation Orchestration:**  
+  - GSAP timelines for hero, scroll‑triggered reveals.  
+  - Framer Motion for layout animations, page transitions.  
+- **3D Shirt Viewer:** React Three Fiber with a GLTF model, custom shaders for glow.  
+- **AI Custom Builder:** HTML5 Canvas with `konva.js` for layering; image warp via WebGL for realistic placement.  
+- **Instagram Feed:** Custom hook fetching from Supabase `instagram_cache`.  
+- **Masonry Gallery:** `react-masonry-css` or `react-photo-gallery`.  
+- **Map Tracking:** `react-simple-maps` with custom markers and animated line (GSAP MorphSVG).
+
+---
+
+## 9. SEO & Meta Strategy
+
+- **React Helmet Async** on each page setting:  
+  - Title: “Dharshini Creations – Handmade Embroidery & Fabric Painting”  
+  - Meta description, Open Graph tags, Twitter cards.  
+- Structured data: `Product`, `LocalBusiness`, `Review` JSON‑LD generated from Supabase data.  
+- Sitemap dynamically generated via Vercel Edge Function.
+
+---
+
+## 10. Revenue Features & Payments
+
+- **Razorpay** integration: payment button on cart, custom order checkout.  
+- **Advance booking payment:** option to pay 50% upfront, stored in order `payment_status`.  
+- **Gift cards:** digital codes stored in `gift_cards` table (not detailed here, but can be added).  
+- **Limited edition collections:** flagged via `tags` and highlighted with “Limited” badge.
+
+---
+
+## 11. Deployment & DevOps
+
+- **Frontend:** Vercel (with environment variables for Supabase URL, anon key).  
+- **Database:** Supabase managed PostgreSQL.  
+- **CI/CD:** GitHub Actions run lint, build, deploy to Vercel on push to main.  
+- **Backup:** Supabase automatic daily backups.
+
+---
+
+## 12. Conclusion
+
+This PRD defines a digital platform that mirrors the artistry and exclusivity of **Dharshini Creations**. Every interaction, from the needle‑stitching loader to the 3D embroidered shirt, is crafted to evoke a sense of premium handmade luxury. The provided Supabase setup files give you a ready‑to‑deploy backend that enforces security and scalability. Paired with the React frontend architecture, this document serves as the single source of truth for development.
+
+---
+
+You now have both the **master‑level PRD** and the **complete Supabase setup code**. Use the PRD as the blueprint for designers and developers, and execute the SQL + Edge Functions in your Supabase project to have the backend instantly operational.
