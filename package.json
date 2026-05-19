@@ -1,0 +1,13 @@
+{
+  "name": "dharshini-root",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "dharshini-creations"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=dharshini-creations",
+    "build": "npm run build --workspace=dharshini-creations",
+    "preview": "npm run preview --workspace=dharshini-creations"
+  }
+}
