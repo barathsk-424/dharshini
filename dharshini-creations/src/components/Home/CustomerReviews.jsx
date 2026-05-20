@@ -17,36 +17,43 @@ export default function CustomerReviews() {
           <p className="section-subtitle" style={{ color: '#F59E0B' }}>What They Say</p>
           <h2 className="section-title glow-text">Customer Reviews</h2>
         </motion.div>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {reviews.map((review, i) => {
             const accent = reviewAccents[i % reviewAccents.length];
             return (
               <motion.div key={review.id} className="glass-card p-6 relative"
-                style={{ borderColor: `${accent}40` }}
+                style={{ borderColor: `${accent}30` }}
                 initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: i * 0.1 }}
                 whileHover={{ y: -4 }}>
                 {review.hasVideo && (
                   <div className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center interactive"
-                    style={{ background: `${accent}4d`, border: `1px solid ${accent}66` }}>
+                    style={{ background: `${accent}33`, border: `1px solid ${accent}4d` }}>
                     <FiPlay size={12} color={accent} />
                   </div>
                 )}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold"
-                    style={{ background: `linear-gradient(135deg, ${accent}, ${accent}cc)`, color: 'white' }}>
-                    {review.name.charAt(0)}
+                <div className="flex items-center gap-3.5 mb-4">
+                  {/* Real avatar render with brand matching glowing ring */}
+                  <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border-2"
+                    style={{ borderColor: accent }}>
+                    <img
+                      src={review.avatar}
+                      alt={review.name}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
                   </div>
                   <div className="text-left">
-                    <p className="font-poppins font-semibold text-sm" style={{ color: '#F5F5F5' }}>{review.name}</p>
+                    <p className="font-poppins font-semibold text-sm" style={{ color: '#FAFAFA' }}>{review.name}</p>
                     <div className="flex gap-0.5">
                       {Array.from({ length: 5 }).map((_, j) => (
-                        <FiStar key={j} size={12} fill={j < review.rating ? '#D4AF37' : 'none'} color={j < review.rating ? '#D4AF37' : '#666'} />
+                        <FiStar key={j} size={12} fill={j < review.rating ? '#F59E0B' : 'none'} color={j < review.rating ? '#F59E0B' : '#4B5563'} />
                       ))}
                     </div>
                   </div>
                 </div>
-                <p className="text-sm leading-relaxed mb-3 text-left" style={{ color: '#B8B8B8' }}>"{review.comment}"</p>
-                <p className="text-xs text-left" style={{ color: '#666' }}>{new Date(review.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                <p className="text-sm leading-relaxed mb-3 text-left" style={{ color: '#9CA3AF' }}>"{review.comment}"</p>
+                <p className="text-xs text-left" style={{ color: '#4B5563' }}>{new Date(review.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
               </motion.div>
             );
           })}

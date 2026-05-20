@@ -5,9 +5,9 @@ import { FiX } from 'react-icons/fi';
 
 // Unique accent color per category
 const categoryColors = {
-  1: { accent: '#F472B6', accentLight: '#FBCFE8', bg: 'rgba(244,114,182,0.2)', border: 'rgba(244,114,182,0.4)', glow: 'rgba(244,114,182,0.15)', gradient: 'linear-gradient(135deg, rgba(244,114,182,0.3), rgba(5,5,5,0.8))' },
-  2: { accent: '#2DD4BF', accentLight: '#99F6E4', bg: 'rgba(45,212,191,0.2)', border: 'rgba(45,212,191,0.4)', glow: 'rgba(45,212,191,0.15)', gradient: 'linear-gradient(135deg, rgba(45,212,191,0.3), rgba(5,5,5,0.8))' },
-  3: { accent: '#F59E0B', accentLight: '#FDE68A', bg: 'rgba(245,158,11,0.2)', border: 'rgba(245,158,11,0.4)', glow: 'rgba(245,158,11,0.15)', gradient: 'linear-gradient(135deg, rgba(245,158,11,0.3), rgba(5,5,5,0.8))' },
+  1: { accent: '#F472B6', accentLight: '#FBCFE8', bg: 'rgba(244,114,182,0.2)', border: 'rgba(244,114,182,0.4)', glow: 'rgba(244,114,182,0.15)' },
+  2: { accent: '#2DD4BF', accentLight: '#99F6E4', bg: 'rgba(45,212,191,0.2)', border: 'rgba(45,212,191,0.4)', glow: 'rgba(45,212,191,0.15)' },
+  3: { accent: '#F59E0B', accentLight: '#FDE68A', bg: 'rgba(245,158,11,0.2)', border: 'rgba(245,158,11,0.4)', glow: 'rgba(245,158,11,0.15)' },
 };
 
 export default function FeaturedCategories() {
@@ -42,18 +42,21 @@ export default function FeaturedCategories() {
                 onClick={() => setSelectedCategory(cat)}
                 whileHover={{ y: -8 }}
               >
-                {/* Image */}
+                {/* Real Image with Luxury Zoom */}
                 <div className="relative h-56 overflow-hidden">
-                  <div className="absolute inset-0" style={{ background: colors.gradient }} />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <motion.div
-                      className="text-6xl"
-                      animate={{ rotate: [0, 5, -5, 0] }}
-                      transition={{ duration: 6, repeat: Infinity }}
-                    >
-                      {cat.id === 1 ? '🎨' : cat.id === 2 ? '🪡' : '✨'}
-                    </motion.div>
+                  <img
+                    src={cat.image}
+                    alt={cat.name}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  />
+                  {/* Subtle luxury gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                  
+                  {/* Category Emoji Badge */}
+                  <div className="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-xl">
+                    {cat.id === 1 ? '🎨' : cat.id === 2 ? '🪡' : '✨'}
                   </div>
+                  
                   {/* Hover shimmer */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
                     style={{
@@ -116,9 +119,9 @@ export default function FeaturedCategories() {
                 </button>
 
                 <div className="text-center mb-6">
-                  <span className="text-4xl mb-3 block">
-                    {selectedCategory.id === 1 ? '🎨' : selectedCategory.id === 2 ? '🪡' : '✨'}
-                  </span>
+                  <div className="w-20 h-20 mx-auto rounded-full overflow-hidden mb-4 border-2" style={{ borderColor: colors.border }}>
+                    <img src={selectedCategory.image} alt={selectedCategory.name} className="w-full h-full object-cover" />
+                  </div>
                   <h3 className="font-cinzel text-2xl font-bold glow-text" style={{ color: '#F5F5F5' }}>
                     {selectedCategory.name}
                   </h3>

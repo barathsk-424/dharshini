@@ -75,14 +75,14 @@ export default function ProductShowcase() {
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -6 }}
                 >
-                  {/* Image area */}
+                  {/* Real Image with Zoom effect */}
                   <div className="relative h-52 overflow-hidden">
-                    <div className="absolute inset-0"
-                      style={{ background: `linear-gradient(135deg, ${accent}33, rgba(20,10,40,0.9))` }}
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 flex items-center justify-center text-5xl">
-                      {product.categoryId === 1 ? '🎨' : product.categoryId === 2 ? '🪡' : '✨'}
-                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
                     {/* Tags */}
                     <div className="absolute top-3 left-3 flex gap-2">
@@ -119,7 +119,7 @@ export default function ProductShowcase() {
                     <p className="text-xs mb-3 line-clamp-2 text-left" style={{ color: '#B8B8B8' }}>
                       {product.description}
                     </p>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mt-auto">
                       <span className="font-cinzel font-bold text-lg" style={{ color: accent }}>
                         ₹{product.basePrice}
                       </span>
