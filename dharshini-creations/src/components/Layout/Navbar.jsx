@@ -66,7 +66,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-2 xl:gap-4">
+          <div className="hidden xl:flex items-center gap-2 xl:gap-4">
             {navLinks.map(link => (
               <Link
                 key={link.path}
@@ -118,7 +118,7 @@ export default function Navbar() {
             {/* Mobile menu toggle */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden interactive p-2 rounded-full hover:bg-white/5 transition-colors"
+              className="xl:hidden interactive p-2 rounded-full hover:bg-white/5 transition-colors"
             >
               {mobileOpen ? <FiX size={22} color="#B266FF" /> : <FiMenu size={22} color="#B8B8B8" />}
             </button>
@@ -130,7 +130,7 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="fixed inset-0 z-40 lg:hidden"
+            className="fixed inset-0 z-40 xl:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

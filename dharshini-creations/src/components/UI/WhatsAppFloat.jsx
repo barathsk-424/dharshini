@@ -7,7 +7,7 @@ export default function WhatsAppFloat() {
       href="https://wa.me/919876543210?text=Hi%20Dharshini!%20I'm%20interested%20in%20your%20creations."
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-20 lg:bottom-8 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center interactive"
+      className="fixed bottom-20 right-6 lg:left-6 lg:right-auto lg:bottom-8 z-50 w-14 h-14 rounded-full flex items-center justify-center interactive"
       style={{
         background: 'linear-gradient(135deg, #25D366, #128C7E)',
         boxShadow: '0 4px 20px rgba(37, 211, 102, 0.4)',
