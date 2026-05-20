@@ -24,7 +24,7 @@ export default function Navbar() {
   const { soundEnabled, toggleSound } = useUIStore();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -37,10 +37,12 @@ export default function Navbar() {
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
         style={{
           background: scrolled
-            ? 'rgba(5, 5, 5, 0.85)'
+            ? 'rgba(3, 2, 6, 0.75)'
             : 'transparent',
-          backdropFilter: scrolled ? 'blur(20px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(106, 13, 173, 0.2)' : 'none',
+          backdropFilter: scrolled ? 'blur(24px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(24px)' : 'none',
+          borderBottom: scrolled ? '1px solid rgba(255, 255, 255, 0.05)' : 'none',
+          boxShadow: scrolled ? '0 10px 30px -10px rgba(0,0,0,0.5)' : 'none',
         }}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -48,39 +50,40 @@ export default function Navbar() {
       >
         <div className="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 interactive">
+          <Link to="/" className="flex items-center gap-3 interactive group">
             <div className="relative">
-              <span className="font-cinzel text-xl md:text-2xl font-bold"
+              <span className="font-cinzel text-xl md:text-2xl font-black tracking-wider transition-all duration-300 group-hover:scale-105"
                 style={{
-                  background: 'linear-gradient(135deg, #8A2BE2, #B266FF)',
+                  background: 'linear-gradient(135deg, #FAFAFA, #A78BFA)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}>
                 Dharshini
               </span>
-              <span className="font-cinzel text-xs tracking-[0.25em] block"
-                style={{ color: '#B8B8B8' }}>
+              <span className="font-cinzel text-[10px] tracking-[0.3em] block font-semibold transition-all duration-300 group-hover:text-purple-400"
+                style={{ color: '#9CA3AF' }}>
                 CREATIONS
               </span>
             </div>
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden xl:flex items-center gap-2 xl:gap-4">
+          <div className="hidden xl:flex items-center gap-1 xl:gap-2">
             {navLinks.map(link => (
               <Link
                 key={link.path}
                 to={link.path}
-                className="interactive px-2 xl:px-3 py-2 text-[13px] xl:text-sm font-poppins rounded-lg transition-all duration-300 relative whitespace-nowrap"
+                className="interactive px-3 py-2 text-[13px] xl:text-[14px] font-medium font-poppins rounded-full transition-all duration-300 relative whitespace-nowrap"
                 style={{
-                  color: location.pathname === link.path ? '#B266FF' : '#B8B8B8',
+                  color: location.pathname === link.path ? '#FAFAFA' : '#9CA3AF',
+                  background: location.pathname === link.path ? 'rgba(255, 255, 255, 0.03)' : 'transparent',
                 }}
               >
                 {link.label}
                 {location.pathname === link.path && (
                   <motion.div
                     className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] rounded-full"
-                    style={{ background: 'linear-gradient(90deg, #8A2BE2, #B266FF)', width: '60%' }}
+                    style={{ background: 'linear-gradient(90deg, #7C3AED, #A78BFA)', width: '40%' }}
                     layoutId="navIndicator"
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   />
@@ -90,22 +93,22 @@ export default function Navbar() {
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-3">
-            <button onClick={toggleSound} className="interactive p-2 rounded-full hover:bg-white/5 transition-colors" title="Toggle Sound">
+          <div className="flex items-center gap-2">
+            <button onClick={toggleSound} className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300" title="Toggle Sound">
               {soundEnabled
-                ? <FiVolume2 size={18} color="#B266FF" />
-                : <FiVolumeX size={18} color="#666" />
+                ? <FiVolume2 size={18} color="#A78BFA" />
+                : <FiVolumeX size={18} color="#4B5563" />
               }
             </button>
-            <Link to="/shop" className="interactive p-2 rounded-full hover:bg-white/5 transition-colors relative" title="Wishlist">
-              <FiHeart size={18} color="#B8B8B8" />
+            <Link to="/shop" className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300 relative" title="Wishlist">
+              <FiHeart size={18} color="#D1D5DB" />
             </Link>
-            <button className="interactive p-2 rounded-full hover:bg-white/5 transition-colors relative" title="Cart">
-              <FiShoppingBag size={18} color="#B8B8B8" />
+            <button className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300 relative" title="Cart">
+              <FiShoppingBag size={18} color="#D1D5DB" />
               {itemCount > 0 && (
                 <motion.span
                   className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center text-white"
-                  style={{ background: 'linear-gradient(135deg, #8A2BE2, #B266FF)' }}
+                  style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)', boxShadow: '0 0 10px rgba(124,58,237,0.5)' }}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: 'spring', stiffness: 500 }}
@@ -118,9 +121,9 @@ export default function Navbar() {
             {/* Mobile menu toggle */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="xl:hidden interactive p-2 rounded-full hover:bg-white/5 transition-colors"
+              className="xl:hidden interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300"
             >
-              {mobileOpen ? <FiX size={22} color="#B266FF" /> : <FiMenu size={22} color="#B8B8B8" />}
+              {mobileOpen ? <FiX size={22} color="#A78BFA" /> : <FiMenu size={22} color="#D1D5DB" />}
             </button>
           </div>
         </div>
@@ -135,12 +138,13 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => setMobileOpen(false)} />
+            <div className="absolute inset-0 bg-black/85 backdrop-blur-lg" onClick={() => setMobileOpen(false)} />
             <motion.div
-              className="absolute right-0 top-0 bottom-0 w-72 pt-24 px-6"
+              className="absolute right-0 top-0 bottom-0 w-80 pt-24 px-6 flex flex-col gap-1"
               style={{
-                background: 'linear-gradient(180deg, rgba(10,5,20,0.98), rgba(5,5,5,0.98))',
-                borderLeft: '1px solid rgba(106, 13, 173, 0.3)',
+                background: 'linear-gradient(180deg, rgba(12,8,22,0.98), rgba(3,2,6,0.98))',
+                borderLeft: '1px solid rgba(255, 255, 255, 0.05)',
+                boxShadow: '-10px 0 30px rgba(0,0,0,0.5)',
               }}
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
@@ -152,14 +156,14 @@ export default function Navbar() {
                   key={link.path}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
+                  transition={{ delay: i * 0.04 }}
                 >
                   <Link
                     to={link.path}
-                    className="block py-3 text-base font-poppins border-b transition-colors"
+                    className="block py-3.5 px-4 text-base font-medium font-poppins rounded-xl transition-all duration-300"
                     style={{
-                      color: location.pathname === link.path ? '#B266FF' : '#B8B8B8',
-                      borderColor: 'rgba(106, 13, 173, 0.15)',
+                      color: location.pathname === link.path ? '#FAFAFA' : '#9CA3AF',
+                      background: location.pathname === link.path ? 'rgba(255, 255, 255, 0.04)' : 'transparent',
                     }}
                   >
                     {link.label}
