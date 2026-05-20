@@ -57,7 +57,7 @@ export default function TrackOrder() {
                   <path d="M180 30 L220 25 L260 40 L280 60 L290 90 L300 120 L290 150 L280 170 L260 200 L240 230 L220 260 L200 280 L190 270 L180 250 L160 230 L140 200 L120 170 L110 150 L105 120 L110 90 L130 60 L150 40 Z"
                     fill="rgba(20,10,40,0.6)" stroke="#6A0DAD" strokeWidth="1" />
                   <circle cx="200" cy="250" r="6" fill="#8A2BE2"><animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite" /></circle>
-                  <text x="215" y="255" fill="#B8B8B8" fontSize="9">Tamil Nadu</text>
+                  <text x="215" y="255" fill="#E5E7EB" fontSize="9">Tamil Nadu</text>
                   <circle cx="200" cy={tracking.dest.includes('Mumbai') ? 150 : tracking.dest.includes('Delhi') ? 80 : 200} r="5" fill="#B266FF" />
                   <text x="215" y={tracking.dest.includes('Mumbai') ? 155 : tracking.dest.includes('Delhi') ? 85 : 205} fill="#B266FF" fontSize="9">{tracking.dest.split(',')[0]}</text>
                   <motion.line x1="200" y1="250" x2="200" y2={tracking.dest.includes('Mumbai') ? 150 : tracking.dest.includes('Delhi') ? 80 : 200}
@@ -75,22 +75,22 @@ export default function TrackOrder() {
                     <motion.div className="w-12 h-12 rounded-full flex items-center justify-center text-xl"
                       style={{ background: i <= statusIndex ? 'linear-gradient(135deg, #8A2BE2, #B266FF)' : 'rgba(20,10,40,0.8)', border: `2px solid ${i <= statusIndex ? '#B266FF' : '#6A0DAD'}` }}
                       initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: i * 0.15 }}>{step.emoji}</motion.div>
-                    <span className="text-xs font-poppins text-center max-w-[80px]" style={{ color: i <= statusIndex ? '#B266FF' : '#666' }}>{step.label}</span>
+                    <span className="text-xs font-poppins text-center max-w-[80px]" style={{ color: i <= statusIndex ? '#B266FF' : '#9CA3AF' }}>{step.label}</span>
                   </div>
                 ))}
               </div>
               {/* Details */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="p-4 rounded-xl" style={{ background: 'rgba(138,43,226,0.08)' }}>
-                  <p className="text-xs mb-1" style={{ color: '#666' }}>Order ID</p>
+                  <p className="text-xs mb-1" style={{ color: '#9CA3AF' }}>Order ID</p>
                   <p className="font-cinzel font-bold" style={{ color: '#B266FF' }}>{orderId.toUpperCase()}</p>
                 </div>
                 <div className="p-4 rounded-xl" style={{ background: 'rgba(138,43,226,0.08)' }}>
-                  <p className="text-xs mb-1" style={{ color: '#666' }}>Destination</p>
+                  <p className="text-xs mb-1" style={{ color: '#9CA3AF' }}>Destination</p>
                   <p className="text-sm font-semibold" style={{ color: '#F5F5F5' }}>{tracking.dest}</p>
                 </div>
                 <div className="p-4 rounded-xl" style={{ background: 'rgba(138,43,226,0.08)' }}>
-                  <p className="text-xs mb-1" style={{ color: '#666' }}>Est. Delivery</p>
+                  <p className="text-xs mb-1" style={{ color: '#9CA3AF' }}>Est. Delivery</p>
                   <p className="text-sm font-semibold" style={{ color: '#4ade80' }}>{tracking.est}</p>
                 </div>
               </div>
@@ -99,8 +99,8 @@ export default function TrackOrder() {
           {!tracking && !error && (
             <div className="text-center py-12">
               <div className="text-5xl mb-4">📦</div>
-              <p className="text-sm" style={{ color: '#B8B8B8' }}>Enter your order ID to track your handcrafted creation</p>
-              <p className="text-xs mt-2" style={{ color: '#666' }}>Demo IDs: DC-001, DC-002, DC-003</p>
+              <p className="text-sm" style={{ color: '#E5E7EB' }}>Enter your order ID to track your handcrafted creation</p>
+              <p className="text-xs mt-2" style={{ color: '#9CA3AF' }}>Demo IDs: DC-001, DC-002, DC-003</p>
             </div>
           )}
         </div>

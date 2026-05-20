@@ -67,7 +67,7 @@ export default function ShippingTracker() {
                     <circle cx="200" cy="250" r="6" fill="#0EA5E9">
                       <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite" />
                     </circle>
-                    <text x="210" y="255" fill="#B8B8B8" fontSize="9" fontFamily="Poppins">Tamil Nadu</text>
+                    <text x="210" y="255" fill="#E5E7EB" fontSize="9" fontFamily="Poppins">Tamil Nadu</text>
                     {/* Destination */}
                     <circle cx="200" cy={tracking.dest === 'Mumbai' ? 150 : tracking.dest === 'Delhi' ? 80 : 200} r="5" fill="#38BDF8" />
                     <text x="210" y={tracking.dest === 'Mumbai' ? 155 : tracking.dest === 'Delhi' ? 85 : 205} fill="#38BDF8" fontSize="9" fontFamily="Poppins">{tracking.dest}</text>
@@ -93,14 +93,14 @@ export default function ShippingTracker() {
                         initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: i * 0.2 }}>
                         {step.emoji}
                       </motion.div>
-                      <span className="text-[10px] font-poppins text-center max-w-[70px]" style={{ color: i <= statusIndex ? step.color : '#666' }}>{step.label}</span>
+                      <span className="text-[10px] font-poppins text-center max-w-[70px]" style={{ color: i <= statusIndex ? step.color : '#9CA3AF' }}>{step.label}</span>
                     </div>
                   ))}
                 </div>
 
                 <div className="mt-6 text-center">
-                  <p className="text-sm" style={{ color: '#B8B8B8' }}>Destination: <span style={{ color: '#38BDF8' }}>{tracking.dest}</span></p>
-                  <p className="text-sm" style={{ color: '#B8B8B8' }}>Est. Delivery: <span style={{ color: '#4ade80' }}>{tracking.est}</span></p>
+                  <p className="text-sm" style={{ color: '#E5E7EB' }}>Destination: <span style={{ color: '#38BDF8' }}>{tracking.dest}</span></p>
+                  <p className="text-sm" style={{ color: '#E5E7EB' }}>Est. Delivery: <span style={{ color: '#4ade80' }}>{tracking.est}</span></p>
                 </div>
               </motion.div>
             )}

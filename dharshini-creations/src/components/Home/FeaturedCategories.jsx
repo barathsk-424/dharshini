@@ -72,7 +72,7 @@ export default function FeaturedCategories() {
                   <h3 className="font-cinzel text-xl font-semibold mb-2" style={{ color: '#F5F5F5' }}>
                     {cat.name}
                   </h3>
-                  <p className="text-sm mb-4 leading-relaxed" style={{ color: '#B8B8B8' }}>
+                  <p className="text-sm mb-4 leading-relaxed" style={{ color: '#E5E7EB' }}>
                     {cat.description}
                   </p>
                   <div className="flex items-center justify-between">
@@ -115,7 +115,7 @@ export default function FeaturedCategories() {
                   onClick={() => setSelectedCategory(null)}
                   className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/10 interactive transition-colors"
                 >
-                  <FiX size={20} color="#B8B8B8" />
+                  <FiX size={20} color="#E5E7EB" />
                 </button>
 
                 <div className="text-center mb-6">

@@ -99,7 +99,7 @@ export default function AIDesignBuilder() {
                   className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-poppins interactive transition-all"
                   style={{
                     background: step === s.num ? sc.bg : 'rgba(138,43,226,0.1)',
-                    color: step === s.num ? 'white' : '#B8B8B8',
+                    color: step === s.num ? 'white' : '#E5E7EB',
                     border: `1px solid ${step === s.num ? sc.accent : 'rgba(106,13,173,0.3)'}`,
                   }}
                 >
@@ -133,8 +133,8 @@ export default function AIDesignBuilder() {
                     ) : (
                       <>
                         <div className="text-5xl mb-4">📁</div>
-                        <p className="text-sm mb-2" style={{ color: '#B8B8B8' }}>Drag & drop your design here</p>
-                        <p className="text-xs mb-4" style={{ color: '#666' }}>PNG, JPG supported</p>
+                        <p className="text-sm mb-2" style={{ color: '#E5E7EB' }}>Drag & drop your design here</p>
+                        <p className="text-xs mb-4" style={{ color: '#9CA3AF' }}>PNG, JPG supported</p>
                         <label className="btn-ghost text-sm py-2 px-6 interactive cursor-pointer" style={{ borderColor: 'rgba(244,114,182,0.5)', color: '#F472B6' }}>
                           Browse Files
                           <input type="file" accept="image/*" className="hidden" onChange={handleUpload} />
@@ -156,7 +156,7 @@ export default function AIDesignBuilder() {
                     className="w-full px-5 py-4 rounded-xl text-base bg-white/5 border outline-none focus:border-purple-500 transition-colors font-poppins"
                     style={{ borderColor: 'rgba(56,189,248,0.3)', color: '#F5F5F5' }}
                   />
-                  <p className="text-xs mt-3 text-left" style={{ color: '#B8B8B8' }}>This text will be embroidered on your shirt</p>
+                  <p className="text-xs mt-3 text-left" style={{ color: '#E5E7EB' }}>This text will be embroidered on your shirt</p>
                   <div className="mt-6 p-4 rounded-xl" style={{ background: 'rgba(56,189,248,0.1)' }}>
                     <p className="text-xs mb-2 text-left" style={{ color: '#38BDF8' }}>Preview:</p>
                     <p className="font-great-vibes text-3xl text-center" style={{ color: '#38BDF8' }}>
@@ -169,7 +169,7 @@ export default function AIDesignBuilder() {
               {step === 3 && (
                 <div>
                   <h3 className="font-cinzel text-xl font-semibold mb-4 text-left" style={{ color: '#F5F5F5' }}>Select Position</h3>
-                  <p className="text-sm mb-6 text-left" style={{ color: '#B8B8B8' }}>Click on the shirt to place your design</p>
+                  <p className="text-sm mb-6 text-left" style={{ color: '#E5E7EB' }}>Click on the shirt to place your design</p>
                   <div className="grid grid-cols-2 gap-3">
                     {positions.map(pos => {
                       const posColor = positionColors[pos.id];
@@ -181,7 +181,7 @@ export default function AIDesignBuilder() {
                           style={{
                             background: selectedPosition === pos.id ? `${posColor}4d` : `${posColor}14`,
                             border: `1px solid ${selectedPosition === pos.id ? posColor : `${posColor}33`}`,
-                            color: selectedPosition === pos.id ? posColor : '#B8B8B8',
+                            color: selectedPosition === pos.id ? posColor : '#E5E7EB',
                           }}
                         >
                           {pos.label}
@@ -208,7 +208,7 @@ export default function AIDesignBuilder() {
                       >
                         <div className="w-10 h-10 rounded-full border-2"
                           style={{ background: color.hex, borderColor: selectedColor.name === color.name ? '#34D399' : 'rgba(255,255,255,0.2)' }} />
-                        <span className="text-[10px]" style={{ color: selectedColor.name === color.name ? '#34D399' : '#B8B8B8' }}>{color.name}</span>
+                        <span className="text-[10px]" style={{ color: selectedColor.name === color.name ? '#34D399' : '#E5E7EB' }}>{color.name}</span>
                       </button>
                     ))}
                   </div>
@@ -230,7 +230,7 @@ export default function AIDesignBuilder() {
                         }}
                       >
                         <div className="text-3xl mb-2">{style.preview}</div>
-                        <span className="text-xs" style={{ color: selectedFloral?.id === style.id ? '#818CF8' : '#B8B8B8' }}>{style.name}</span>
+                        <span className="text-xs" style={{ color: selectedFloral?.id === style.id ? '#818CF8' : '#E5E7EB' }}>{style.name}</span>
                       </button>
                     ))}
                   </div>
@@ -302,7 +302,7 @@ export default function AIDesignBuilder() {
                   )}
                 </svg>
 
-                <p className="text-center text-xs mt-4 font-poppins" style={{ color: '#666' }}>
+                <p className="text-center text-xs mt-4 font-poppins" style={{ color: '#9CA3AF' }}>
                   Live Preview • {selectedColor.name} • {selectedPosition.replace('-', ' ')}
                 </p>
               </div>

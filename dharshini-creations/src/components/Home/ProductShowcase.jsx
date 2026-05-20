@@ -116,7 +116,7 @@ export default function ProductShowcase() {
                     <h4 className="font-poppins font-semibold text-sm mb-1 truncate text-left" style={{ color: '#F5F5F5' }}>
                       {product.name}
                     </h4>
-                    <p className="text-xs mb-3 line-clamp-2 text-left" style={{ color: '#B8B8B8' }}>
+                    <p className="text-xs mb-3 line-clamp-2 text-left" style={{ color: '#E5E7EB' }}>
                       {product.description}
                     </p>
                     <div className="flex items-center justify-between mt-auto">

@@ -61,7 +61,7 @@ export default function ContactSection() {
               </div>
               <h3 className="font-cinzel text-xl font-bold tracking-widest mb-1" style={{ color: '#F5F5F5' }}>Dharshini Creations Studio</h3>
               <p className="text-sm font-semibold tracking-wider" style={{ color: '#818CF8' }}>Tamil Nadu, India 🇮🇳</p>
-              <p className="text-xs max-w-sm mx-auto mt-2 leading-relaxed" style={{ color: '#B8B8B8' }}>
+              <p className="text-xs max-w-sm mx-auto mt-2 leading-relaxed" style={{ color: '#E5E7EB' }}>
                 Our artisan embroidery and custom painting workshop. Serving clients globally with premium express shipping.
               </p>
             </div>

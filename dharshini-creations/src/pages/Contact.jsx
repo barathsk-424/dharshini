@@ -37,7 +37,7 @@ export default function Contact() {
                   <Icon size={28} color="white" />
                 </div>
                 <h4 className="font-cinzel font-semibold text-lg mb-2" style={{ color: '#F5F5F5' }}>{card.title}</h4>
-                <p className="text-sm" style={{ color: '#B8B8B8' }}>{card.desc}</p>
+                <p className="text-sm" style={{ color: '#E5E7EB' }}>{card.desc}</p>
               </motion.a>
             );
           })}
@@ -50,25 +50,25 @@ export default function Contact() {
             <motion.div className="glass-card p-12 text-center" initial={{ scale: 0.8 }} animate={{ scale: 1 }}>
               <div className="text-6xl mb-4">💌</div>
               <h3 className="font-cinzel text-2xl font-bold mb-2" style={{ color: '#F5F5F5' }}>Message Sent!</h3>
-              <p className="text-sm" style={{ color: '#B8B8B8' }}>Thank you for reaching out. We'll get back to you within 24 hours.</p>
+              <p className="text-sm" style={{ color: '#E5E7EB' }}>Thank you for reaching out. We'll get back to you within 24 hours.</p>
               <button onClick={() => { setSubmitted(false); setForm({ name: '', email: '', message: '' }); }} className="btn-primary mt-6 interactive">Send Another</button>
             </motion.div>
           ) : (
             <div className="glass-card p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <label className="text-xs font-semibold block mb-2" style={{ color: '#B8B8B8' }}>Your Name</label>
+                  <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Your Name</label>
                   <input value={form.name} onChange={e => update('name', e.target.value)} placeholder="Full name"
                     className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors" style={{ borderColor: 'rgba(106,13,173,0.3)', color: '#F5F5F5' }} />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold block mb-2" style={{ color: '#B8B8B8' }}>Email</label>
+                  <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Email</label>
                   <input value={form.email} onChange={e => update('email', e.target.value)} placeholder="your@email.com" type="email"
                     className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors" style={{ borderColor: 'rgba(106,13,173,0.3)', color: '#F5F5F5' }} />
                 </div>
               </div>
               <div className="mb-6">
-                <label className="text-xs font-semibold block mb-2" style={{ color: '#B8B8B8' }}>Message</label>
+                <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Message</label>
                 <textarea value={form.message} onChange={e => update('message', e.target.value)} rows={5} placeholder="Tell us about your project, question, or just say hello..."
                   className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 resize-none transition-colors" style={{ borderColor: 'rgba(106,13,173,0.3)', color: '#F5F5F5' }} />
               </div>
@@ -99,7 +99,7 @@ export default function Contact() {
               </div>
               <h3 className="font-cinzel text-xl font-bold tracking-widest mb-1" style={{ color: '#F5F5F5' }}>Dharshini Creations Studio</h3>
               <p className="text-sm font-semibold tracking-wider" style={{ color: '#B266FF' }}>Tamil Nadu, India 🇮🇳</p>
-              <p className="text-xs max-w-sm mx-auto mt-2 leading-relaxed" style={{ color: '#B8B8B8' }}>
+              <p className="text-xs max-w-sm mx-auto mt-2 leading-relaxed" style={{ color: '#E5E7EB' }}>
                 Our artisan embroidery and custom painting workshop. Serving clients globally with premium express shipping.
               </p>
             </div>
