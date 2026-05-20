@@ -51,10 +51,18 @@ export default function Navbar() {
       >
         <div className="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3.5 interactive group">
-            <Logo size={42} className="group-hover:rotate-12 transition-transform duration-500" />
-            <div className="relative">
-              <span className="font-cinzel text-xl md:text-2xl font-black tracking-wider transition-all duration-300 group-hover:scale-105"
+          <Link to="/" className="flex items-center gap-3 interactive group"
+            onClick={(e) => {
+              if (location.pathname === '/') {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              } else {
+                window.scrollTo({ top: 0 });
+              }
+            }}>
+            <Logo size={40} className="flex-shrink-0 group-hover:rotate-12 transition-transform duration-500" />
+            <div className="relative leading-tight">
+              <span className="font-cinzel text-lg md:text-xl font-black tracking-wider block transition-all duration-300 group-hover:scale-105"
                 style={{
                   background: 'linear-gradient(135deg, #FAFAFA, #A78BFA)',
                   WebkitBackgroundClip: 'text',
@@ -62,7 +70,7 @@ export default function Navbar() {
                 }}>
                 Dharshini
               </span>
-              <span className="font-cinzel text-[10px] tracking-[0.3em] block font-semibold transition-all duration-300 group-hover:text-purple-400"
+              <span className="font-cinzel text-[9px] tracking-[0.3em] block font-semibold transition-all duration-300 group-hover:text-purple-400"
                 style={{ color: '#9CA3AF' }}>
                 CREATIONS
               </span>
