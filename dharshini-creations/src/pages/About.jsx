@@ -3,6 +3,8 @@ import { motion, useInView } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
+const artistImage = 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=600&q=80';
+
 const timeline = [
   { year: '2020', title: 'The Spark', desc: 'A needle, thread, and a dream — Dharshini began hand-embroidering small pieces for friends and family.' },
   { year: '2021', title: 'First 100 Orders', desc: 'Word spread through Instagram. The first 100 orders poured in, each more creative than the last.' },
@@ -11,11 +13,13 @@ const timeline = [
   { year: '2024', title: 'Going Digital', desc: 'Launched the official website with AI custom builder, bringing handcrafted luxury to your fingertips.' },
 ];
 
+const timelineColors = ['#F472B6', '#38BDF8', '#FB923C', '#34D399', '#818CF8'];
+
 const values = [
-  { emoji: '🪡', title: 'Handcrafted', desc: 'Every stitch is made by hand with meticulous attention to detail.' },
-  { emoji: '🎨', title: 'Creative', desc: 'Unique designs that blend traditional art with modern aesthetics.' },
-  { emoji: '💜', title: 'Passionate', desc: 'Born from a deep love for textile art and creative expression.' },
-  { emoji: '✨', title: 'Premium', desc: 'Only the finest materials — premium threads, fabrics, and paints.' },
+  { emoji: '🪡', title: 'Handcrafted', desc: 'Every stitch is made by hand with meticulous attention to detail.', image: 'https://images.unsplash.com/photo-1617058998014-a13b69286e9f?auto=format&fit=crop&w=400&q=80' },
+  { emoji: '🎨', title: 'Creative', desc: 'Unique designs that blend traditional art with modern aesthetics.', image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=400&q=80' },
+  { emoji: '💜', title: 'Passionate', desc: 'Born from a deep love for textile art and creative expression.', image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=400&q=80' },
+  { emoji: '✨', title: 'Premium', desc: 'Only the finest materials — premium threads, fabrics, and paints.', image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=400&q=80' },
 ];
 
 export default function About() {
@@ -27,10 +31,10 @@ export default function About() {
       <Helmet><title>About — Dharshini Creations</title></Helmet>
       <section className="gradient-mesh min-h-[50vh] flex items-center justify-center">
         <div className="text-center max-w-2xl mx-auto px-6">
-          <motion.p className="font-great-vibes text-2xl mb-2" style={{ color: '#B266FF' }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>Our Story</motion.p>
+          <motion.p className="font-great-vibes text-2xl mb-2" style={{ color: '#A78BFA' }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>Our Story</motion.p>
           <motion.h1 className="font-cinzel text-4xl md:text-5xl font-bold glow-text mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-            style={{ background: 'linear-gradient(135deg, #F5F5F5, #8A2BE2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>About Dharshini Creations</motion.h1>
-          <motion.p className="text-base leading-relaxed" style={{ color: '#B8B8B8' }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+            style={{ background: 'linear-gradient(135deg, #FAFAFA, #7C3AED)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>About Dharshini Creations</motion.h1>
+          <motion.p className="text-base leading-relaxed" style={{ color: '#9CA3AF' }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
             Born from a passion for needlework and fabric art, Dharshini Creations transforms ordinary fabric into extraordinary wearable art. Every piece is a labor of love, handcrafted in Tamil Nadu, India.
           </motion.p>
         </div>
@@ -40,11 +44,27 @@ export default function About() {
         {/* Artist Section */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
           <motion.div className="relative" initial={{ opacity: 0, x: -40 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.2 }}>
-            <div className="relative w-full max-w-md mx-auto aspect-[3/4] rounded-3xl overflow-hidden" style={{ background: 'linear-gradient(135deg, rgba(138,43,226,0.2), rgba(20,10,40,0.9))' }}>
-              <div className="absolute inset-0 flex items-center justify-center flex-col gap-4">
-                <div className="w-36 h-36 rounded-full flex items-center justify-center text-6xl" style={{ background: 'linear-gradient(135deg, #8A2BE2, #B266FF)', boxShadow: '0 0 50px rgba(138,43,226,0.4)' }}>🪡</div>
-                <p className="font-great-vibes text-4xl" style={{ color: '#B266FF' }}>Dharshini</p>
-                <p className="text-sm" style={{ color: '#B8B8B8' }}>Artist & Founder</p>
+            <div className="relative w-full max-w-md mx-auto aspect-[3/4] rounded-3xl overflow-hidden border border-white/10"
+              style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.5)' }}>
+              <img
+                src={artistImage}
+                alt="Dharshini — Artist & Founder"
+                className="w-full h-full object-cover"
+                loading="lazy"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.parentElement.querySelector('.img-fallback')?.classList.remove('hidden');
+                }}
+              />
+              <div className="img-fallback hidden absolute inset-0 flex items-center justify-center flex-col gap-4"
+                style={{ background: 'linear-gradient(135deg, rgba(124,58,237,0.2), rgba(12,8,22,0.9))' }}>
+                <div className="w-36 h-36 rounded-full flex items-center justify-center text-6xl" style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)', boxShadow: '0 0 50px rgba(124,58,237,0.4)' }}>🪡</div>
+                <p className="font-great-vibes text-4xl" style={{ color: '#A78BFA' }}>Dharshini</p>
+                <p className="text-sm" style={{ color: '#9CA3AF' }}>Artist & Founder</p>
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                <p className="font-great-vibes text-4xl" style={{ color: '#A78BFA' }}>Dharshini</p>
+                <p className="text-sm" style={{ color: '#9CA3AF' }}>Artist & Founder</p>
               </div>
             </div>
             <motion.div className="absolute -top-4 -right-4 text-3xl" animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 6, repeat: Infinity }}>🌸</motion.div>
@@ -52,18 +72,18 @@ export default function About() {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, x: 40 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.3 }}>
-            <h2 className="font-cinzel text-3xl font-bold mb-6 glow-text" style={{ color: '#F5F5F5' }}>Meet the Artist</h2>
-            <blockquote className="text-lg italic leading-relaxed mb-6 pl-6" style={{ color: '#B8B8B8', borderLeft: '3px solid #8A2BE2' }}>
+            <h2 className="font-cinzel text-3xl font-bold mb-6 glow-text" style={{ color: '#FAFAFA' }}>Meet the Artist</h2>
+            <blockquote className="text-lg italic leading-relaxed mb-6 pl-6 text-left" style={{ color: '#9CA3AF', borderLeft: '3px solid #7C3AED' }}>
               "I believe that every piece of fabric holds a story waiting to be told through art. My mission is to bring your imagination to life, one stitch at a time."
             </blockquote>
-            <p className="text-sm leading-relaxed mb-4" style={{ color: '#B8B8B8' }}>
+            <p className="text-sm leading-relaxed mb-4 text-left" style={{ color: '#9CA3AF' }}>
               Dharshini is a self-taught textile artist from Tamil Nadu who discovered her passion for embroidery at a young age. What started as a hobby creating small pieces for friends has grown into a thriving brand that serves customers across India.
             </p>
-            <p className="text-sm leading-relaxed" style={{ color: '#B8B8B8' }}>
+            <p className="text-sm leading-relaxed text-left" style={{ color: '#9CA3AF' }}>
               Specializing in hand embroidery, fabric painting, and custom designs, Dharshini combines traditional techniques with modern aesthetics to create pieces that are truly one-of-a-kind.
             </p>
-            <div className="mt-6 p-4 rounded-xl" style={{ background: 'rgba(138,43,226,0.08)', border: '1px solid rgba(106,13,173,0.2)' }}>
-              <p className="font-great-vibes text-2xl" style={{ color: '#B266FF' }}>— Dharshini</p>
+            <div className="mt-6 p-4 rounded-xl" style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(167,139,250,0.2)' }}>
+              <p className="font-great-vibes text-2xl" style={{ color: '#A78BFA' }}>— Dharshini</p>
             </div>
           </motion.div>
         </div>
@@ -73,10 +93,17 @@ export default function About() {
           <h2 className="section-title glow-text mb-10">Our Values</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((v, i) => (
-              <motion.div key={v.title} className="glass-card p-6 text-center" initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: i * 0.1 }} whileHover={{ y: -6 }}>
-                <div className="text-4xl mb-4">{v.emoji}</div>
-                <h4 className="font-cinzel font-bold mb-2" style={{ color: '#F5F5F5' }}>{v.title}</h4>
-                <p className="text-xs leading-relaxed" style={{ color: '#B8B8B8' }}>{v.desc}</p>
+              <motion.div key={v.title} className="glass-card overflow-hidden group" initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: i * 0.1 }} whileHover={{ y: -6 }}>
+                <div className="relative h-36 overflow-hidden">
+                  <img src={v.image} alt={v.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy"
+                    onError={(e) => { e.target.style.display = 'none'; }} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                  <div className="absolute bottom-3 left-4 text-3xl">{v.emoji}</div>
+                </div>
+                <div className="p-5 text-center">
+                  <h4 className="font-cinzel font-bold mb-2" style={{ color: '#FAFAFA' }}>{v.title}</h4>
+                  <p className="text-xs leading-relaxed" style={{ color: '#9CA3AF' }}>{v.desc}</p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -86,26 +113,29 @@ export default function About() {
         <div className="max-w-2xl mx-auto mb-16">
           <h2 className="section-title glow-text mb-10">Our Journey</h2>
           <div className="space-y-1">
-            {timeline.map((item, i) => (
-              <motion.div key={item.year} className="flex gap-4 items-start" initial={{ opacity: 0, x: -20 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.3 + i * 0.1 }}>
-                <div className="flex-shrink-0 w-16 text-right pt-1"><span className="font-cinzel font-bold text-sm" style={{ color: '#B266FF' }}>{item.year}</span></div>
-                <div className="flex-shrink-0 flex flex-col items-center">
-                  <div className="w-3 h-3 rounded-full" style={{ background: '#8A2BE2', boxShadow: '0 0 10px rgba(138,43,226,0.5)' }} />
-                  {i < timeline.length - 1 && <div className="w-px flex-1 min-h-[50px]" style={{ background: 'rgba(106,13,173,0.3)' }} />}
-                </div>
-                <div className="pb-6">
-                  <p className="font-poppins font-semibold text-sm" style={{ color: '#F5F5F5' }}>{item.title}</p>
-                  <p className="text-xs mt-1 leading-relaxed" style={{ color: '#B8B8B8' }}>{item.desc}</p>
-                </div>
-              </motion.div>
-            ))}
+            {timeline.map((item, i) => {
+              const color = timelineColors[i % timelineColors.length];
+              return (
+                <motion.div key={item.year} className="flex gap-4 items-start" initial={{ opacity: 0, x: -20 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.3 + i * 0.1 }}>
+                  <div className="flex-shrink-0 w-16 text-right pt-1"><span className="font-cinzel font-bold text-sm" style={{ color }}>{item.year}</span></div>
+                  <div className="flex-shrink-0 flex flex-col items-center">
+                    <div className="w-3 h-3 rounded-full" style={{ background: color, boxShadow: `0 0 10px ${color}80` }} />
+                    {i < timeline.length - 1 && <div className="w-px flex-1 min-h-[50px]" style={{ background: `${color}4d` }} />}
+                  </div>
+                  <div className="pb-6 text-left">
+                    <p className="font-poppins font-semibold text-sm" style={{ color: '#FAFAFA' }}>{item.title}</p>
+                    <p className="text-xs mt-1 leading-relaxed" style={{ color: '#9CA3AF' }}>{item.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
 
         {/* CTA */}
         <div className="text-center glass-card p-12 max-w-2xl mx-auto">
-          <h3 className="font-cinzel text-2xl font-bold mb-4 glow-text" style={{ color: '#F5F5F5' }}>Let's Collaborate</h3>
-          <p className="text-sm mb-6" style={{ color: '#B8B8B8' }}>Have a special project in mind? Let's create something beautiful together.</p>
+          <h3 className="font-cinzel text-2xl font-bold mb-4 glow-text" style={{ color: '#FAFAFA' }}>Let's Collaborate</h3>
+          <p className="text-sm mb-6" style={{ color: '#9CA3AF' }}>Have a special project in mind? Let's create something beautiful together.</p>
           <div className="flex gap-4 justify-center">
             <Link to="/custom-orders" className="btn-primary interactive">Start a Project</Link>
             <Link to="/contact" className="btn-ghost interactive">Get in Touch</Link>

@@ -1,8 +1,7 @@
 import { useState, useRef } from 'react';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { galleryImages } from '../../data/mockData';
 import { FiHeart, FiX } from 'react-icons/fi';
-import Masonry from 'react-masonry-css';
 
 const filters = ['All', 'Embroidery', 'Fabric Painting', 'Combo', 'Customer Orders'];
 const filterMap = { 'All': 'all', 'Embroidery': 'embroidery', 'Fabric Painting': 'fabric-painting', 'Combo': 'combo', 'Customer Orders': 'customer' };
@@ -36,6 +35,12 @@ export default function GallerySection() {
 
   const heights = [240, 320, 260, 360, 280, 300, 340, 240, 320, 280, 260, 360];
 
+  const handleImgError = (e) => {
+    e.target.style.display = 'none';
+    const fb = e.target.parentElement.querySelector('.img-fallback');
+    if (fb) fb.classList.remove('hidden');
+  };
+
   return (
     <section ref={ref} className="relative gradient-bg">
       <div className="section-container">
@@ -61,11 +66,12 @@ export default function GallerySection() {
           })}
         </div>
 
-        <Masonry breakpointCols={{ default: 3, 768: 2, 480: 1 }} className="masonry-grid" columnClassName="masonry-grid_column">
+        {/* Clean CSS Columns for native responsive masonry-like flow */}
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
           {filtered.map((img, i) => {
             const accent = categoryAccent[img.category] || '#B266FF';
             return (
-              <motion.div key={img.id} className="mb-5 group relative rounded-3xl overflow-hidden interactive"
+              <motion.div key={img.id} className="mb-4 group relative rounded-3xl overflow-hidden interactive break-inside-avoid"
                 initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: i * 0.05 }}
                 style={{ height: heights[i % heights.length] }}
                 onClick={() => setLightbox(img)} whileHover={{ scale: 1.02 }}>
@@ -75,8 +81,14 @@ export default function GallerySection() {
                   alt={img.title}
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                   loading="lazy"
+                  onError={handleImgError}
                 />
                 
+                <div className="img-fallback hidden absolute inset-0 flex items-center justify-center text-4xl"
+                  style={{ background: `linear-gradient(135deg, ${accent}33, rgba(12,8,22,0.9))` }}>
+                  {img.category === 'embroidery' ? '🪡' : img.category === 'fabric-painting' ? '🎨' : '✨'}
+                </div>
+
                 {/* Soft obsidian gradient overlays */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 
@@ -94,7 +106,7 @@ export default function GallerySection() {
               </motion.div>
             );
           })}
-        </Masonry>
+        </div>
 
         {lightbox && (() => {
           const accent = categoryAccent[lightbox.category] || '#B266FF';
@@ -103,7 +115,7 @@ export default function GallerySection() {
               <div className="relative max-w-2xl w-full mx-4 glass-card p-6" onClick={e => e.stopPropagation()}>
                 <button onClick={() => setLightbox(null)} className="absolute top-3 right-3 p-2 rounded-full hover:bg-white/10 z-10"><FiX size={20} color="#9CA3AF" /></button>
                 <div className="aspect-video rounded-2xl overflow-hidden mb-4 border border-white/10">
-                  <img src={lightbox.src} alt={lightbox.title} className="w-full h-full object-cover" />
+                  <img src={lightbox.src} alt={lightbox.title} className="w-full h-full object-cover" onError={e => { e.target.style.display = 'none'; }} />
                 </div>
                 <h3 className="font-cinzel text-xl font-semibold text-left" style={{ color: '#FAFAFA' }}>{lightbox.title}</h3>
                 <p className="text-sm mt-1 text-left" style={{ color: '#9CA3AF' }}>Category: <span style={{ color: accent }}>{lightbox.category}</span> • {lightbox.likes} likes</p>
