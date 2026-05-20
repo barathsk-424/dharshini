@@ -10,24 +10,24 @@ export default function HeroSection() {
     <section ref={ref} className="relative min-h-screen flex items-center overflow-hidden gradient-mesh">
       {/* Animated background particles */}
       <div className="absolute inset-0 pointer-events-none">
-        {Array.from({ length: 20 }).map((_, i) => (
+        {Array.from({ length: 25 }).map((_, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full"
             style={{
-              width: 2 + Math.random() * 4,
-              height: 2 + Math.random() * 4,
-              background: i % 2 === 0 ? 'rgba(178,102,255,0.3)' : 'rgba(138,43,226,0.2)',
+              width: 1.5 + Math.random() * 3.5,
+              height: 1.5 + Math.random() * 3.5,
+              background: i % 2 === 0 ? 'rgba(167,139,250,0.25)' : 'rgba(124,58,237,0.15)',
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
             }}
             animate={{
-              y: [0, -30, 0],
-              opacity: [0.2, 0.8, 0.2],
-              scale: [1, 1.5, 1],
+              y: [0, -40, 0],
+              opacity: [0.15, 0.7, 0.15],
+              scale: [1, 1.4, 1],
             }}
             transition={{
-              duration: 3 + Math.random() * 4,
+              duration: 4 + Math.random() * 5,
               repeat: Infinity,
               delay: Math.random() * 2,
               ease: 'easeInOut',
@@ -36,28 +36,29 @@ export default function HeroSection() {
         ))}
       </div>
 
-      <div className="section-container w-full">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="section-container w-full relative z-10 pt-20">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Content */}
           <motion.div
-            initial={{ opacity: 0, x: -60 }}
+            initial={{ opacity: 0, x: -50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="text-left"
           >
             <motion.p
-              className="font-great-vibes text-xl md:text-2xl mb-4"
-              style={{ color: '#B266FF' }}
-              initial={{ opacity: 0, y: 20 }}
+              className="font-great-vibes text-2xl md:text-3xl mb-4"
+              style={{ color: '#A78BFA' }}
+              initial={{ opacity: 0, y: 15 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
             >
               Handcrafted with Love
             </motion.p>
 
             <h1
-              className="font-cinzel text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight mb-6 glow-text"
+              className="font-cinzel text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] mb-6 glow-text tracking-wide"
               style={{
-                background: 'linear-gradient(135deg, #F5F5F5 0%, #8A2BE2 50%, #B266FF 100%)',
+                background: 'linear-gradient(135deg, #FAFAFA 0%, #7C3AED 50%, #A78BFA 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }}
@@ -65,8 +66,8 @@ export default function HeroSection() {
               Dharshini<br />Creations
             </h1>
 
-            <p className="text-lg md:text-xl mb-8 max-w-lg leading-relaxed" style={{ color: '#B8B8B8' }}>
-              Handcrafted Embroidery & Fabric Art — where every thread is woven with passion and every brushstroke tells a unique story.
+            <p className="text-base md:text-lg mb-8 max-w-lg leading-relaxed font-normal" style={{ color: '#D1D5DB' }}>
+              Handcrafted Embroidery & Fabric Art — where every thread is woven with passion and every brushstroke tells a unique story of elegance and luxury.
             </p>
 
             <div className="flex flex-wrap gap-4">
@@ -80,19 +81,20 @@ export default function HeroSection() {
 
             {/* Stats */}
             <motion.div
-              className="flex gap-8 mt-12"
+              className="flex gap-10 mt-16 pt-8"
+              style={{ borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.6 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
             >
               {[
                 { num: '500+', label: 'Happy Customers' },
                 { num: '1000+', label: 'Designs Crafted' },
                 { num: '5★', label: 'Average Rating' },
               ].map(stat => (
-                <div key={stat.label}>
-                  <p className="font-cinzel text-2xl font-bold" style={{ color: '#B266FF' }}>{stat.num}</p>
-                  <p className="text-xs" style={{ color: '#666' }}>{stat.label}</p>
+                <div key={stat.label} className="text-left">
+                  <p className="font-cinzel text-2xl md:text-3xl font-bold tracking-wider" style={{ color: '#A78BFA' }}>{stat.num}</p>
+                  <p className="text-xs font-medium uppercase tracking-widest mt-1" style={{ color: '#9CA3AF' }}>{stat.label}</p>
                 </div>
               ))}
             </motion.div>
@@ -101,48 +103,48 @@ export default function HeroSection() {
           {/* Right - 3D Shirt Mockup Area */}
           <motion.div
             className="relative flex items-center justify-center"
-            initial={{ opacity: 0, x: 60 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="relative w-[320px] h-[400px] md:w-[400px] md:h-[500px]">
+            <div className="relative w-[320px] h-[400px] md:w-[420px] md:h-[520px]">
               {/* Glowing ring behind shirt */}
               <div className="absolute inset-0 rounded-full animate-pulse-glow"
                 style={{
-                  background: 'radial-gradient(circle, rgba(138,43,226,0.15) 0%, transparent 70%)',
-                  filter: 'blur(40px)',
+                  background: 'radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%)',
+                  filter: 'blur(50px)',
                 }}
               />
 
               {/* Shirt SVG with embroidery glow */}
               <motion.div
                 className="relative z-10 w-full h-full flex items-center justify-center"
-                animate={{ rotateY: [0, 5, -5, 0] }}
-                transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+                animate={{ rotateY: [0, 8, -8, 0], y: [0, -6, 6, 0] }}
+                transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <svg viewBox="0 0 300 380" className="w-full h-full drop-shadow-2xl">
-                  {/* T-shirt shape */}
+                <svg viewBox="0 0 300 380" className="w-full h-full drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+                  {/* T-shirt shape with premium luxury styling */}
                   <path
                     d="M75 80 L40 120 L70 140 L70 340 L230 340 L230 140 L260 120 L225 80 L190 100 Q150 120 110 100 Z"
-                    fill="#1a1a1a"
-                    stroke="rgba(138,43,226,0.4)"
+                    fill="#0A0612"
+                    stroke="rgba(167, 139, 250, 0.3)"
                     strokeWidth="1.5"
                   />
                   {/* Collar */}
                   <path
                     d="M110 100 Q150 120 190 100 Q165 110 150 112 Q135 110 110 100"
                     fill="none"
-                    stroke="rgba(178,102,255,0.6)"
-                    strokeWidth="1"
+                    stroke="rgba(167, 139, 250, 0.6)"
+                    strokeWidth="1.2"
                   />
                   {/* Embroidery design - floral */}
                   <motion.g
-                    animate={{ opacity: [0.6, 1, 0.6] }}
+                    animate={{ opacity: [0.75, 1, 0.75] }}
                     transition={{ duration: 3, repeat: Infinity }}
                   >
-                    <circle cx="150" cy="200" r="50" fill="none" stroke="#B266FF" strokeWidth="1" opacity="0.6" />
-                    <circle cx="150" cy="200" r="35" fill="none" stroke="#8A2BE2" strokeWidth="1" opacity="0.8" />
-                    <circle cx="150" cy="200" r="20" fill="none" stroke="#B266FF" strokeWidth="0.8" opacity="0.5" />
+                    <circle cx="150" cy="200" r="50" fill="none" stroke="#A78BFA" strokeWidth="1" opacity="0.4" />
+                    <circle cx="150" cy="200" r="35" fill="none" stroke="#7C3AED" strokeWidth="1" opacity="0.6" />
+                    <circle cx="150" cy="200" r="20" fill="none" stroke="#A78BFA" strokeWidth="0.8" opacity="0.4" />
                     {/* Petals */}
                     {Array.from({ length: 8 }).map((_, i) => {
                       const angle = (i * Math.PI * 2) / 8;
@@ -152,13 +154,13 @@ export default function HeroSection() {
                       const y2 = 200 + Math.sin(angle) * 55;
                       return (
                         <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}
-                          stroke="#B266FF" strokeWidth="1" opacity="0.5" />
+                          stroke="#A78BFA" strokeWidth="1" opacity="0.4" />
                       );
                     })}
                     {/* Center flower */}
-                    <circle cx="150" cy="200" r="8" fill="#B266FF" opacity="0.4" />
-                    <text x="150" y="285" textAnchor="middle" fill="#B266FF" fontSize="24"
-                      fontFamily="Great Vibes, cursive" opacity="0.9" filter="drop-shadow(0 0 2px rgba(178,102,255,0.5))">
+                    <circle cx="150" cy="200" r="8" fill="#A78BFA" opacity="0.3" />
+                    <text x="150" y="285" textAnchor="middle" fill="#A78BFA" fontSize="24"
+                      fontFamily="Great Vibes, cursive" opacity="0.95" filter="drop-shadow(0 0 4px rgba(167,139,250,0.6))">
                       Dharshini
                     </text>
                   </motion.g>
@@ -168,12 +170,12 @@ export default function HeroSection() {
                     x="70" y="80" width="30" height="260"
                     fill="url(#shineGrad)"
                     animate={{ x: [70, 230] }}
-                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 4, ease: 'easeInOut' }}
+                    transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 5, ease: 'easeInOut' }}
                   />
                   <defs>
                     <linearGradient id="shineGrad" x1="0" y1="0" x2="1" y2="0">
                       <stop offset="0%" stopColor="transparent" />
-                      <stop offset="50%" stopColor="rgba(178,102,255,0.08)" />
+                      <stop offset="50%" stopColor="rgba(167,139,250,0.12)" />
                       <stop offset="100%" stopColor="transparent" />
                     </linearGradient>
                   </defs>
@@ -182,16 +184,16 @@ export default function HeroSection() {
 
               {/* Floating decorative elements */}
               <motion.div className="absolute top-8 right-8 text-2xl"
-                animate={{ y: [0, -10, 0], rotate: [0, 15, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
+                animate={{ y: [0, -12, 0], rotate: [0, 20, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               >✨</motion.div>
               <motion.div className="absolute bottom-16 left-4 text-xl"
-                animate={{ y: [0, -8, 0], rotate: [0, -10, 0] }}
-                transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+                animate={{ y: [0, -10, 0], rotate: [0, -15, 0] }}
+                transition={{ duration: 5, repeat: Infinity, delay: 1, ease: 'easeInOut' }}
               >🌸</motion.div>
               <motion.div className="absolute top-24 left-0 text-lg"
-                animate={{ y: [0, -12, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }}
+                animate={{ y: [0, -14, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, delay: 0.5, ease: 'easeInOut' }}
               >🪡</motion.div>
             </div>
           </motion.div>
@@ -204,12 +206,12 @@ export default function HeroSection() {
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <span className="text-xs font-poppins" style={{ color: '#666' }}>Scroll to explore</span>
-        <div className="w-5 h-8 rounded-full border-2 flex justify-center pt-1.5" style={{ borderColor: '#6A0DAD' }}>
+        <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#4B5563', fontSize: '9px' }}>Scroll to explore</span>
+        <div className="w-5 h-8 rounded-full border flex justify-center pt-1.5" style={{ borderColor: 'rgba(124, 58, 237, 0.4)' }}>
           <motion.div
             className="w-1.5 h-1.5 rounded-full"
-            style={{ background: '#B266FF' }}
-            animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}
+            style={{ background: '#A78BFA' }}
+            animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           />
         </div>

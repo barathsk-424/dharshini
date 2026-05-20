@@ -79,14 +79,29 @@ export default function Contact() {
           )}
         </div>
 
-        {/* Map */}
+        {/* Map with beautiful vector styling */}
         <motion.div className="mt-16 max-w-4xl mx-auto glass-card overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          <div className="relative h-64 flex items-center justify-center" style={{ background: 'rgba(138,43,226,0.05)' }}>
-            <div className="text-center">
-              <FiMapPin size={48} color="#B266FF" className="mx-auto mb-4" />
-              <p className="font-cinzel text-xl font-semibold" style={{ color: '#F5F5F5' }}>Dharshini Creations Studio</p>
-              <p className="text-sm mt-2" style={{ color: '#B8B8B8' }}>Tamil Nadu, India 🇮🇳</p>
-              <p className="text-xs mt-1" style={{ color: '#666' }}>Handcrafted with love from South India</p>
+          <div className="relative h-72 flex items-center justify-center overflow-hidden" style={{ background: 'rgba(5, 3, 10, 0.95)' }}>
+            {/* Fine Gridlines Background */}
+            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(rgba(138,43,226,0.4) 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+            
+            {/* Glowing Concentric Rings */}
+            <div className="absolute w-96 h-96 rounded-full border border-purple-500/10 animate-pulse-glow" style={{ animationDuration: '4s' }} />
+            <div className="absolute w-64 h-64 rounded-full border border-purple-500/20 animate-pulse-glow" style={{ animationDuration: '3s' }} />
+            <div className="absolute w-40 h-40 rounded-full border border-purple-500/30 animate-pulse-glow" style={{ animationDuration: '2s' }} />
+            
+            {/* Pulsating Glowing Map Marker */}
+            <div className="relative z-10 text-center px-6">
+              <div className="relative mx-auto mb-4 w-12 h-12 flex items-center justify-center">
+                <span className="absolute inset-0 rounded-full bg-purple-500/30 animate-ping" />
+                <span className="absolute inset-2 rounded-full bg-purple-500/60 animate-pulse" />
+                <FiMapPin size={32} color="#B266FF" className="relative z-10 drop-shadow-[0_0_12px_rgba(178,102,255,0.8)]" />
+              </div>
+              <h3 className="font-cinzel text-xl font-bold tracking-widest mb-1" style={{ color: '#F5F5F5' }}>Dharshini Creations Studio</h3>
+              <p className="text-sm font-semibold tracking-wider" style={{ color: '#B266FF' }}>Tamil Nadu, India 🇮🇳</p>
+              <p className="text-xs max-w-sm mx-auto mt-2 leading-relaxed" style={{ color: '#B8B8B8' }}>
+                Our artisan embroidery and custom painting workshop. Serving clients globally with premium express shipping.
+              </p>
             </div>
           </div>
         </motion.div>

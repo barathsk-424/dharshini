@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FiInstagram, FiMail, FiMapPin, FiHeart } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
+import logo from '../../assets/logo.png';
 
 export default function Footer() {
   return (
@@ -12,11 +13,18 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
           {/* Brand */}
           <div className="text-left">
-            <h3 className="font-cinzel text-2xl font-bold mb-1"
-              style={{ background: 'linear-gradient(135deg, #FAFAFA, #A78BFA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              Dharshini
-            </h3>
-            <p className="font-cinzel text-[10px] tracking-[0.25em] mb-4" style={{ color: '#9CA3AF' }}>CREATIONS</p>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-12 h-12 rounded-full overflow-hidden border border-purple-500/30 flex-shrink-0">
+                <img src={logo} alt="Logo" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <h3 className="font-cinzel text-2xl font-bold leading-none"
+                  style={{ background: 'linear-gradient(135deg, #FAFAFA, #A78BFA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  Dharshini
+                </h3>
+                <p className="font-cinzel text-[10px] tracking-[0.25em] mt-1" style={{ color: '#9CA3AF' }}>CREATIONS</p>
+              </div>
+            </div>
             <p className="font-great-vibes text-xl mb-4" style={{ color: '#A78BFA' }}>Every Stitch Tells A Story</p>
             <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>
               Premium handmade embroidery and custom fabric painting, crafted with unmatched precision and creative soul in Tamil Nadu, India.
