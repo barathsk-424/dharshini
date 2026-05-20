@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore, useUIStore } from '../../store/useStore';
 import { FiShoppingBag, FiHeart, FiMenu, FiX, FiVolume2, FiVolumeX } from 'react-icons/fi';
-import logo from '../../assets/logo.png';
+import Logo from '../UI/Logo';
 
 const navLinks = [
   { path: '/', label: 'Home' },
@@ -52,9 +52,7 @@ export default function Navbar() {
         <div className="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3.5 interactive group">
-            <div className="relative w-10 h-10 rounded-full overflow-hidden border border-purple-500/30 flex-shrink-0 group-hover:border-purple-400 transition-all duration-300">
-              <img src={logo} alt="Logo" className="w-full h-full object-cover" />
-            </div>
+            <Logo size={42} className="group-hover:rotate-12 transition-transform duration-500" />
             <div className="relative">
               <span className="font-cinzel text-xl md:text-2xl font-black tracking-wider transition-all duration-300 group-hover:scale-105"
                 style={{

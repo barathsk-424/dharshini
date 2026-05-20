@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FiInstagram, FiMail, FiMapPin, FiHeart } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
-import logo from '../../assets/logo.png';
+import Logo from '../UI/Logo';
 
 export default function Footer() {
   return (
@@ -14,9 +14,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="text-left">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 rounded-full overflow-hidden border border-purple-500/30 flex-shrink-0">
-                <img src={logo} alt="Logo" className="w-full h-full object-cover" />
-              </div>
+              <Logo size={48} className="hover:rotate-12 transition-transform duration-500" />
               <div>
                 <h3 className="font-cinzel text-2xl font-bold leading-none"
                   style={{ background: 'linear-gradient(135deg, #FAFAFA, #A78BFA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
