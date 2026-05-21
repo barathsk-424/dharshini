@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { categories, faqData } from '../data/mockData';
@@ -55,8 +56,8 @@ export default function Pricing() {
                       <span className="font-cinzel font-bold text-sm" style={{ color: accent }}>{item.price}</span>
                     </div>
                   ))}
-                  <a href="/custom-orders" className="btn-primary w-full mt-6 interactive text-center block"
-                    style={{ background: `linear-gradient(135deg, ${accent}, ${accent}cc)` }}>Order Now</a>
+                  <Link to="/custom-orders" className="btn-primary w-full mt-6 interactive text-center block"
+                    style={{ background: `linear-gradient(135deg, ${accent}, ${accent}cc)` }}>Order Now</Link>
                 </div>
               </motion.div>
             );

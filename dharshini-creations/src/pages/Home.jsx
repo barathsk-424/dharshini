@@ -5,8 +5,6 @@ import FeaturedCategories from '../components/Home/FeaturedCategories';
 import ProductShowcase from '../components/Home/ProductShowcase';
 import AIDesignBuilder from '../components/Home/AIDesignBuilder';
 import PriceCalculator from '../components/Home/PriceCalculator';
-import GallerySection from '../components/Home/GallerySection';
-import InstagramFeed from '../components/Home/InstagramFeed';
 import CustomerReviews from '../components/Home/CustomerReviews';
 import ShippingTracker from '../components/Home/ShippingTracker';
 import AboutArtist from '../components/Home/AboutArtist';
@@ -39,10 +37,6 @@ export default function Home() {
       <AIDesignBuilder />
       <SectionDivider />
       <PriceCalculator />
-      <SectionDivider />
-      <GallerySection />
-      <SectionDivider />
-      <InstagramFeed />
       <SectionDivider />
       <CustomerReviews />
       <SectionDivider />

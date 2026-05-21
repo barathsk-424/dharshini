@@ -5,15 +5,30 @@ import { FiInstagram, FiMail, FiMapPin, FiSend } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 
 const contactCards = [
-  { icon: FiInstagram, title: 'Instagram', desc: '@dharshini_creations', link: 'https://instagram.com/dharshini_creations', gradient: 'linear-gradient(135deg, #833AB4, #E1306C, #F77737)' },
+  { icon: FiInstagram, title: 'Instagram', desc: '@threads.by.dharshini0612', link: 'https://instagram.com/threads.by.dharshini0612', gradient: 'linear-gradient(135deg, #833AB4, #E1306C, #F77737)' },
   { icon: FaWhatsapp, title: 'WhatsApp', desc: '+91 98765 43210', link: 'https://wa.me/919876543210?text=Hi%20Dharshini!', gradient: 'linear-gradient(135deg, #25D366, #128C7E)' },
-  { icon: FiMail, title: 'Email', desc: 'hello@dharshinicreations.com', link: 'mailto:hello@dharshinicreations.com?subject=Inquiry', gradient: 'linear-gradient(135deg, #8A2BE2, #B266FF)' },
 ];
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [form, setForm] = useState({ name: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const update = (k, v) => setForm(p => ({ ...p, [k]: v }));
+
+  const handleWhatsAppSubmit = () => {
+    if (!form.name || !form.message) {
+      alert("Please fill in your name and message.");
+      return;
+    }
+    
+    let text = `*New Contact Inquiry*\n\n`;
+    text += `*Name:* ${form.name}\n`;
+    text += `*Message:* ${form.message}\n`;
+    
+    const encoded = encodeURIComponent(text);
+    window.open(`https://wa.me/919876543210?text=${encoded}`, '_blank');
+    
+    setSubmitted(true);
+  };
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -27,7 +42,7 @@ export default function Contact() {
       </section>
       <div className="section-container" style={{ paddingTop: 40 }}>
         {/* Contact cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 max-w-2xl mx-auto">
           {contactCards.map((card, i) => {
             const Icon = card.icon;
             return (
@@ -55,25 +70,18 @@ export default function Contact() {
             </motion.div>
           ) : (
             <div className="glass-card p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Your Name</label>
-                  <input value={form.name} onChange={e => update('name', e.target.value)} placeholder="Full name"
-                    className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors" style={{ borderColor: 'rgba(106,13,173,0.3)', color: '#F5F5F5' }} />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Email</label>
-                  <input value={form.email} onChange={e => update('email', e.target.value)} placeholder="your@email.com" type="email"
-                    className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors" style={{ borderColor: 'rgba(106,13,173,0.3)', color: '#F5F5F5' }} />
-                </div>
+              <div className="mb-6">
+                <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Your Name</label>
+                <input value={form.name} onChange={e => update('name', e.target.value)} placeholder="Full name"
+                  className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors" style={{ borderColor: 'rgba(106,13,173,0.3)', color: '#F5F5F5' }} />
               </div>
               <div className="mb-6">
                 <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Message</label>
                 <textarea value={form.message} onChange={e => update('message', e.target.value)} rows={5} placeholder="Tell us about your project, question, or just say hello..."
                   className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 resize-none transition-colors" style={{ borderColor: 'rgba(106,13,173,0.3)', color: '#F5F5F5' }} />
               </div>
-              <button onClick={() => setSubmitted(true)} className="btn-primary w-full interactive flex items-center justify-center gap-2">
-                <FiSend size={16} /> Send Message
+              <button onClick={handleWhatsAppSubmit} className="btn-primary w-full interactive flex items-center justify-center gap-2" style={{ background: 'linear-gradient(135deg, #25D366, #128C7E)' }}>
+                <FaWhatsapp size={18} /> Send via WhatsApp
               </button>
             </div>
           )}

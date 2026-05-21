@@ -6,11 +6,9 @@ import { Link } from 'react-router-dom';
 const artistImage = 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=600&q=80';
 
 const timeline = [
-  { year: '2020', title: 'The Spark', desc: 'A needle, thread, and a dream — Dharshini began hand-embroidering small pieces for friends and family.' },
-  { year: '2021', title: 'First 100 Orders', desc: 'Word spread through Instagram. The first 100 orders poured in, each more creative than the last.' },
-  { year: '2022', title: 'Fabric Painting', desc: 'Expanded into hand-painted fabric art, blending painting with embroidery for truly unique pieces.' },
-  { year: '2023', title: '500+ Happy Customers', desc: 'Reached 500+ satisfied customers, featured in local exhibitions and craft fairs across Tamil Nadu.' },
-  { year: '2024', title: 'Going Digital', desc: 'Launched the official website with AI custom builder, bringing handcrafted luxury to your fingertips.' },
+  { year: '2026', title: 'Start', desc: 'A needle, thread, and a dream — Dharshini began hand-embroidering small pieces for friends and family.' },
+  { year: '', title: '', desc: 'Expanded into hand-painted fabric art, blending painting with embroidery for truly unique pieces.' },
+  { year: '', title: '', desc: 'Launched the official website with AI custom builder, bringing handcrafted luxury to your fingertips.' },
 ];
 
 const timelineColors = ['#F472B6', '#38BDF8', '#FB923C', '#34D399', '#818CF8'];
@@ -42,37 +40,9 @@ export default function About() {
 
       <div ref={ref} className="section-container" style={{ paddingTop: 40 }}>
         {/* Artist Section */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
-          <motion.div className="relative" initial={{ opacity: 0, x: -40 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.2 }}>
-            <div className="relative w-full max-w-md mx-auto aspect-[3/4] rounded-3xl overflow-hidden border border-white/10"
-              style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.5)' }}>
-              <img
-                src={artistImage}
-                alt="Dharshini — Artist & Founder"
-                className="w-full h-full object-cover"
-                loading="lazy"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                  e.target.parentElement.querySelector('.img-fallback')?.classList.remove('hidden');
-                }}
-              />
-              <div className="img-fallback hidden absolute inset-0 flex items-center justify-center flex-col gap-4"
-                style={{ background: 'linear-gradient(135deg, rgba(124,58,237,0.2), rgba(12,8,22,0.9))' }}>
-                <div className="w-36 h-36 rounded-full flex items-center justify-center text-6xl" style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)', boxShadow: '0 0 50px rgba(124,58,237,0.4)' }}>🪡</div>
-                <p className="font-great-vibes text-4xl" style={{ color: '#A78BFA' }}>Dharshini</p>
-                <p className="text-sm" style={{ color: '#9CA3AF' }}>Artist & Founder</p>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
-                <p className="font-great-vibes text-4xl" style={{ color: '#A78BFA' }}>Dharshini</p>
-                <p className="text-sm" style={{ color: '#9CA3AF' }}>Artist & Founder</p>
-              </div>
-            </div>
-            <motion.div className="absolute -top-4 -right-4 text-3xl" animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 6, repeat: Infinity }}>🌸</motion.div>
-            <motion.div className="absolute -bottom-4 -left-4 text-3xl" animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity }}>✨</motion.div>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0, x: 40 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.3 }}>
-            <h2 className="font-cinzel text-3xl font-bold mb-6 glow-text" style={{ color: '#FAFAFA' }}>Meet the Artist</h2>
+        <div className="max-w-3xl mx-auto mb-20">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.3 }}>
+            <h2 className="font-cinzel text-3xl font-bold mb-6 glow-text text-center" style={{ color: '#FAFAFA' }}>Meet the Artist</h2>
             <blockquote className="text-lg italic leading-relaxed mb-6 pl-6 text-left" style={{ color: '#9CA3AF', borderLeft: '3px solid #7C3AED' }}>
               "I believe that every piece of fabric holds a story waiting to be told through art. My mission is to bring your imagination to life, one stitch at a time."
             </blockquote>
@@ -82,7 +52,7 @@ export default function About() {
             <p className="text-sm leading-relaxed text-left" style={{ color: '#9CA3AF' }}>
               Specializing in hand embroidery, fabric painting, and custom designs, Dharshini combines traditional techniques with modern aesthetics to create pieces that are truly one-of-a-kind.
             </p>
-            <div className="mt-6 p-4 rounded-xl" style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(167,139,250,0.2)' }}>
+            <div className="mt-6 p-4 rounded-xl text-center" style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(167,139,250,0.2)' }}>
               <p className="font-great-vibes text-2xl" style={{ color: '#A78BFA' }}>— Dharshini</p>
             </div>
           </motion.div>

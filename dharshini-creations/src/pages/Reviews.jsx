@@ -7,8 +7,31 @@ import { FiStar, FiPlay, FiCamera } from 'react-icons/fi';
 const reviewAccents = ['#F472B6', '#38BDF8', '#FB923C', '#2DD4BF', '#818CF8', '#F59E0B'];
 
 export default function Reviews() {
+  const [reviewsList, setReviewsList] = useState(reviews);
   const [filterRating, setFilterRating] = useState(0);
-  const filtered = filterRating === 0 ? reviews : reviews.filter(r => r.rating === filterRating);
+  const [showForm, setShowForm] = useState(false);
+  const [newReview, setNewReview] = useState({ name: '', comment: '', rating: 5 });
+
+  const filtered = filterRating === 0 ? reviewsList : reviewsList.filter(r => r.rating === filterRating);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!newReview.name || !newReview.comment) return;
+    
+    const reviewObj = {
+      id: Date.now(),
+      name: newReview.name,
+      rating: newReview.rating,
+      comment: newReview.comment,
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80',
+      date: new Date().toISOString().split('T')[0],
+      hasVideo: false
+    };
+    
+    setReviewsList([reviewObj, ...reviewsList]);
+    setShowForm(false);
+    setNewReview({ name: '', comment: '', rating: 5 });
+  };
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -32,7 +55,7 @@ export default function Reviews() {
               </button>
             ))}
           </div>
-          <button className="btn-ghost text-sm py-2 px-5 interactive flex items-center gap-2"><FiCamera size={14} /> Submit Review</button>
+          <button onClick={() => setShowForm(true)} className="btn-ghost text-sm py-2 px-5 interactive flex items-center gap-2"><FiCamera size={14} /> Submit Review</button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((review, i) => {
@@ -74,6 +97,36 @@ export default function Reviews() {
           })}
         </div>
       </div>
+      {/* Submit Review Modal */}
+      {showForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="glass-card p-6 w-full max-w-md relative">
+            <button onClick={() => setShowForm(false)} className="absolute top-4 right-4 text-gray-400 hover:text-white interactive">✕</button>
+            <h3 className="font-cinzel text-xl font-bold mb-6 text-white text-left">Write a Review</h3>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div>
+                <label className="text-xs text-gray-400 block mb-2 text-left">Your Name</label>
+                <input required value={newReview.name} onChange={e => setNewReview({ ...newReview, name: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm outline-none focus:border-purple-500" placeholder="John Doe" />
+              </div>
+              <div>
+                <label className="text-xs text-gray-400 block mb-2 text-left">Rating</label>
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4, 5].map(star => (
+                    <button type="button" key={star} onClick={() => setNewReview({ ...newReview, rating: star })} className="interactive">
+                      <FiStar size={24} fill={star <= newReview.rating ? '#F59E0B' : 'none'} color={star <= newReview.rating ? '#F59E0B' : '#4B5563'} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-gray-400 block mb-2 text-left">Your Experience</label>
+                <textarea required value={newReview.comment} onChange={e => setNewReview({ ...newReview, comment: e.target.value })} rows={4} className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm outline-none focus:border-purple-500 resize-none" placeholder="Tell us what you think..." />
+              </div>
+              <button type="submit" className="btn-primary w-full interactive mt-2">Submit Review</button>
+            </form>
+          </motion.div>
+        </div>
+      )}
     </motion.div>
   );
 }

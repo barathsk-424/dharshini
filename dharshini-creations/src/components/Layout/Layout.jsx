@@ -2,6 +2,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import MobileNav from './MobileNav';
 import WhatsAppFloat from '../UI/WhatsAppFloat';
+import CartDrawer from '../UI/CartDrawer';
 
 export default function Layout({ children }) {
   return (
@@ -13,6 +14,7 @@ export default function Layout({ children }) {
       <Footer />
       <MobileNav />
       <WhatsAppFloat />
+      <CartDrawer />
     </div>
   );
 }

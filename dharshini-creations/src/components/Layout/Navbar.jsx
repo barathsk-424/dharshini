@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCartStore, useUIStore } from '../../store/useStore';
+import { useCartStore, useUIStore, useUserStore } from '../../store/useStore';
 import { FiShoppingBag, FiHeart, FiMenu, FiX, FiVolume2, FiVolumeX } from 'react-icons/fi';
 import Logo from '../UI/Logo';
 
 const navLinks = [
   { path: '/', label: 'Home' },
-  { path: '/gallery', label: 'Gallery' },
   { path: '/shop', label: 'Shop' },
   { path: '/custom-orders', label: 'Custom Orders' },
   { path: '/pricing', label: 'Pricing' },
@@ -22,6 +21,8 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const itemCount = useCartStore(s => s.getItemCount());
+  const toggleCart = useCartStore(s => s.toggleCart);
+  const wishlistCount = useUserStore(s => s.wishlist.length);
   const { soundEnabled, toggleSound } = useUIStore();
 
   useEffect(() => {
@@ -53,12 +54,8 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 interactive group"
             onClick={(e) => {
-              if (location.pathname === '/') {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              } else {
-                window.scrollTo({ top: 0 });
-              }
+              e.preventDefault();
+              window.location.href = '/';
             }}>
             <Logo size={40} className="flex-shrink-0 group-hover:rotate-12 transition-transform duration-500" />
             <div className="relative leading-tight">
@@ -110,10 +107,21 @@ export default function Navbar() {
                 : <FiVolumeX size={18} color="#4B5563" />
               }
             </button>
-            <Link to="/shop" className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300 relative" title="Wishlist">
+            <Link to="/shop?wishlist=true" className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300 relative" title="Wishlist">
               <FiHeart size={18} color="#D1D5DB" />
+              {wishlistCount > 0 && (
+                <motion.span
+                  className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center text-white"
+                  style={{ background: 'linear-gradient(135deg, #EC4899, #F472B6)', boxShadow: '0 0 10px rgba(236,72,153,0.5)' }}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: 'spring', stiffness: 500 }}
+                >
+                  {wishlistCount}
+                </motion.span>
+              )}
             </Link>
-            <button className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300 relative" title="Cart">
+            <button onClick={toggleCart} className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300 relative" title="Cart">
               <FiShoppingBag size={18} color="#D1D5DB" />
               {itemCount > 0 && (
                 <motion.span

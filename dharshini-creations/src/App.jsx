@@ -4,8 +4,8 @@ import { useUIStore } from './store/useStore';
 import Layout from './components/Layout/Layout';
 import OpeningAnimation from './components/OpeningAnimation';
 import Home from './pages/Home';
-import Gallery from './pages/Gallery';
 import Shop from './pages/Shop';
+import ProductDetail from './pages/ProductDetail';
 import CustomOrders from './pages/CustomOrders';
 import Pricing from './pages/Pricing';
 import Reviews from './pages/Reviews';
@@ -29,8 +29,8 @@ function App() {
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
-            <Route path="/gallery" element={<Gallery />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/shop/:id" element={<ProductDetail />} />
             <Route path="/custom-orders" element={<CustomOrders />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/reviews" element={<Reviews />} />

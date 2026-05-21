@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { shirtColors, floralStyles } from '../data/mockData';
@@ -7,7 +7,27 @@ export default function CustomOrders() {
   const [form, setForm] = useState({ name: '', phone: '', shirtType: 'tshirt', position: 'chest', color: 'White', measurements: '', instructions: '' });
   const [files, setFiles] = useState([]);
   const [submitted, setSubmitted] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  
   const update = (k, v) => setForm(p => ({ ...p, [k]: v }));
+
+  useEffect(() => {
+    const saved = localStorage.getItem('dc_custom_order_draft');
+    if (saved) {
+      try { setForm(JSON.parse(saved)); } catch (e) {}
+    }
+  }, []);
+
+  const handleSaveDraft = () => {
+    localStorage.setItem('dc_custom_order_draft', JSON.stringify(form));
+    setIsSaved(true);
+    setTimeout(() => setIsSaved(false), 2000);
+  };
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+    localStorage.removeItem('dc_custom_order_draft');
+  };
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -83,8 +103,10 @@ export default function CustomOrders() {
               <textarea value={form.instructions} onChange={e => update('instructions', e.target.value)} rows={4} placeholder="Any specific details, colors, design preferences..." className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 resize-none" style={{ borderColor: 'rgba(106,13,173,0.3)', color: '#F5F5F5' }} />
             </div>
             <div className="flex gap-4">
-              <button className="btn-ghost flex-1 interactive">💾 Save Draft</button>
-              <button onClick={() => setSubmitted(true)} className="btn-primary flex-1 interactive">📩 Submit for Quote</button>
+              <button onClick={handleSaveDraft} className="btn-ghost flex-1 interactive">
+                {isSaved ? '✅ Saved!' : '💾 Save Draft'}
+              </button>
+              <button onClick={handleSubmit} className="btn-primary flex-1 interactive">📩 Submit for Quote</button>
             </div>
           </div>
         )}

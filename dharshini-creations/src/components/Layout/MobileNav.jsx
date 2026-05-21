@@ -4,7 +4,6 @@ import { FiHome, FiImage, FiShoppingBag, FiHeart, FiUser } from 'react-icons/fi'
 
 const tabs = [
   { path: '/', icon: FiHome, label: 'Home' },
-  { path: '/gallery', icon: FiImage, label: 'Gallery' },
   { path: '/shop', icon: FiShoppingBag, label: 'Orders' },
   { path: '/shop', icon: FiHeart, label: 'Wishlist' },
   { path: '/about', icon: FiUser, label: 'Profile' },

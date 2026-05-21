@@ -13,8 +13,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
           {/* Brand */}
           <div className="text-left">
-            <div className="flex items-center gap-3 mb-3">
-              <Logo size={48} className="hover:rotate-12 transition-transform duration-500" />
+            <a href="/" className="flex items-center gap-3 mb-3 interactive group cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = '/';
+              }}>
+              <Logo size={48} className="group-hover:rotate-12 transition-transform duration-500" />
               <div>
                 <h3 className="font-cinzel text-2xl font-bold leading-none"
                   style={{ background: 'linear-gradient(135deg, #FAFAFA, #A78BFA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
@@ -22,7 +26,7 @@ export default function Footer() {
                 </h3>
                 <p className="font-cinzel text-[10px] tracking-[0.25em] mt-1" style={{ color: '#9CA3AF' }}>CREATIONS</p>
               </div>
-            </div>
+            </a>
             <p className="font-great-vibes text-xl mb-4" style={{ color: '#A78BFA' }}>Every Stitch Tells A Story</p>
             <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>
               Premium handmade embroidery and custom fabric painting, crafted with unmatched precision and creative soul in Tamil Nadu, India.
@@ -35,7 +39,6 @@ export default function Footer() {
             <div className="space-y-3.5">
               {[
                 { to: '/shop', label: 'Shop' },
-                { to: '/gallery', label: 'Gallery' },
                 { to: '/custom-orders', label: 'Custom Orders' },
                 { to: '/pricing', label: 'Pricing' },
                 { to: '/track-order', label: 'Track Order' },
@@ -51,9 +54,9 @@ export default function Footer() {
           <div className="text-left">
             <h4 className="font-cinzel text-xs font-semibold tracking-[0.2em] mb-6" style={{ color: '#FAFAFA' }}>CONTACT</h4>
             <div className="space-y-4">
-              <a href="https://instagram.com/dharshini_creations" target="_blank" rel="noopener noreferrer"
+              <a href="https://instagram.com/threads.by.dharshini0612" target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-3 text-sm interactive transition-all duration-300 hover:text-purple-400" style={{ color: '#9CA3AF' }}>
-                <FiInstagram size={16} color="#A78BFA" /> @dharshini_creations
+                <FiInstagram size={16} color="#A78BFA" /> @threads.by.dharshini0612
               </a>
               <a href="https://wa.me/919876543210?text=Hi%20Dharshini!%20I'm%20interested%20in%20your%20creations." target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-3 text-sm interactive transition-all duration-300 hover:text-purple-400" style={{ color: '#9CA3AF' }}>
