@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FiInstagram, FiMail, FiMapPin, FiHeart } from 'react-icons/fi';
+import { FiInstagram, FiMapPin, FiHeart } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import Logo from '../UI/Logo';
 
@@ -61,10 +61,6 @@ export default function Footer() {
               <a href="https://wa.me/919876543210?text=Hi%20Dharshini!%20I'm%20interested%20in%20your%20creations." target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-3 text-sm interactive transition-all duration-300 hover:text-purple-400" style={{ color: '#9CA3AF' }}>
                 <FaWhatsapp size={16} color="#A78BFA" /> +91 98765 43210
-              </a>
-              <a href="mailto:hello@dharshinicreations.com?subject=Inquiry%20from%20Website"
-                className="flex items-center gap-3 text-sm interactive transition-all duration-300 hover:text-purple-400" style={{ color: '#9CA3AF' }}>
-                <FiMail size={16} color="#A78BFA" /> hello@dharshinicreations.com
               </a>
               <div className="flex items-center gap-3 text-sm" style={{ color: '#9CA3AF' }}>
                 <FiMapPin size={16} color="#A78BFA" /> Tamil Nadu, India

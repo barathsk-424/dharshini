@@ -1,12 +1,11 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { FiInstagram, FiMail, FiMapPin } from 'react-icons/fi';
+import { FiInstagram, FiMapPin } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 
 const contactCards = [
   { icon: FiInstagram, title: 'Instagram', desc: '@threads.by.dharshini0612', link: 'https://instagram.com/threads.by.dharshini0612', color: 'linear-gradient(135deg, #833AB4, #E1306C, #F77737)', accent: '#E1306C' },
   { icon: FaWhatsapp, title: 'WhatsApp', desc: '+91 98765 43210', link: 'https://wa.me/919876543210?text=Hi%20Dharshini!', color: 'linear-gradient(135deg, #25D366, #128C7E)', accent: '#25D366' },
-  { icon: FiMail, title: 'Email', desc: 'hello@dharshinicreations.com', link: 'mailto:hello@dharshinicreations.com?subject=Inquiry', color: 'linear-gradient(135deg, #38BDF8, #818CF8)', accent: '#818CF8' },
 ];
 
 export default function ContactSection() {
@@ -21,7 +20,7 @@ export default function ContactSection() {
           <h2 className="section-title glow-text">Get In Touch</h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 max-w-4xl mx-auto">
           {contactCards.map((card, i) => {
             const Icon = card.icon;
             return (
