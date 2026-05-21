@@ -1,9 +1,6 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-// Artist portrait from Unsplash
-const artistImage = 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=600&q=80';
-
 // Unique color per timeline milestone
 const timelineColors = ['#F472B6', '#38BDF8', '#FB923C', '#34D399', '#818CF8'];
 
@@ -27,40 +24,7 @@ export default function AboutArtist() {
           <h2 className="section-title glow-text">About the Artist</h2>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 mt-8 items-center">
-          {/* Artist image area */}
-          <motion.div className="relative" initial={{ opacity: 0, x: -40 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.2 }}>
-            <div className="relative w-full max-w-md mx-auto aspect-[3/4] rounded-3xl overflow-hidden border border-white/10"
-              style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.5)' }}>
-              <img
-                src={artistImage}
-                alt="Dharshini — Artist & Founder"
-                className="w-full h-full object-cover"
-                loading="lazy"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                  e.target.parentElement.querySelector('.img-fallback')?.classList.remove('hidden');
-                }}
-              />
-              <div className="img-fallback hidden absolute inset-0 flex items-center justify-center flex-col gap-4"
-                style={{ background: 'linear-gradient(135deg, rgba(245,158,11,0.2), rgba(20,10,40,0.9))' }}>
-                <div className="w-32 h-32 rounded-full flex items-center justify-center text-5xl"
-                  style={{ background: 'linear-gradient(135deg, #F59E0B, #FBBF24)', boxShadow: '0 0 40px rgba(245,158,11,0.4)' }}>
-                  🪡
-                </div>
-                <p className="font-great-vibes text-3xl" style={{ color: '#FBBF24' }}>Dharshini</p>
-                <p className="text-sm" style={{ color: '#9CA3AF' }}>Artist & Founder</p>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
-                <p className="font-great-vibes text-3xl" style={{ color: '#FBBF24' }}>Dharshini</p>
-                <p className="text-sm" style={{ color: '#9CA3AF' }}>Artist & Founder</p>
-              </div>
-            </div>
-            {/* Decorative elements */}
-            <motion.div className="absolute -top-6 -right-6 text-4xl" animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 6, repeat: Infinity }}>🌸</motion.div>
-            <motion.div className="absolute -bottom-4 -left-4 text-3xl" animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity }}>✨</motion.div>
-          </motion.div>
-
+        <div className="max-w-3xl mx-auto mt-8">
           {/* Story & Timeline */}
           <motion.div initial={{ opacity: 0, x: 40 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.3 }}>
             <blockquote className="text-lg italic leading-relaxed mb-8 pl-6 text-left" style={{ color: '#9CA3AF', borderLeft: '3px solid #F59E0B' }}>
