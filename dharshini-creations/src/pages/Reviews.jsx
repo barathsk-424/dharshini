@@ -38,19 +38,19 @@ export default function Reviews() {
       <Helmet><title>Reviews — Dharshini Creations</title></Helmet>
       <section className="gradient-mesh min-h-[40vh] flex items-center justify-center">
         <div className="text-center">
-          <motion.p className="font-great-vibes text-2xl mb-2" style={{ color: '#A78BFA' }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>Customer Love</motion.p>
+          <motion.p className="font-great-vibes text-2xl mb-2" style={{ color: 'var(--color-purple-glow)' }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>Customer Love</motion.p>
           <motion.h1 className="font-cinzel text-4xl md:text-5xl font-bold glow-text" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-            style={{ background: 'linear-gradient(135deg, #FAFAFA, #7C3AED)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Reviews</motion.h1>
+            style={{ background: 'linear-gradient(135deg, var(--color-white), var(--color-purple-primary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Reviews</motion.h1>
         </div>
       </section>
       <div className="section-container" style={{ paddingTop: 40 }}>
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <div className="flex gap-2">
             <button onClick={() => setFilterRating(0)} className="px-4 py-2 rounded-full text-sm interactive transition-all"
-              style={{ background: filterRating === 0 ? 'linear-gradient(135deg, #7C3AED, #A78BFA)' : 'rgba(124,58,237,0.1)', color: filterRating === 0 ? 'white' : '#9CA3AF' }}>All</button>
+              style={{ background: filterRating === 0 ? 'linear-gradient(135deg, var(--color-purple-primary), var(--color-purple-glow))' : 'rgba(124,58,237,0.1)', color: filterRating === 0 ? 'white' : 'var(--color-gray-dark)' }}>All</button>
             {[5, 4, 3, 2, 1].map(r => (
               <button key={r} onClick={() => setFilterRating(r)} className="px-3 py-2 rounded-full text-sm interactive flex items-center gap-1"
-                style={{ background: filterRating === r ? 'linear-gradient(135deg, #7C3AED, #A78BFA)' : 'rgba(124,58,237,0.1)', color: filterRating === r ? 'white' : '#9CA3AF' }}>
+                style={{ background: filterRating === r ? 'linear-gradient(135deg, var(--color-purple-primary), var(--color-purple-glow))' : 'rgba(124,58,237,0.1)', color: filterRating === r ? 'white' : 'var(--color-gray-dark)' }}>
                 {r} <FiStar size={10} />
               </button>
             ))}
@@ -77,21 +77,21 @@ export default function Reviews() {
                       loading="lazy"
                       onError={(e) => {
                         e.target.style.display = 'none';
-                        e.target.parentElement.innerHTML = `<div class="w-full h-full rounded-full flex items-center justify-center text-lg font-bold" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);color:white">${review.name.charAt(0)}</div>`;
+                        e.target.parentElement.innerHTML = `<div class="w-full h-full rounded-full flex items-center justify-center text-lg font-bold" style="background:linear-gradient(135deg,var(--color-purple-primary),var(--color-purple-glow));color:white">${review.name.charAt(0)}</div>`;
                       }}
                     />
                   </div>
                   <div className="text-left">
-                    <p className="font-poppins font-semibold text-sm" style={{ color: '#FAFAFA' }}>{review.name}</p>
+                    <p className="font-poppins font-semibold text-sm" style={{ color: 'var(--color-white)' }}>{review.name}</p>
                     <div className="flex gap-0.5">
                       {Array.from({ length: 5 }).map((_, j) => (
-                        <FiStar key={j} size={12} fill={j < review.rating ? '#F59E0B' : 'none'} color={j < review.rating ? '#F59E0B' : '#4B5563'} />
+                        <FiStar key={j} size={12} fill={j < review.rating ? '#F59E0B' : 'none'} color={j < review.rating ? '#F59E0B' : 'var(--color-gray-dark)'} />
                       ))}
                     </div>
                   </div>
                 </div>
-                <p className="text-sm leading-relaxed mb-3 text-left" style={{ color: '#9CA3AF' }}>"{review.comment}"</p>
-                <p className="text-xs text-left" style={{ color: '#4B5563' }}>{new Date(review.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                <p className="text-sm leading-relaxed mb-3 text-left" style={{ color: 'var(--color-gray-dark)' }}>"{review.comment}"</p>
+                <p className="text-xs text-left" style={{ color: 'var(--color-gray-dark)' }}>{new Date(review.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
               </motion.div>
             );
           })}
@@ -113,7 +113,7 @@ export default function Reviews() {
                 <div className="flex gap-2">
                   {[1, 2, 3, 4, 5].map(star => (
                     <button type="button" key={star} onClick={() => setNewReview({ ...newReview, rating: star })} className="interactive">
-                      <FiStar size={24} fill={star <= newReview.rating ? '#F59E0B' : 'none'} color={star <= newReview.rating ? '#F59E0B' : '#4B5563'} />
+                      <FiStar size={24} fill={star <= newReview.rating ? '#F59E0B' : 'none'} color={star <= newReview.rating ? '#F59E0B' : 'var(--color-gray-dark)'} />
                     </button>
                   ))}
                 </div>

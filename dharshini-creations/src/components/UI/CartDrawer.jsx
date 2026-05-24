@@ -89,7 +89,7 @@ export default function CartDrawer() {
                       <button
                         onClick={toggleCart}
                         className="px-6 py-2.5 rounded-full text-xs font-bold tracking-wider text-white interactive"
-                        style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)' }}
+                        style={{ background: 'linear-gradient(135deg, var(--color-purple-primary), var(--color-purple-glow))' }}
                       >
                         CONTINUE SHOPPING
                       </button>
@@ -175,18 +175,30 @@ export default function CartDrawer() {
                       </span>
                     </div>
                     <p className="text-[10px] text-gray-400 text-left">
-                      Shipping and customizations are calculated at order confirmation. Orders are processed via WhatsApp chat.
+                      Shipping and customizations are calculated at checkout.
                     </p>
-                    <button
-                      onClick={handleCheckout}
-                      className="w-full py-3.5 px-4 rounded-xl font-bold text-xs tracking-wider flex items-center justify-center gap-2 text-white transition-transform duration-300 hover:scale-[1.02] interactive"
-                      style={{
-                        background: 'linear-gradient(135deg, #25D366, #128C7E)',
-                        boxShadow: '0 4px 15px rgba(37, 211, 102, 0.25)',
-                      }}
-                    >
-                      <FaWhatsapp size={16} /> CHECKOUT VIA WHATSAPP
-                    </button>
+                    <div className="flex flex-col gap-3">
+                      <button
+                        onClick={() => { toggleCart(); navigate('/checkout'); }}
+                        className="w-full py-3.5 px-4 rounded-xl font-bold text-xs tracking-wider flex items-center justify-center gap-2 text-white transition-transform duration-300 hover:scale-[1.02] interactive"
+                        style={{
+                          background: 'linear-gradient(135deg, var(--color-purple-primary), var(--color-purple-glow))',
+                          boxShadow: '0 4px 15px rgba(124, 58, 237, 0.25)',
+                        }}
+                      >
+                        <FiShoppingBag size={16} /> DIRECT WEBSITE ORDER
+                      </button>
+                      <button
+                        onClick={handleCheckout}
+                        className="w-full py-3.5 px-4 rounded-xl font-bold text-xs tracking-wider flex items-center justify-center gap-2 text-white transition-transform duration-300 hover:scale-[1.02] interactive"
+                        style={{
+                          background: 'linear-gradient(135deg, #25D366, #128C7E)',
+                          boxShadow: '0 4px 15px rgba(37, 211, 102, 0.25)',
+                        }}
+                      >
+                        <FaWhatsapp size={16} /> CHECKOUT VIA WHATSAPP
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>

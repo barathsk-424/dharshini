@@ -11,23 +11,11 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const product = products.find(p => p.id === parseInt(id));
 
-  // Default selections
-  const [selectedColor, setSelectedColor] = useState('');
-  const [selectedSize, setSelectedSize] = useState('');
-  const [customText, setCustomText] = useState('');
-  const [quantity, setQuantity] = useState(1);
   const [activeAccordion, setActiveAccordion] = useState('description');
-
-  const addItem = useCartStore(s => s.addItem);
-  const toggleCart = useCartStore(s => s.toggleCart);
-  const { wishlist, toggleWishlist, isAuthenticated } = useUserStore();
+  const { wishlist, toggleWishlist } = useUserStore();
 
   useEffect(() => {
     if (product) {
-      setSelectedColor(product.colors?.[0] || 'Default');
-      setSelectedSize(product.sizes?.[0] || 'Free Size');
-      setQuantity(1);
-      setCustomText('');
       window.scrollTo(0, 0);
     }
   }, [product, id]);
@@ -37,39 +25,15 @@ export default function ProductDetail() {
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-6">
         <h2 className="font-cinzel text-2xl font-bold text-red-400 mb-4">Product Not Found</h2>
         <p className="text-gray-400 mb-6">The product you are looking for does not exist or has been removed.</p>
-        <Link to="/shop" className="btn-primary px-6 py-3 rounded-full text-sm font-semibold" style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)' }}>
+        <Link to="/shop" className="btn-primary px-6 py-3 rounded-full text-sm font-semibold" style={{ background: 'linear-gradient(135deg, var(--color-purple-primary), var(--color-purple-glow))' }}>
           Back to Shop
         </Link>
       </div>
     );
   }
 
-  const handleAddToCart = () => {
-    addItem(product, { color: selectedColor, size: selectedSize, customText });
-    toggleCart(); // Open cart drawer for feedback
-  };
-
-  const handleBuyNow = () => {
-    if (!isAuthenticated) {
-      navigate('/auth');
-      return;
-    }
-    // Add to cart first
-    addItem(product, { color: selectedColor, size: selectedSize, customText });
-    
-    // Construct WhatsApp message
-    const message = `Hi! I would like to buy this product:
-🛍️ *Product:* ${product.name}
-🏷️ *Price:* ₹${product.basePrice}
-🎨 *Color:* ${selectedColor}
-📏 *Size:* ${selectedSize}
-${customText ? `✍️ *Customization:* "${customText}"` : ''}
-🔢 *Quantity:* ${quantity}
-
-Please let me know how to proceed with my order!`;
-
-    const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/919876543210?text=${encoded}`, '_blank');
+  const handleCustomizeAndOrder = () => {
+    navigate(`/customize/${product.id}`);
   };
 
   // Filter out current product for related items
@@ -118,7 +82,7 @@ Please let me know how to proceed with my order!`;
               className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center interactive"
               style={{ background: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(8px)' }}
             >
-              <FiHeart size={18} fill={wishlist.includes(product.id) ? '#A78BFA' : 'none'} color={wishlist.includes(product.id) ? '#A78BFA' : 'white'} />
+              <FiHeart size={18} fill={wishlist.includes(product.id) ? 'var(--color-purple-glow)' : 'none'} color={wishlist.includes(product.id) ? 'var(--color-purple-glow)' : 'white'} />
             </button>
           </div>
         </div>
@@ -128,124 +92,31 @@ Please let me know how to proceed with my order!`;
           <span className="text-xs font-semibold uppercase tracking-widest text-purple-400 mb-2">
             {product.categoryId === 1 ? 'Fabric Painting' : product.categoryId === 2 ? 'Embroidery Works' : 'Combo Works'}
           </span>
-          <h1 className="font-cinzel text-3xl lg:text-4xl font-black mb-4 tracking-wide" style={{ color: '#FAFAFA' }}>
+          <h1 className="font-cinzel text-3xl lg:text-4xl font-black mb-4 tracking-wide" style={{ color: 'var(--color-white)' }}>
             {product.name}
           </h1>
           <div className="flex items-center gap-4 mb-6">
-            <span className="font-cinzel text-3xl font-bold" style={{ color: '#A78BFA' }}>
-              ₹{product.basePrice * quantity}
+            <span className="font-cinzel text-3xl font-bold" style={{ color: 'var(--color-purple-glow)' }}>
+              ₹{product.basePrice}
             </span>
-            {product.isCustomizable && (
-              <span className="px-2.5 py-1 rounded-md text-[10px] font-semibold tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                CUSTOMIZABLE
-              </span>
-            )}
+            <span className="px-2.5 py-1 rounded-md text-[10px] font-semibold tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              CUSTOMIZABLE
+            </span>
           </div>
 
-          <p className="text-sm leading-relaxed mb-8" style={{ color: '#9CA3AF' }}>
+          <p className="text-sm leading-relaxed mb-8" style={{ color: 'var(--color-gray-dark)' }}>
             {product.description}
           </p>
 
-          {/* Configuration Options */}
-          <div className="space-y-6 mb-8 p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-            {/* Color selector */}
-            {product.colors && product.colors.length > 0 && (
-              <div>
-                <span className="text-xs font-bold tracking-wider text-gray-400 block mb-3 uppercase">Select Color</span>
-                <div className="flex flex-wrap gap-2">
-                  {product.colors.map(col => (
-                    <button
-                      key={col}
-                      onClick={() => setSelectedColor(col)}
-                      className="px-4 py-2 rounded-xl text-xs font-medium border transition-all duration-300 interactive"
-                      style={{
-                        borderColor: selectedColor === col ? '#A78BFA' : 'rgba(255,255,255,0.05)',
-                        background: selectedColor === col ? 'rgba(167, 139, 250, 0.1)' : 'transparent',
-                        color: selectedColor === col ? '#A78BFA' : '#9CA3AF'
-                      }}
-                    >
-                      {col}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Size selector */}
-            {product.sizes && product.sizes.length > 0 && (
-              <div>
-                <span className="text-xs font-bold tracking-wider text-gray-400 block mb-3 uppercase">Select Size</span>
-                <div className="flex flex-wrap gap-2">
-                  {product.sizes.map(sz => (
-                    <button
-                      key={sz}
-                      onClick={() => setSelectedSize(sz)}
-                      className="px-4 py-2.5 rounded-xl text-xs font-bold border transition-all duration-300 interactive"
-                      style={{
-                        borderColor: selectedSize === sz ? '#A78BFA' : 'rgba(255,255,255,0.05)',
-                        background: selectedSize === sz ? 'rgba(167, 139, 250, 0.1)' : 'transparent',
-                        color: selectedSize === sz ? '#A78BFA' : '#9CA3AF'
-                      }}
-                    >
-                      {sz}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Custom text input */}
-            {product.isCustomizable && (
-              <div>
-                <span className="text-xs font-bold tracking-wider text-gray-400 block mb-2 uppercase">Customization Text (Optional)</span>
-                <p className="text-[11px] text-gray-500 mb-2">Enter the name, quote or phrase you want embroidered or painted.</p>
-                <input
-                  type="text"
-                  placeholder="e.g. Priya, Believe in Yourself, etc."
-                  value={customText}
-                  onChange={e => setCustomText(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border border-white/10 outline-none focus:border-purple-500 text-white transition-colors"
-                />
-              </div>
-            )}
-
-            {/* Quantity */}
-            <div>
-              <span className="text-xs font-bold tracking-wider text-gray-400 block mb-3 uppercase">Quantity</span>
-              <div className="flex items-center gap-1 bg-white/5 border border-white/10 w-fit rounded-xl overflow-hidden">
-                <button 
-                  onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                  className="p-3 text-gray-400 hover:text-white transition-colors interactive"
-                >
-                  <FiMinus size={14} />
-                </button>
-                <span className="w-12 text-center text-sm font-semibold text-white">
-                  {quantity}
-                </span>
-                <button 
-                  onClick={() => setQuantity(q => q + 1)}
-                  className="p-3 text-gray-400 hover:text-white transition-colors interactive"
-                >
-                  <FiPlus size={14} />
-                </button>
-              </div>
-            </div>
-          </div>
-
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-10">
+          <div className="mb-10">
             <button
-              onClick={handleAddToCart}
-              className="flex-1 py-4 px-6 rounded-2xl font-bold text-sm tracking-wider flex items-center justify-center gap-2 border border-purple-500/30 text-purple-300 bg-purple-500/5 hover:bg-purple-500/10 transition-colors interactive"
+              onClick={handleCustomizeAndOrder}
+              className="w-full py-5 px-6 rounded-2xl font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-3 text-white transition-transform duration-300 hover:scale-[1.02] interactive"
+              style={{ background: 'linear-gradient(135deg, var(--color-purple-primary), var(--color-purple-glow))', boxShadow: '0 4px 20px rgba(124, 58, 237, 0.4)' }}
             >
-              <FiShoppingBag size={16} /> ADD TO CART
-            </button>
-            <button
-              onClick={handleBuyNow}
-              className="flex-1 py-4 px-6 rounded-2xl font-bold text-sm tracking-wider flex items-center justify-center gap-2 text-white transition-transform duration-300 hover:scale-[1.02] interactive"
-              style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)', boxShadow: '0 4px 20px rgba(124, 58, 237, 0.3)' }}
-            >
-              BUY NOW via WhatsApp
+              CUSTOMIZE & ORDER
+              <span className="text-lg">→</span>
             </button>
           </div>
 
@@ -288,7 +159,7 @@ Please let me know how to proceed with my order!`;
       {/* Related Products */}
       {relatedProducts.length > 0 && (
         <div className="mt-20 border-t border-white/5 pt-16">
-          <h3 className="font-cinzel text-2xl font-bold mb-8 text-left" style={{ color: '#FAFAFA' }}>
+          <h3 className="font-cinzel text-2xl font-bold mb-8 text-left" style={{ color: 'var(--color-white)' }}>
             You May Also Like
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -305,7 +176,7 @@ Please let me know how to proceed with my order!`;
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <span className="font-cinzel font-bold text-lg absolute bottom-4 left-4" style={{ color: '#A78BFA' }}>
+                  <span className="font-cinzel font-bold text-lg absolute bottom-4 left-4" style={{ color: 'var(--color-purple-glow)' }}>
                     ₹{p.basePrice}
                   </span>
                 </div>

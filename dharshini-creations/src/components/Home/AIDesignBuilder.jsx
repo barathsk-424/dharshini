@@ -134,7 +134,7 @@ export default function AIDesignBuilder() {
                       <>
                         <div className="text-5xl mb-4">📁</div>
                         <p className="text-sm mb-2" style={{ color: '#E5E7EB' }}>Drag & drop your design here</p>
-                        <p className="text-xs mb-4" style={{ color: '#9CA3AF' }}>PNG, JPG supported</p>
+                        <p className="text-xs mb-4" style={{ color: 'var(--color-gray-dark)' }}>PNG, JPG supported</p>
                         <label className="btn-ghost text-sm py-2 px-6 interactive cursor-pointer" style={{ borderColor: 'rgba(244,114,182,0.5)', color: '#F472B6' }}>
                           Browse Files
                           <input type="file" accept="image/*" className="hidden" onChange={handleUpload} />
@@ -302,7 +302,7 @@ export default function AIDesignBuilder() {
                   )}
                 </svg>
 
-                <p className="text-center text-xs mt-4 font-poppins" style={{ color: '#9CA3AF' }}>
+                <p className="text-center text-xs mt-4 font-poppins" style={{ color: 'var(--color-gray-dark)' }}>
                   Live Preview • {selectedColor.name} • {selectedPosition.replace('-', ' ')}
                 </p>
               </div>

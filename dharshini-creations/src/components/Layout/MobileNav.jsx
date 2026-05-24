@@ -38,8 +38,8 @@ export default function MobileNav() {
                   transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                 />
               )}
-              <Icon size={20} color={isActive ? '#B266FF' : '#9CA3AF'} />
-              <span className="text-[10px] font-poppins" style={{ color: isActive ? '#B266FF' : '#9CA3AF' }}>
+              <Icon size={20} color={isActive ? '#B266FF' : 'var(--color-gray-dark)'} />
+              <span className="text-[10px] font-poppins" style={{ color: isActive ? '#B266FF' : 'var(--color-gray-dark)' }}>
                 {tab.label}
               </span>
             </Link>

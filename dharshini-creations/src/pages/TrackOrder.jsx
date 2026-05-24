@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { FiSearch, FiPackage, FiTruck, FiCheckCircle } from 'react-icons/fi';
+import { useOrderStore } from '../store/useStore';
 
 const steps = [
   { key: 'packed', label: 'Order Packed', emoji: '📦' },
@@ -21,10 +22,24 @@ export default function TrackOrder() {
   const [tracking, setTracking] = useState(null);
   const [error, setError] = useState('');
 
+  const orders = useOrderStore(s => s.orders);
+
   const handleTrack = () => {
-    const result = mockTracking[orderId.toUpperCase()];
+    const query = orderId.trim().toUpperCase();
+    
+    // Check in local state first (Direct Website Orders)
+    const localOrder = orders.find(o => o.id === query);
+    
+    if (localOrder) {
+      setTracking(localOrder);
+      setError('');
+      return;
+    }
+
+    // Fallback to mock static data
+    const result = mockTracking[query];
     if (result) { setTracking(result); setError(''); }
-    else { setTracking(null); setError('Order not found. Try DC-001, DC-002, or DC-003'); }
+    else { setTracking(null); setError('Order not found. Try your order ID or DC-001'); }
   };
 
   const statusIndex = tracking ? steps.findIndex(s => s.key === tracking.status) : -1;
@@ -75,22 +90,22 @@ export default function TrackOrder() {
                     <motion.div className="w-12 h-12 rounded-full flex items-center justify-center text-xl"
                       style={{ background: i <= statusIndex ? 'linear-gradient(135deg, #8A2BE2, #B266FF)' : 'rgba(20,10,40,0.8)', border: `2px solid ${i <= statusIndex ? '#B266FF' : '#6A0DAD'}` }}
                       initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: i * 0.15 }}>{step.emoji}</motion.div>
-                    <span className="text-xs font-poppins text-center max-w-[80px]" style={{ color: i <= statusIndex ? '#B266FF' : '#9CA3AF' }}>{step.label}</span>
+                    <span className="text-xs font-poppins text-center max-w-[80px]" style={{ color: i <= statusIndex ? '#B266FF' : 'var(--color-gray-dark)' }}>{step.label}</span>
                   </div>
                 ))}
               </div>
               {/* Details */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="p-4 rounded-xl" style={{ background: 'rgba(138,43,226,0.08)' }}>
-                  <p className="text-xs mb-1" style={{ color: '#9CA3AF' }}>Order ID</p>
+                  <p className="text-xs mb-1" style={{ color: 'var(--color-gray-dark)' }}>Order ID</p>
                   <p className="font-cinzel font-bold" style={{ color: '#B266FF' }}>{orderId.toUpperCase()}</p>
                 </div>
                 <div className="p-4 rounded-xl" style={{ background: 'rgba(138,43,226,0.08)' }}>
-                  <p className="text-xs mb-1" style={{ color: '#9CA3AF' }}>Destination</p>
+                  <p className="text-xs mb-1" style={{ color: 'var(--color-gray-dark)' }}>Destination</p>
                   <p className="text-sm font-semibold" style={{ color: '#F5F5F5' }}>{tracking.dest}</p>
                 </div>
                 <div className="p-4 rounded-xl" style={{ background: 'rgba(138,43,226,0.08)' }}>
-                  <p className="text-xs mb-1" style={{ color: '#9CA3AF' }}>Est. Delivery</p>
+                  <p className="text-xs mb-1" style={{ color: 'var(--color-gray-dark)' }}>Est. Delivery</p>
                   <p className="text-sm font-semibold" style={{ color: '#4ade80' }}>{tracking.est}</p>
                 </div>
               </div>
@@ -100,7 +115,7 @@ export default function TrackOrder() {
             <div className="text-center py-12">
               <div className="text-5xl mb-4">📦</div>
               <p className="text-sm" style={{ color: '#E5E7EB' }}>Enter your order ID to track your handcrafted creation</p>
-              <p className="text-xs mt-2" style={{ color: '#9CA3AF' }}>Demo IDs: DC-001, DC-002, DC-003</p>
+              <p className="text-xs mt-2" style={{ color: 'var(--color-gray-dark)' }}>Demo IDs: DC-001, DC-002, DC-003</p>
             </div>
           )}
         </div>

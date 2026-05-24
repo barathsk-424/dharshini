@@ -42,58 +42,83 @@ export const categories = [
 ];
 
 export const products = [
+  // ── FABRIC PAINTING ──
   {
-    id: 1, categoryId: 1, name: 'Floral Paradise T-shirt', description: 'Hand-painted tropical floral design with vibrant colors on premium cotton.',
-    basePrice: 599, tags: ['trending', 'floral'], isCustomizable: true,
-    image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=600&q=80', colors: ['White', 'Black', 'Pastel Pink'], sizes: ['S', 'M', 'L', 'XL']
+    id: 1, categoryId: 1, name: 'Kerchief Painting',
+    description: 'Beautiful hand-painted design on premium cotton kerchief. Perfect as a gift or personal accessory.',
+    basePrice: 50, tags: ['fabric-painting'], isCustomizable: false,
+    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80',
+    colors: ['White', 'Cream'], sizes: ['Free Size']
   },
   {
-    id: 2, categoryId: 2, name: 'Royal Name Embroidery Shirt', description: 'Elegant cursive name embroidery with golden thread on premium shirt.',
-    basePrice: 450, tags: ['new-arrival'], isCustomizable: true,
-    image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=600&q=80', colors: ['White', 'Sky Blue', 'Cream'], sizes: ['S', 'M', 'L', 'XL']
+    id: 2, categoryId: 1, name: 'Simple T-shirt Painting',
+    description: 'A clean, hand-painted design on a quality cotton T-shirt. Great for everyday wear with a creative touch.',
+    basePrice: 199, tags: ['fabric-painting'], isCustomizable: false,
+    image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=600&q=80',
+    colors: ['White', 'Black', 'Pastel Pink'], sizes: ['S', 'M', 'L', 'XL']
   },
   {
-    id: 3, categoryId: 3, name: 'Anime Art Combo Tee', description: 'Custom anime character painting with embroidered name and details.',
-    basePrice: 799, tags: ['trending', 'anime'], isCustomizable: true,
-    image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=600&q=80', colors: ['Black', 'White', 'Navy'], sizes: ['S', 'M', 'L', 'XL']
+    id: 3, categoryId: 1, name: 'Custom T-shirt Painting',
+    description: 'Fully customized hand-painted T-shirt with your choice of design, character, or artwork. Made to order.',
+    basePrice: 350, tags: ['fabric-painting', 'trending'], isCustomizable: true,
+    image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=600&q=80',
+    colors: ['White', 'Black', 'Navy'], sizes: ['S', 'M', 'L', 'XL']
   },
   {
-    id: 4, categoryId: 1, name: 'Couple Portrait T-shirts', description: 'Matching hand-painted couple portraits on premium cotton tees.',
-    basePrice: 999, tags: ['couple', 'trending'], isCustomizable: true,
-    image: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=600&q=80', colors: ['White', 'Black'], sizes: ['S', 'M', 'L', 'XL']
+    id: 4, categoryId: 1, name: 'Shirt Painting',
+    description: 'Premium hand-painted artwork on a formal or casual shirt. Vibrant colors that last through washes.',
+    basePrice: 499, tags: ['fabric-painting'], isCustomizable: true,
+    image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=600&q=80',
+    colors: ['White', 'Sky Blue', 'Cream'], sizes: ['S', 'M', 'L', 'XL']
+  },
+
+  // ── EMBROIDERY WORKS ──
+  {
+    id: 5, categoryId: 2, name: 'Name Embroidery',
+    description: 'Elegant hand-stitched name embroidery with premium thread. Perfect for personalized gifts.',
+    basePrice: 80, tags: ['embroidery'], isCustomizable: true,
+    image: 'https://images.unsplash.com/photo-1617058998014-a13b69286e9f?auto=format&fit=crop&w=600&q=80',
+    colors: ['White', 'Black', 'Cream'], sizes: ['Free Size']
   },
   {
-    id: 5, categoryId: 2, name: 'Festival Embroidery Collection', description: 'Festive motifs with mirror work and colorful thread embroidery.',
-    basePrice: 650, tags: ['festival', 'new-arrival'], isCustomizable: true,
-    image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=600&q=80', colors: ['Red', 'Green', 'Yellow'], sizes: ['S', 'M', 'L', 'XL']
+    id: 6, categoryId: 2, name: 'Small Floral Design',
+    description: 'Delicate hand-stitched floral embroidery pattern. A subtle and beautiful addition to any garment.',
+    basePrice: 150, tags: ['embroidery', 'floral'], isCustomizable: false,
+    image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=600&q=80',
+    colors: ['White', 'Cream', 'Pastel Pink'], sizes: ['Free Size']
   },
   {
-    id: 6, categoryId: 1, name: 'Butterfly Dreams Kerchief', description: 'Delicate butterfly painting on soft cotton kerchief.',
-    basePrice: 150, tags: ['floral', 'new-arrival'], isCustomizable: false,
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80', colors: ['White', 'Cream'], sizes: ['Free Size']
+    id: 7, categoryId: 2, name: 'Sleeve Embroidery',
+    description: 'Intricate hand-stitched embroidery on sleeves with floral vine or geometric patterns.',
+    basePrice: 199, tags: ['embroidery'], isCustomizable: true,
+    image: 'https://images.unsplash.com/photo-1605697040924-850d9963eede?auto=format&fit=crop&w=600&q=80',
+    colors: ['Black', 'White', 'Maroon'], sizes: ['S', 'M', 'L', 'XL']
   },
   {
-    id: 7, categoryId: 3, name: 'Premium Wedding Combo', description: 'Luxury embroidery + fabric painting for wedding outfits.',
-    basePrice: 1299, tags: ['festival', 'trending'], isCustomizable: true,
-    image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=600&q=80', colors: ['White', 'Ivory', 'Gold'], sizes: ['S', 'M', 'L', 'XL', 'XXL']
+    id: 8, categoryId: 2, name: 'Custom Embroidery',
+    description: 'Fully customized embroidery work with your choice of design, pattern, or motif. Handcrafted with care.',
+    basePrice: 350, tags: ['embroidery', 'trending'], isCustomizable: true,
+    image: 'https://images.unsplash.com/photo-1572087570494-df74d75b3313?auto=format&fit=crop&w=600&q=80',
+    colors: ['White', 'Black', 'Red', 'Maroon'], sizes: ['S', 'M', 'L', 'XL']
+  },
+
+  // ── COMBO WORKS ──
+  {
+    id: 9, categoryId: 3, name: 'Paint + Embroidery T-shirt',
+    description: 'The best of both worlds — a T-shirt with hand-painted artwork combined with embroidery detailing.',
+    basePrice: 499, tags: ['combo', 'trending'], isCustomizable: true,
+    image: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=600&q=80',
+    colors: ['White', 'Black'], sizes: ['S', 'M', 'L', 'XL']
   },
   {
-    id: 8, categoryId: 2, name: 'Sleeve Art Embroidery', description: 'Intricate sleeve embroidery with floral vine patterns.',
-    basePrice: 399, tags: ['floral'], isCustomizable: true,
-    image: 'https://images.unsplash.com/photo-1605697040924-850d9963eede?auto=format&fit=crop&w=600&q=80', colors: ['Black', 'White', 'Maroon'], sizes: ['S', 'M', 'L', 'XL']
-  }
+    id: 10, categoryId: 3, name: 'Paint + Embroidery Shirt',
+    description: 'Premium shirt featuring both fabric painting and embroidery. A luxury handcrafted statement piece.',
+    basePrice: 699, tags: ['combo'], isCustomizable: true,
+    image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=600&q=80',
+    colors: ['White', 'Ivory', 'Cream'], sizes: ['S', 'M', 'L', 'XL', 'XXL']
+  },
 ];
 
-export const pricingRules = [
-  { itemType: 'name_embroidery', shirtType: 'tshirt', price: 80 },
-  { itemType: 'name_embroidery', shirtType: 'shirt', price: 100 },
-  { itemType: 'sleeve_embroidery', shirtType: 'tshirt', price: 199 },
-  { itemType: 'sleeve_embroidery', shirtType: 'shirt', price: 249 },
-  { itemType: 'fabric_paint', shirtType: 'tshirt', price: 199 },
-  { itemType: 'fabric_paint', shirtType: 'shirt', price: 499 },
-  { itemType: 'custom_embroidery', shirtType: 'tshirt', price: 350 },
-  { itemType: 'custom_embroidery', shirtType: 'shirt', price: 450 },
-];
 
 export const reviews = [
   {

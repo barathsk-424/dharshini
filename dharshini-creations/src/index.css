@@ -39,6 +39,9 @@
   --color-orange: #F97316;
   --color-orange-light: #FED7AA;
 
+  --color-border-light: rgba(255, 255, 255, 0.05);
+  --color-border-strong: rgba(255, 255, 255, 0.15);
+
   --font-great-vibes: 'Great Vibes', cursive;
   --font-cinzel: 'Cinzel', Georgia, serif;
   --font-poppins: 'Poppins', Arial, sans-serif;
@@ -229,6 +232,7 @@ textarea {
   box-sizing: border-box;
 }
 
+
 textarea {
   height: auto !important;
   padding: 16px 20px !important;
@@ -242,6 +246,8 @@ textarea:focus {
   box-shadow: 0 0 20px rgba(167, 139, 250, 0.15) !important;
   background: rgba(255, 255, 255, 0.04) !important;
 }
+
+
 
 /* ─── Center Containers ─── */
 .max-w-3xl.mx-auto {

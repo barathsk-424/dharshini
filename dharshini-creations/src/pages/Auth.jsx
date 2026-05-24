@@ -42,12 +42,12 @@ export default function Auth() {
 
           <div className="relative z-10 text-center mb-8">
             <div className="w-16 h-16 mx-auto bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(138,43,226,0.3)]">
-              <FiUser size={30} color="#A78BFA" />
+              <FiUser size={30} color="var(--color-purple-glow)" />
             </div>
-            <h1 className="font-cinzel text-3xl font-bold mb-2 glow-text" style={{ background: 'linear-gradient(135deg, #FAFAFA, #A78BFA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            <h1 className="font-cinzel text-3xl font-bold mb-2 glow-text" style={{ background: 'linear-gradient(135deg, var(--color-white), var(--color-purple-glow))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               {isLogin ? 'Welcome Back' : 'Join Us'}
             </h1>
-            <p className="text-sm" style={{ color: '#9CA3AF' }}>
+            <p className="text-sm" style={{ color: 'var(--color-gray-dark)' }}>
               {isLogin ? 'Sign in to access your custom orders and wishlist' : 'Create an account to start your journey with us'}
             </p>
           </div>
@@ -74,7 +74,7 @@ export default function Auth() {
                       placeholder="Jane Doe"
                       required={!isLogin}
                       className="w-full pl-11 pr-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors placeholder-gray-600" 
-                      style={{ borderColor: 'rgba(255,255,255,0.1)', color: '#F5F5F5' }} 
+                      style={{ borderColor: 'var(--color-border-strong)', color: '#F5F5F5' }} 
                     />
                   </div>
                 </motion.div>
@@ -94,7 +94,7 @@ export default function Auth() {
                   placeholder="jane@example.com"
                   required
                   className="w-full pl-11 pr-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors placeholder-gray-600" 
-                  style={{ borderColor: 'rgba(255,255,255,0.1)', color: '#F5F5F5' }} 
+                  style={{ borderColor: 'var(--color-border-strong)', color: '#F5F5F5' }} 
                 />
               </div>
             </div>
@@ -103,7 +103,7 @@ export default function Auth() {
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-semibold block" style={{ color: '#E5E7EB' }}>Password</label>
                 {isLogin && (
-                  <a href="#" className="text-xs hover:text-purple-400 transition-colors" style={{ color: '#A78BFA' }}>Forgot?</a>
+                  <a href="#" className="text-xs hover:text-purple-400 transition-colors" style={{ color: 'var(--color-purple-glow)' }}>Forgot?</a>
                 )}
               </div>
               <div className="relative">
@@ -117,7 +117,7 @@ export default function Auth() {
                   placeholder="••••••••"
                   required
                   className="w-full pl-11 pr-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors placeholder-gray-600" 
-                  style={{ borderColor: 'rgba(255,255,255,0.1)', color: '#F5F5F5' }} 
+                  style={{ borderColor: 'var(--color-border-strong)', color: '#F5F5F5' }} 
                 />
               </div>
             </div>
@@ -128,9 +128,9 @@ export default function Auth() {
           </form>
 
           <div className="mt-8 text-center relative z-10">
-            <p className="text-sm" style={{ color: '#9CA3AF' }}>
+            <p className="text-sm" style={{ color: 'var(--color-gray-dark)' }}>
               {isLogin ? "Don't have an account? " : "Already have an account? "}
-              <button onClick={toggleMode} className="font-semibold hover:text-white transition-colors" style={{ color: '#A78BFA' }}>
+              <button onClick={toggleMode} className="font-semibold hover:text-white transition-colors" style={{ color: 'var(--color-purple-glow)' }}>
                 {isLogin ? 'Sign up' : 'Sign in'}
               </button>
             </p>

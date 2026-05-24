@@ -27,8 +27,8 @@ export default function Logo({ size = 40, className = "" }) {
 
         {/* Royal Purple / Violet Accents */}
         <linearGradient id="violetGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#A78BFA" />
-          <stop offset="50%" stopColor="#7C3AED" />
+          <stop offset="0%" stopColor="var(--color-purple-glow)" />
+          <stop offset="50%" stopColor="var(--color-purple-primary)" />
           <stop offset="100%" stopColor="#4C1D95" />
         </linearGradient>
 

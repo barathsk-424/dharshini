@@ -1,3 +1,4 @@
+
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { useUIStore } from './store/useStore';
@@ -13,6 +14,9 @@ import TrackOrder from './pages/TrackOrder';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Auth from './pages/Auth';
+import Checkout from './pages/Checkout';
+import ProductCustomize from './pages/ProductCustomize';
+import OrderReview from './pages/OrderReview';
 import CustomCursor from './components/UI/CustomCursor';
 
 function App() {
@@ -39,6 +43,9 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/customize/:id" element={<ProductCustomize />} />
+            <Route path="/review/:id" element={<OrderReview />} />
           </Routes>
         </AnimatePresence>
       </Layout>

@@ -47,7 +47,7 @@ export default function HeroSection() {
           >
             <motion.p
               className="font-great-vibes text-2xl md:text-3xl mb-4"
-              style={{ color: '#A78BFA' }}
+              style={{ color: 'var(--color-purple-glow)' }}
               initial={{ opacity: 0, y: 15 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.2, duration: 0.8 }}
@@ -58,7 +58,7 @@ export default function HeroSection() {
             <h1
               className="font-cinzel text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] mb-6 glow-text tracking-wide"
               style={{
-                background: 'linear-gradient(135deg, #FAFAFA 0%, #7C3AED 50%, #A78BFA 100%)',
+                background: 'linear-gradient(135deg, var(--color-white) 0%, var(--color-purple-primary) 50%, var(--color-purple-glow) 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }}
@@ -66,7 +66,7 @@ export default function HeroSection() {
               Dharshini<br />Creations
             </h1>
 
-            <p className="text-base md:text-lg mb-8 max-w-lg leading-relaxed font-normal" style={{ color: '#D1D5DB' }}>
+            <p className="text-base md:text-lg mb-8 max-w-lg leading-relaxed font-normal" style={{ color: 'var(--color-gray-soft)' }}>
               Handcrafted Embroidery & Fabric Art — where every thread is woven with passion and every brushstroke tells a unique story of elegance and luxury.
             </p>
 
@@ -82,7 +82,7 @@ export default function HeroSection() {
             {/* Stats */}
             <motion.div
               className="flex gap-10 mt-16 pt-8"
-              style={{ borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}
+              style={{ borderTop: '1px solid var(--color-border-light, var(--color-border-light))' }}
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.6, duration: 0.8 }}
@@ -93,8 +93,8 @@ export default function HeroSection() {
                 { num: '5★', label: 'Average Rating' },
               ].map(stat => (
                 <div key={stat.label} className="text-left">
-                  <p className="font-cinzel text-2xl md:text-3xl font-bold tracking-wider" style={{ color: '#A78BFA' }}>{stat.num}</p>
-                  <p className="text-xs font-medium uppercase tracking-widest mt-1" style={{ color: '#9CA3AF' }}>{stat.label}</p>
+                  <p className="font-cinzel text-2xl md:text-3xl font-bold tracking-wider" style={{ color: 'var(--color-purple-glow)' }}>{stat.num}</p>
+                  <p className="text-xs font-medium uppercase tracking-widest mt-1" style={{ color: 'var(--color-gray-dark)' }}>{stat.label}</p>
                 </div>
               ))}
             </motion.div>
@@ -126,7 +126,7 @@ export default function HeroSection() {
                   {/* T-shirt shape with premium luxury styling */}
                   <path
                     d="M75 80 L40 120 L70 140 L70 340 L230 340 L230 140 L260 120 L225 80 L190 100 Q150 120 110 100 Z"
-                    fill="#0A0612"
+                    fill="var(--color-bg-secondary)"
                     stroke="rgba(167, 139, 250, 0.3)"
                     strokeWidth="1.5"
                   />
@@ -142,9 +142,9 @@ export default function HeroSection() {
                     animate={{ opacity: [0.75, 1, 0.75] }}
                     transition={{ duration: 3, repeat: Infinity }}
                   >
-                    <circle cx="150" cy="200" r="50" fill="none" stroke="#A78BFA" strokeWidth="1" opacity="0.4" />
-                    <circle cx="150" cy="200" r="35" fill="none" stroke="#7C3AED" strokeWidth="1" opacity="0.6" />
-                    <circle cx="150" cy="200" r="20" fill="none" stroke="#A78BFA" strokeWidth="0.8" opacity="0.4" />
+                    <circle cx="150" cy="200" r="50" fill="none" stroke="var(--color-purple-glow)" strokeWidth="1" opacity="0.4" />
+                    <circle cx="150" cy="200" r="35" fill="none" stroke="var(--color-purple-primary)" strokeWidth="1" opacity="0.6" />
+                    <circle cx="150" cy="200" r="20" fill="none" stroke="var(--color-purple-glow)" strokeWidth="0.8" opacity="0.4" />
                     {/* Petals */}
                     {Array.from({ length: 8 }).map((_, i) => {
                       const angle = (i * Math.PI * 2) / 8;
@@ -154,12 +154,12 @@ export default function HeroSection() {
                       const y2 = 200 + Math.sin(angle) * 55;
                       return (
                         <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}
-                          stroke="#A78BFA" strokeWidth="1" opacity="0.4" />
+                          stroke="var(--color-purple-glow)" strokeWidth="1" opacity="0.4" />
                       );
                     })}
                     {/* Center flower */}
-                    <circle cx="150" cy="200" r="8" fill="#A78BFA" opacity="0.3" />
-                    <text x="150" y="285" textAnchor="middle" fill="#A78BFA" fontSize="24"
+                    <circle cx="150" cy="200" r="8" fill="var(--color-purple-glow)" opacity="0.3" />
+                    <text x="150" y="285" textAnchor="middle" fill="var(--color-purple-glow)" fontSize="24"
                       fontFamily="Great Vibes, cursive" opacity="0.95" filter="drop-shadow(0 0 4px rgba(167,139,250,0.6))">
                       Dharshini
                     </text>
@@ -206,11 +206,11 @@ export default function HeroSection() {
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#4B5563', fontSize: '9px' }}>Scroll to explore</span>
+        <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--color-gray-dark)', fontSize: '9px' }}>Scroll to explore</span>
         <div className="w-5 h-8 rounded-full border flex justify-center pt-1.5" style={{ borderColor: 'rgba(124, 58, 237, 0.4)' }}>
           <motion.div
             className="w-1.5 h-1.5 rounded-full"
-            style={{ background: '#A78BFA' }}
+            style={{ background: 'var(--color-purple-glow)' }}
             animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           />

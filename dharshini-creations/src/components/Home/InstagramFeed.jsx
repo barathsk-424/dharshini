@@ -58,7 +58,7 @@ export default function InstagramFeed() {
                     </div>
                   </div>
                   <div className="p-4">
-                    <p className="text-xs line-clamp-2 leading-relaxed text-left" style={{ color: '#9CA3AF' }}>{post.caption}</p>
+                    <p className="text-xs line-clamp-2 leading-relaxed text-left" style={{ color: 'var(--color-gray-dark)' }}>{post.caption}</p>
                     <p className="text-[10px] mt-2 flex items-center gap-1" style={{ color: accent }}>
                       View on Instagram <FiExternalLink size={10} />
                     </p>

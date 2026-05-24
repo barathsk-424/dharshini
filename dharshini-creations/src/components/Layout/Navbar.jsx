@@ -61,14 +61,14 @@ export default function Navbar() {
             <div className="relative leading-tight">
               <span className="font-cinzel text-lg md:text-xl font-black tracking-wider block transition-all duration-300 group-hover:scale-105"
                 style={{
-                  background: 'linear-gradient(135deg, #FAFAFA, #A78BFA)',
+                  background: 'linear-gradient(135deg, var(--color-white), var(--color-purple-glow))',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}>
                 Dharshini
               </span>
               <span className="font-cinzel text-[9px] tracking-[0.3em] block font-semibold transition-all duration-300 group-hover:text-purple-400"
-                style={{ color: '#9CA3AF' }}>
+                style={{ color: 'var(--color-gray-dark)' }}>
                 CREATIONS
               </span>
             </div>
@@ -82,15 +82,15 @@ export default function Navbar() {
                 to={link.path}
                 className="interactive px-3 py-2 text-[13px] xl:text-[14px] font-medium font-poppins rounded-full transition-all duration-300 relative whitespace-nowrap"
                 style={{
-                  color: location.pathname === link.path ? '#FAFAFA' : '#9CA3AF',
-                  background: location.pathname === link.path ? 'rgba(255, 255, 255, 0.03)' : 'transparent',
+                  color: location.pathname === link.path ? 'var(--color-white)' : 'var(--color-gray-dark)',
+                  background: location.pathname === link.path ? 'var(--color-border-light, rgba(255, 255, 255, 0.03))' : 'transparent',
                 }}
               >
                 {link.label}
                 {location.pathname === link.path && (
                   <motion.div
                     className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] rounded-full"
-                    style={{ background: 'linear-gradient(90deg, #7C3AED, #A78BFA)', width: '40%' }}
+                    style={{ background: 'linear-gradient(90deg, var(--color-purple-primary), var(--color-purple-glow))', width: '40%' }}
                     layoutId="navIndicator"
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   />
@@ -103,15 +103,15 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
             <button onClick={toggleSound} className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300" title="Toggle Sound">
               {soundEnabled
-                ? <FiVolume2 size={18} color="#A78BFA" />
-                : <FiVolumeX size={18} color="#4B5563" />
+                ? <FiVolume2 size={18} color="var(--color-purple-glow)" />
+                : <FiVolumeX size={18} color="var(--color-gray-dark)" />
               }
             </button>
             <Link to="/auth" className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300" title="Sign In / Join">
-              <FiUser size={18} color="#D1D5DB" />
+              <FiUser size={18} color="var(--color-gray-soft)" />
             </Link>
             <Link to="/shop?wishlist=true" className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300 relative" title="Wishlist">
-              <FiHeart size={18} color="#D1D5DB" />
+              <FiHeart size={18} color="var(--color-gray-soft)" />
               {wishlistCount > 0 && (
                 <motion.span
                   className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center text-white"
@@ -125,11 +125,11 @@ export default function Navbar() {
               )}
             </Link>
             <button onClick={toggleCart} className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300 relative" title="Cart">
-              <FiShoppingBag size={18} color="#D1D5DB" />
+              <FiShoppingBag size={18} color="var(--color-gray-soft)" />
               {itemCount > 0 && (
                 <motion.span
                   className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center text-white"
-                  style={{ background: 'linear-gradient(135deg, #7C3AED, #A78BFA)', boxShadow: '0 0 10px rgba(124,58,237,0.5)' }}
+                  style={{ background: 'linear-gradient(135deg, var(--color-purple-primary), var(--color-purple-glow))', boxShadow: '0 0 10px rgba(124,58,237,0.5)' }}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: 'spring', stiffness: 500 }}
@@ -144,7 +144,7 @@ export default function Navbar() {
               onClick={() => setMobileOpen(!mobileOpen)}
               className="xl:hidden interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300"
             >
-              {mobileOpen ? <FiX size={22} color="#A78BFA" /> : <FiMenu size={22} color="#D1D5DB" />}
+              {mobileOpen ? <FiX size={22} color="var(--color-purple-glow)" /> : <FiMenu size={22} color="var(--color-gray-soft)" />}
             </button>
           </div>
         </div>
@@ -183,8 +183,8 @@ export default function Navbar() {
                     to={link.path}
                     className="block py-3.5 px-4 text-base font-medium font-poppins rounded-xl transition-all duration-300"
                     style={{
-                      color: location.pathname === link.path ? '#FAFAFA' : '#9CA3AF',
-                      background: location.pathname === link.path ? 'rgba(255, 255, 255, 0.04)' : 'transparent',
+                      color: location.pathname === link.path ? 'var(--color-white)' : 'var(--color-gray-dark)',
+                      background: location.pathname === link.path ? 'var(--color-border-light, rgba(255, 255, 255, 0.04))' : 'transparent',
                     }}
                   >
                     {link.label}

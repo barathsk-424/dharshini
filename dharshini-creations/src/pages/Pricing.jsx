@@ -15,15 +15,15 @@ export default function Pricing() {
       <Helmet><title>Pricing — Dharshini Creations</title></Helmet>
       <section className="gradient-mesh min-h-[40vh] flex items-center justify-center">
         <div className="text-center">
-          <motion.p className="font-great-vibes text-2xl mb-2" style={{ color: '#A78BFA' }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>Transparent & Fair</motion.p>
+          <motion.p className="font-great-vibes text-2xl mb-2" style={{ color: 'var(--color-purple-glow)' }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>Transparent & Fair</motion.p>
           <motion.h1 className="font-cinzel text-4xl md:text-5xl font-bold glow-text" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-            style={{ background: 'linear-gradient(135deg, #FAFAFA, #7C3AED)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Pricing</motion.h1>
+            style={{ background: 'linear-gradient(135deg, var(--color-white), var(--color-purple-primary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Pricing</motion.h1>
         </div>
       </section>
       <div className="section-container" style={{ paddingTop: 40 }}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {categories.map((cat, i) => {
-            const accent = categoryAccents[cat.id] || '#A78BFA';
+            const accent = categoryAccents[cat.id] || 'var(--color-purple-glow)';
             return (
               <motion.div key={cat.id} className="glass-card overflow-hidden" style={{ borderColor: `${accent}30` }}
                 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.15 }}>
@@ -45,14 +45,14 @@ export default function Pricing() {
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-5 text-center">
-                    <h3 className="font-cinzel text-xl font-bold" style={{ color: '#FAFAFA' }}>{cat.name}</h3>
+                    <h3 className="font-cinzel text-xl font-bold" style={{ color: 'var(--color-white)' }}>{cat.name}</h3>
                     <p className="text-xs mt-1" style={{ color: accent }}>Starting from ₹{cat.startingPrice}+</p>
                   </div>
                 </div>
                 <div className="p-6">
                   {cat.items.map((item, j) => (
-                    <div key={item.name} className="flex items-center justify-between py-3" style={{ borderBottom: j < cat.items.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
-                      <span className="text-sm" style={{ color: '#FAFAFA' }}>{item.name}</span>
+                    <div key={item.name} className="flex items-center justify-between py-3" style={{ borderBottom: j < cat.items.length - 1 ? '1px solid var(--color-border-light, var(--color-border-light))' : 'none' }}>
+                      <span className="text-sm" style={{ color: 'var(--color-white)' }}>{item.name}</span>
                       <span className="font-cinzel font-bold text-sm" style={{ color: accent }}>{item.price}</span>
                     </div>
                   ))}
@@ -71,13 +71,13 @@ export default function Pricing() {
             {faqData.map((faq, i) => (
               <motion.div key={i} className="glass-card overflow-hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }}>
                 <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="w-full flex items-center justify-between p-5 text-left interactive">
-                  <span className="font-poppins font-semibold text-sm pr-4" style={{ color: '#FAFAFA' }}>{faq.question}</span>
+                  <span className="font-poppins font-semibold text-sm pr-4" style={{ color: 'var(--color-white)' }}>{faq.question}</span>
                   <motion.div animate={{ rotate: openFaq === i ? 180 : 0 }} transition={{ duration: 0.3 }}>
-                    <FiChevronDown size={18} color="#A78BFA" />
+                    <FiChevronDown size={18} color="var(--color-purple-glow)" />
                   </motion.div>
                 </button>
                 <motion.div initial={false} animate={{ height: openFaq === i ? 'auto' : 0, opacity: openFaq === i ? 1 : 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
-                  <p className="px-5 pb-5 text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>{faq.answer}</p>
+                  <p className="px-5 pb-5 text-sm leading-relaxed" style={{ color: 'var(--color-gray-dark)' }}>{faq.answer}</p>
                 </motion.div>
               </motion.div>
             ))}

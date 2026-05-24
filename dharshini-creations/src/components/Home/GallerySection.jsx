@@ -8,7 +8,7 @@ const filterMap = { 'All': 'all', 'Embroidery': 'embroidery', 'Fabric Painting':
 
 // Unique color per filter/category
 const filterColors = {
-  'All': { accent: '#B266FF', bg: 'linear-gradient(135deg, #7C3AED, #A78BFA)' },
+  'All': { accent: '#B266FF', bg: 'linear-gradient(135deg, var(--color-purple-primary), var(--color-purple-glow))' },
   'Embroidery': { accent: '#2DD4BF', bg: 'linear-gradient(135deg, #14B8A6, #2DD4BF)' },
   'Fabric Painting': { accent: '#FB923C', bg: 'linear-gradient(135deg, #EA580C, #FB923C)' },
   'Combo': { accent: '#818CF8', bg: 'linear-gradient(135deg, #6366F1, #818CF8)' },
@@ -57,8 +57,8 @@ export default function GallerySection() {
                 className="px-5 py-2 rounded-full text-sm font-poppins interactive transition-all"
                 style={{
                   background: activeFilter === f ? fc.bg : 'rgba(124,58,237,0.06)',
-                  color: activeFilter === f ? 'white' : '#9CA3AF',
-                  border: `1px solid ${activeFilter === f ? fc.accent : 'rgba(255,255,255,0.05)'}`,
+                  color: activeFilter === f ? 'white' : 'var(--color-gray-dark)',
+                  border: `1px solid ${activeFilter === f ? fc.accent : 'var(--color-border-light, var(--color-border-light))'}`,
                 }}>
                 {f}
               </button>
@@ -93,13 +93,13 @@ export default function GallerySection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 
                 <div className="absolute bottom-0 left-0 right-0 p-5 bg-black/40 backdrop-blur-md border-t border-white/5">
-                  <p className="text-sm font-poppins font-semibold mb-1 text-left" style={{ color: '#FAFAFA' }}>{img.title}</p>
+                  <p className="text-sm font-poppins font-semibold mb-1 text-left" style={{ color: 'var(--color-white)' }}>{img.title}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-xs capitalize font-semibold" style={{ color: accent }}>{img.category.replace('-', ' ')}</span>
                     <button onClick={e => { e.stopPropagation(); toggleLike(img.id); }}
                       className="flex items-center gap-1.5 text-xs interactive hover:scale-105 transition-transform">
-                      <FiHeart size={14} fill={likes[img.id] ? accent : 'none'} color={likes[img.id] ? accent : '#9CA3AF'} />
-                      <span style={{ color: '#9CA3AF' }}>{img.likes + (likes[img.id] ? 1 : 0)}</span>
+                      <FiHeart size={14} fill={likes[img.id] ? accent : 'none'} color={likes[img.id] ? accent : 'var(--color-gray-dark)'} />
+                      <span style={{ color: 'var(--color-gray-dark)' }}>{img.likes + (likes[img.id] ? 1 : 0)}</span>
                     </button>
                   </div>
                 </div>
@@ -113,12 +113,12 @@ export default function GallerySection() {
           return (
             <motion.div className="modal-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => setLightbox(null)}>
               <div className="relative max-w-2xl w-full mx-4 glass-card p-6" onClick={e => e.stopPropagation()}>
-                <button onClick={() => setLightbox(null)} className="absolute top-3 right-3 p-2 rounded-full hover:bg-white/10 z-10"><FiX size={20} color="#9CA3AF" /></button>
+                <button onClick={() => setLightbox(null)} className="absolute top-3 right-3 p-2 rounded-full hover:bg-white/10 z-10"><FiX size={20} color="var(--color-gray-dark)" /></button>
                 <div className="aspect-video rounded-2xl overflow-hidden mb-4 border border-white/10">
                   <img src={lightbox.src} alt={lightbox.title} className="w-full h-full object-cover" onError={e => { e.target.style.display = 'none'; }} />
                 </div>
-                <h3 className="font-cinzel text-xl font-semibold text-left" style={{ color: '#FAFAFA' }}>{lightbox.title}</h3>
-                <p className="text-sm mt-1 text-left" style={{ color: '#9CA3AF' }}>Category: <span style={{ color: accent }}>{lightbox.category}</span> • {lightbox.likes} likes</p>
+                <h3 className="font-cinzel text-xl font-semibold text-left" style={{ color: 'var(--color-white)' }}>{lightbox.title}</h3>
+                <p className="text-sm mt-1 text-left" style={{ color: 'var(--color-gray-dark)' }}>Category: <span style={{ color: accent }}>{lightbox.category}</span> • {lightbox.likes} likes</p>
               </div>
             </motion.div>
           );

@@ -93,7 +93,7 @@ export default function ShippingTracker() {
                         initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: i * 0.2 }}>
                         {step.emoji}
                       </motion.div>
-                      <span className="text-[10px] font-poppins text-center max-w-[70px]" style={{ color: i <= statusIndex ? step.color : '#9CA3AF' }}>{step.label}</span>
+                      <span className="text-[10px] font-poppins text-center max-w-[70px]" style={{ color: i <= statusIndex ? step.color : 'var(--color-gray-dark)' }}>{step.label}</span>
                     </div>
                   ))}
                 </div>

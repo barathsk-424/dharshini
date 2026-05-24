@@ -77,3 +77,44 @@ export const useUIStore = create((set) => ({
     set({ showOpeningAnimation: false });
   },
 }));
+
+export const useOrderStore = create((set, get) => ({
+  orders: JSON.parse(localStorage.getItem('dc_orders')) || [],
+  placeOrder: (orderData) => {
+    const newOrder = {
+      id: `DC-${Math.floor(1000 + Math.random() * 9000)}`,
+      date: new Date().toLocaleDateString(),
+      status: 'packed',
+      dest: `${orderData.shippingAddress.city}, ${orderData.shippingAddress.state}`,
+      est: '5 days',
+      items: orderData.items.map(item => `${item.name} × ${item.quantity}`).join(', '),
+      total: orderData.total,
+      ...orderData
+    };
+    
+    const updatedOrders = [newOrder, ...get().orders];
+    localStorage.setItem('dc_orders', JSON.stringify(updatedOrders));
+    set({ orders: updatedOrders });
+    
+    return newOrder;
+  },
+  clearOrders: () => {
+    localStorage.removeItem('dc_orders');
+    set({ orders: [] });
+  }
+}));
+
+export const useCustomizationStore = create((set, get) => ({
+  draft: JSON.parse(localStorage.getItem('dc_customization_draft')) || null,
+  
+  saveDraft: (productId, data) => {
+    const draftData = { productId, ...data, updatedAt: new Date().toISOString() };
+    localStorage.setItem('dc_customization_draft', JSON.stringify(draftData));
+    set({ draft: draftData });
+  },
+  
+  clearDraft: () => {
+    localStorage.removeItem('dc_customization_draft');
+    set({ draft: null });
+  }
+}));

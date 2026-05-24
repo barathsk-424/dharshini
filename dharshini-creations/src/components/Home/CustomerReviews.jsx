@@ -44,16 +44,16 @@ export default function CustomerReviews() {
                     />
                   </div>
                   <div className="text-left">
-                    <p className="font-poppins font-semibold text-sm" style={{ color: '#FAFAFA' }}>{review.name}</p>
+                    <p className="font-poppins font-semibold text-sm" style={{ color: 'var(--color-white)' }}>{review.name}</p>
                     <div className="flex gap-0.5">
                       {Array.from({ length: 5 }).map((_, j) => (
-                        <FiStar key={j} size={12} fill={j < review.rating ? '#F59E0B' : 'none'} color={j < review.rating ? '#F59E0B' : '#4B5563'} />
+                        <FiStar key={j} size={12} fill={j < review.rating ? '#F59E0B' : 'none'} color={j < review.rating ? '#F59E0B' : 'var(--color-gray-dark)'} />
                       ))}
                     </div>
                   </div>
                 </div>
-                <p className="text-sm leading-relaxed mb-3 text-left" style={{ color: '#9CA3AF' }}>"{review.comment}"</p>
-                <p className="text-xs text-left" style={{ color: '#4B5563' }}>{new Date(review.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                <p className="text-sm leading-relaxed mb-3 text-left" style={{ color: 'var(--color-gray-dark)' }}>"{review.comment}"</p>
+                <p className="text-xs text-left" style={{ color: 'var(--color-gray-dark)' }}>{new Date(review.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
               </motion.div>
             );
           })}
