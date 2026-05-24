@@ -63,7 +63,7 @@ export const useUserStore = create((set) => ({
 
 export const useUIStore = create((set) => ({
   soundEnabled: false,
-  showOpeningAnimation: !localStorage.getItem('dc_visited'),
+  showOpeningAnimation: !sessionStorage.getItem('dc_visited'),
   cursorType: 'default',
   activeModal: null,
 
@@ -73,7 +73,7 @@ export const useUIStore = create((set) => ({
   openModal: (modal) => set({ activeModal: modal }),
   closeModal: () => set({ activeModal: null }),
   markVisited: () => {
-    localStorage.setItem('dc_visited', 'true');
+    sessionStorage.setItem('dc_visited', 'true');
     set({ showOpeningAnimation: false });
   },
 }));

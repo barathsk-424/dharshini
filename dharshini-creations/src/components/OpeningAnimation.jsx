@@ -8,11 +8,11 @@ export default function OpeningAnimation() {
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase(1), 300),
-      setTimeout(() => setPhase(2), 1200),
-      setTimeout(() => setPhase(3), 1800),
-      setTimeout(() => setPhase(4), 2200),
-      setTimeout(() => markVisited(), 2800),
+      setTimeout(() => setPhase(1), 250),
+      setTimeout(() => setPhase(2), 1000),
+      setTimeout(() => setPhase(3), 1500),
+      setTimeout(() => setPhase(4), 1900),
+      setTimeout(() => markVisited(), 2500),
     ];
     return () => timers.forEach(clearTimeout);
   }, [markVisited]);

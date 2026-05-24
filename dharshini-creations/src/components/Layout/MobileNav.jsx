@@ -6,7 +6,7 @@ const tabs = [
   { path: '/', icon: FiHome, label: 'Home' },
   { path: '/shop', icon: FiShoppingBag, label: 'Orders' },
   { path: '/shop', icon: FiHeart, label: 'Wishlist' },
-  { path: '/about', icon: FiUser, label: 'Profile' },
+  { path: '/auth', icon: FiUser, label: 'Profile' },
 ];
 
 export default function MobileNav() {

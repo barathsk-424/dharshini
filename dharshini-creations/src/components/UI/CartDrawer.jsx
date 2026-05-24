@@ -1,12 +1,20 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCartStore } from '../../store/useStore';
+import { useCartStore, useUserStore } from '../../store/useStore';
+import { useNavigate } from 'react-router-dom';
 import { FiX, FiTrash2, FiPlus, FiMinus, FiShoppingBag } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 
 export default function CartDrawer() {
   const { items, isOpen, toggleCart, updateQuantity, removeItem, getTotal } = useCartStore();
+  const isAuthenticated = useUserStore(s => s.isAuthenticated);
+  const navigate = useNavigate();
 
   const handleCheckout = () => {
+    if (!isAuthenticated) {
+      toggleCart();
+      navigate('/auth');
+      return;
+    }
     if (items.length === 0) return;
 
     let message = `Hi Dharshini Creations! I'd like to place an order for the following items:\n\n`;

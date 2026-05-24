@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { products } from '../data/mockData';
@@ -8,6 +8,7 @@ import { FiShoppingBag, FiHeart, FiChevronLeft, FiPlus, FiMinus, FiInfo, FiTruck
 
 export default function ProductDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const product = products.find(p => p.id === parseInt(id));
 
   // Default selections
@@ -19,7 +20,7 @@ export default function ProductDetail() {
 
   const addItem = useCartStore(s => s.addItem);
   const toggleCart = useCartStore(s => s.toggleCart);
-  const { wishlist, toggleWishlist } = useUserStore();
+  const { wishlist, toggleWishlist, isAuthenticated } = useUserStore();
 
   useEffect(() => {
     if (product) {
@@ -49,6 +50,10 @@ export default function ProductDetail() {
   };
 
   const handleBuyNow = () => {
+    if (!isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
     // Add to cart first
     addItem(product, { color: selectedColor, size: selectedSize, customText });
     

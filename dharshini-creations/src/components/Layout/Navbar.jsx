@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore, useUIStore, useUserStore } from '../../store/useStore';
-import { FiShoppingBag, FiHeart, FiMenu, FiX, FiVolume2, FiVolumeX } from 'react-icons/fi';
+import { FiShoppingBag, FiHeart, FiMenu, FiX, FiVolume2, FiVolumeX, FiUser } from 'react-icons/fi';
 import Logo from '../UI/Logo';
 
 const navLinks = [
@@ -107,6 +107,9 @@ export default function Navbar() {
                 : <FiVolumeX size={18} color="#4B5563" />
               }
             </button>
+            <Link to="/auth" className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300" title="Sign In / Join">
+              <FiUser size={18} color="#D1D5DB" />
+            </Link>
             <Link to="/shop?wishlist=true" className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300 relative" title="Wishlist">
               <FiHeart size={18} color="#D1D5DB" />
               {wishlistCount > 0 && (

@@ -2,12 +2,17 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { shirtColors, floralStyles } from '../data/mockData';
+import { useUserStore } from '../store/useStore';
+import { useNavigate } from 'react-router-dom';
 
 export default function CustomOrders() {
   const [form, setForm] = useState({ name: '', phone: '', shirtType: 'tshirt', position: 'chest', color: 'White', measurements: '', instructions: '' });
   const [files, setFiles] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  
+  const isAuthenticated = useUserStore(s => s.isAuthenticated);
+  const navigate = useNavigate();
   
   const update = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
@@ -25,6 +30,10 @@ export default function CustomOrders() {
   };
 
   const handleSubmit = () => {
+    if (!isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
     setSubmitted(true);
     localStorage.removeItem('dc_custom_order_draft');
   };
