@@ -107,7 +107,7 @@ export default function About() {
           <h3 className="font-cinzel text-2xl font-bold mb-4 glow-text" style={{ color: 'var(--color-white)' }}>Let's Collaborate</h3>
           <p className="text-sm mb-6" style={{ color: 'var(--color-gray-dark)' }}>Have a special project in mind? Let's create something beautiful together.</p>
           <div className="flex gap-4 justify-center">
-            <Link to="/custom-orders" className="btn-primary interactive">Start a Project</Link>
+            <Link to="/contact" className="btn-primary interactive">Start a Project</Link>
             <Link to="/contact" className="btn-ghost interactive">Get in Touch</Link>
           </div>
         </div>

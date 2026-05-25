@@ -56,7 +56,7 @@ export default function Pricing() {
                       <span className="font-cinzel font-bold text-sm" style={{ color: accent }}>{item.price}</span>
                     </div>
                   ))}
-                  <Link to="/custom-orders" className="btn-primary w-full mt-6 interactive text-center block"
+                  <Link to="/shop" className="btn-primary w-full mt-6 interactive text-center block"
                     style={{ background: `linear-gradient(135deg, ${accent}, ${accent}cc)` }}>Order Now</Link>
                 </div>
               </motion.div>

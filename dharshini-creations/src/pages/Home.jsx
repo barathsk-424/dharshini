@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import HeroSection from '../components/Home/HeroSection';
 import FeaturedCategories from '../components/Home/FeaturedCategories';
 import ProductShowcase from '../components/Home/ProductShowcase';
-import AIDesignBuilder from '../components/Home/AIDesignBuilder';
 import CustomerReviews from '../components/Home/CustomerReviews';
 import ShippingTracker from '../components/Home/ShippingTracker';
 import AboutArtist from '../components/Home/AboutArtist';
@@ -32,8 +31,6 @@ export default function Home() {
       <FeaturedCategories />
       <SectionDivider />
       <ProductShowcase />
-      <SectionDivider />
-      <AIDesignBuilder />
       <SectionDivider />
       <CustomerReviews />
       <SectionDivider />

@@ -16,7 +16,7 @@
   --color-purple-light: #DDD6FE;
   --color-white: #FAFAFA;
   --color-gray-soft: #D1D5DB;
-  --color-gray-dark: #4B5563;
+  --color-gray-dark: #9CA3AF;
   --color-gold: #F59E0B;
   --color-success: #10B981;
   --color-error: #EF4444;
@@ -215,21 +215,33 @@ h1, h2, h3 {
 }
 
 /* ─── Sleek Luxury Forms ─── */
-input[type="text"],
-input[type="email"],
-select,
-textarea {
+:where(input[type="text"], input[type="email"], input[type="password"], select, textarea) {
   height: 52px !important;
   border-radius: 16px !important;
   background: rgba(255, 255, 255, 0.02) !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  padding: 0 20px !important;
+  padding-top: 12px;
+  padding-bottom: 12px;
   color: var(--color-white) !important;
   font-family: var(--font-poppins) !important;
   font-size: 0.95rem !important;
   outline: none !important;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
   box-sizing: border-box;
+}
+
+/* Default horizontal padding for inputs without icons */
+input[type="text"]:not(.icon-input),
+input[type="email"]:not(.icon-input),
+input[type="password"]:not(.icon-input) {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+/* Inputs with leading icon – icon wrapper adds padding via inline style */
+input.icon-input {
+  padding-left: 2.75rem !important;
+  padding-right: 1rem !important;
 }
 
 
@@ -240,6 +252,7 @@ textarea {
 
 input[type="text"]:focus,
 input[type="email"]:focus,
+input[type="password"]:focus,
 select:focus,
 textarea:focus {
   border-color: rgba(167, 139, 250, 0.6) !important;

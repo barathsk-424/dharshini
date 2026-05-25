@@ -148,7 +148,7 @@ export default function FeaturedCategories() {
                 </div>
 
                 <div className="mt-6 text-center">
-                  <a href="/custom-orders" className="btn-primary inline-flex interactive">
+                  <a href="/contact" className="btn-primary inline-flex interactive">
                     Order Now →
                   </a>
                 </div>

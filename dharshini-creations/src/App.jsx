@@ -1,13 +1,21 @@
-
+import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { useUIStore } from './store/useStore';
 import Layout from './components/Layout/Layout';
+import Orders from './pages/Orders';
+import Designs from './pages/Designs';
+import Wishlist from './pages/Wishlist';
+import ProfileSettings from './pages/ProfileSettings';
+import Activity from './pages/Activity';
+import Notifications from './pages/Notifications';
+import Addresses from './pages/Addresses';
+import Support from './pages/Support';
+import Logout from './pages/Logout';
 import OpeningAnimation from './components/OpeningAnimation';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
-import CustomOrders from './pages/CustomOrders';
 import Pricing from './pages/Pricing';
 import Reviews from './pages/Reviews';
 import TrackOrder from './pages/TrackOrder';
@@ -23,6 +31,10 @@ function App() {
   const location = useLocation();
   const { showOpeningAnimation } = useUIStore();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   if (showOpeningAnimation) {
     return <OpeningAnimation />;
   }
@@ -36,10 +48,17 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/shop/:id" element={<ProductDetail />} />
-            <Route path="/custom-orders" element={<CustomOrders />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/reviews" element={<Reviews />} />
-            <Route path="/track-order" element={<TrackOrder />} />
+            <Route path="/orders" element={<Orders />} />
+          <Route path="/track-order" element={<TrackOrder />} />
+          <Route path="/designs" element={<Designs />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/profile-settings" element={<ProfileSettings />} />
+          <Route path="/activity" element={<Activity />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/addresses" element={<Addresses />} />
+          <Route path="/support" element={<Support />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />

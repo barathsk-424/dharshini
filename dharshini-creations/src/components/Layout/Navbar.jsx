@@ -8,7 +8,6 @@ import Logo from '../UI/Logo';
 const navLinks = [
   { path: '/', label: 'Home' },
   { path: '/shop', label: 'Shop' },
-  { path: '/custom-orders', label: 'Custom Orders' },
   { path: '/pricing', label: 'Pricing' },
   { path: '/reviews', label: 'Reviews' },
   { path: '/track-order', label: 'Track Order' },

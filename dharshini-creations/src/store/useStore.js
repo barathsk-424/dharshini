@@ -46,19 +46,29 @@ export const useCartStore = create((set, get) => ({
 }));
 
 export const useUserStore = create((set) => ({
-  user: null,
+  user: JSON.parse(localStorage.getItem('dc_user')) || null,
   profile: null,
-  isAuthenticated: false,
+  isAuthenticated: !!localStorage.getItem('dc_user'),
   wishlist: [],
 
-  setUser: (user) => set({ user, isAuthenticated: !!user }),
+  setUser: (user) => {
+    if (user) {
+      localStorage.setItem('dc_user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('dc_user');
+    }
+    set({ user, isAuthenticated: !!user });
+  },
   setProfile: (profile) => set({ profile }),
   toggleWishlist: (productId) => set((state) => ({
     wishlist: state.wishlist.includes(productId)
       ? state.wishlist.filter(id => id !== productId)
       : [...state.wishlist, productId]
   })),
-  logout: () => set({ user: null, profile: null, isAuthenticated: false }),
+  logout: () => {
+    localStorage.removeItem('dc_user');
+    set({ user: null, profile: null, isAuthenticated: false });
+  },
 }));
 
 export const useUIStore = create((set) => ({
@@ -82,14 +92,15 @@ export const useOrderStore = create((set, get) => ({
   orders: JSON.parse(localStorage.getItem('dc_orders')) || [],
   placeOrder: (orderData) => {
     const newOrder = {
+      ...orderData,
       id: `DC-${Math.floor(1000 + Math.random() * 9000)}`,
       date: new Date().toLocaleDateString(),
       status: 'packed',
       dest: `${orderData.shippingAddress.city}, ${orderData.shippingAddress.state}`,
       est: '5 days',
       items: orderData.items.map(item => `${item.name} × ${item.quantity}`).join(', '),
-      total: orderData.total,
-      ...orderData
+      rawItems: orderData.items,
+      total: orderData.total
     };
     
     const updatedOrders = [newOrder, ...get().orders];

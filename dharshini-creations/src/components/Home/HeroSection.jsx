@@ -74,7 +74,7 @@ export default function HeroSection() {
               <Link to="/shop" className="btn-primary interactive">
                 <span>✨</span> Explore Designs
               </Link>
-              <Link to="/custom-orders" className="btn-ghost interactive">
+              <Link to="/contact" className="btn-ghost interactive">
                 <span>🪡</span> Custom Order
               </Link>
             </div>

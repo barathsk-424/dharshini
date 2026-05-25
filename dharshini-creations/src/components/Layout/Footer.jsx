@@ -39,7 +39,6 @@ export default function Footer() {
             <div className="space-y-3.5">
               {[
                 { to: '/shop', label: 'Shop' },
-                { to: '/custom-orders', label: 'Custom Orders' },
                 { to: '/pricing', label: 'Pricing' },
                 { to: '/track-order', label: 'Track Order' },
               ].map(l => (
