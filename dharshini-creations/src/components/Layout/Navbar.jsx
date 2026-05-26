@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore, useUIStore, useUserStore } from '../../store/useStore';
-import { FiShoppingBag, FiHeart, FiMenu, FiX, FiVolume2, FiVolumeX, FiUser } from 'react-icons/fi';
+import { FiShoppingBag, FiHeart, FiMenu, FiX, FiUser } from 'react-icons/fi';
 import Logo from '../UI/Logo';
 
 const navLinks = [
@@ -22,7 +22,7 @@ export default function Navbar() {
   const itemCount = useCartStore(s => s.getItemCount());
   const toggleCart = useCartStore(s => s.toggleCart);
   const wishlistCount = useUserStore(s => s.wishlist.length);
-  const { soundEnabled, toggleSound } = useUIStore();
+
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -100,12 +100,7 @@ export default function Navbar() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2">
-            <button onClick={toggleSound} className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300" title="Toggle Sound">
-              {soundEnabled
-                ? <FiVolume2 size={18} color="var(--color-purple-glow)" />
-                : <FiVolumeX size={18} color="var(--color-gray-dark)" />
-              }
-            </button>
+
             <Link to="/auth" className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300" title="Sign In / Join">
               <FiUser size={18} color="var(--color-gray-soft)" />
             </Link>
