@@ -184,8 +184,8 @@ export default function Auth() {
                 <motion.div key="name-input" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden mb-5">
                   <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Full Name</label>
                   <div className="relative">
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><FiUser size={18} /></div>
-                    <input type="text" value={form.name} onChange={e => update('name', e.target.value)} placeholder="Jane Doe" required={!isLogin} className="w-full pr-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors placeholder-gray-600" style={{ borderColor: 'var(--color-border-strong)', color: '#F5F5F5', paddingLeft: '2.75rem' }} />
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 z-10 pointer-events-none"><FiUser size={16} /></div>
+                    <input type="text" value={form.name} onChange={e => update('name', e.target.value)} placeholder="Jane Doe" required={!isLogin} className="w-full pl-11 pr-4 py-3 rounded-xl text-sm border outline-none focus:border-purple-500 transition-colors placeholder-gray-600" style={{ borderColor: 'var(--color-border-strong)', color: '#F5F5F5', background: 'rgba(255,255,255,0.05)', WebkitBoxShadow: '0 0 0 1000px rgba(12,8,22,0.9) inset', WebkitTextFillColor: '#F5F5F5' }} />
                   </div>
                 </motion.div>
               )}
@@ -193,8 +193,8 @@ export default function Auth() {
             <div className="mb-5">
               <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Email Address</label>
               <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><FiMail size={18} /></div>
-                <input type="email" value={form.email} onChange={e => update('email', e.target.value)} placeholder="jane@example.com" required className="w-full pr-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors placeholder-gray-600" style={{ borderColor: 'var(--color-border-strong)', color: '#F5F5F5', paddingLeft: '2.75rem' }} />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 z-10 pointer-events-none"><FiMail size={16} /></div>
+                <input type="email" value={form.email} onChange={e => update('email', e.target.value)} placeholder="jane@example.com" required className="w-full pl-11 pr-4 py-3 rounded-xl text-sm border outline-none focus:border-purple-500 transition-colors placeholder-gray-600" style={{ borderColor: 'var(--color-border-strong)', color: '#F5F5F5', background: 'rgba(255,255,255,0.05)', WebkitBoxShadow: '0 0 0 1000px rgba(12,8,22,0.9) inset', WebkitTextFillColor: '#F5F5F5' }} />
               </div>
             </div>
             <div className="mb-5">
@@ -203,8 +203,8 @@ export default function Auth() {
                 {isLogin && (<a href="#" className="text-xs hover:text-purple-400 transition-colors" style={{ color: 'var(--color-purple-glow)' }}>Forgot?</a>)}
               </div>
               <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><FiLock size={18} /></div>
-                <input type="password" value={form.password} onChange={e => update('password', e.target.value)} placeholder="••••••••" required className="w-full pr-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors placeholder-gray-600" style={{ borderColor: 'var(--color-border-strong)', color: '#F5F5F5', paddingLeft: '2.75rem' }} />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 z-10 pointer-events-none"><FiLock size={16} /></div>
+                <input type="password" value={form.password} onChange={e => update('password', e.target.value)} placeholder="••••••••" required className="w-full pl-11 pr-4 py-3 rounded-xl text-sm border outline-none focus:border-purple-500 transition-colors placeholder-gray-600" style={{ borderColor: 'var(--color-border-strong)', color: '#F5F5F5', background: 'rgba(255,255,255,0.05)', WebkitBoxShadow: '0 0 0 1000px rgba(12,8,22,0.9) inset', WebkitTextFillColor: '#F5F5F5' }} />
               </div>
             </div>
             <button type="submit" className="btn-primary w-full interactive flex items-center justify-center gap-2 mt-4 py-3.5 shadow-[0_0_20px_rgba(138,43,226,0.3)]">{isLogin ? 'Sign In' : 'Create Account'} <FiArrowRight size={18} /></button>
