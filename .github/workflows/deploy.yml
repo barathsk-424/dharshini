@@ -42,7 +42,7 @@ jobs:
         run: cp dharshini-creations/dist/index.html dharshini-creations/dist/404.html
 
       - name: Upload Pages Artifact 📤
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v3.0.1
         with:
           path: ./dharshini-creations/dist
 
