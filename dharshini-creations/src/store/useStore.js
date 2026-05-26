@@ -73,7 +73,7 @@ export const useUserStore = create((set) => ({
 
 export const useUIStore = create((set) => ({
   soundEnabled: false,
-  showOpeningAnimation: !sessionStorage.getItem('dc_visited'),
+  showOpeningAnimation: true,
   cursorType: 'default',
   activeModal: null,
 
