@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import AdminRoutes from './admin/AdminRoutes';
 import { AnimatePresence } from 'framer-motion';
 import { useUIStore } from './store/useStore';
 import Layout from './components/Layout/Layout';
@@ -30,6 +31,7 @@ import CustomCursor from './components/UI/CustomCursor';
 function App() {
   const location = useLocation();
   const { showOpeningAnimation } = useUIStore();
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -37,6 +39,10 @@ function App() {
 
   if (showOpeningAnimation) {
     return <OpeningAnimation />;
+  }
+
+  if (isAdminRoute) {
+    return <AdminRoutes />;
   }
 
   return (
