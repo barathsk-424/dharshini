@@ -1,15 +1,22 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { FiBell, FiGift, FiTruck, FiInfo } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
-const notifications = [
+const initialNotifications = [
   { id: 1, type: 'promo', title: 'Flash Sale! 🎉', desc: 'Get 20% off on all Combo Works this weekend only. Use code COMBO20 at checkout.', date: '2 hours ago', icon: FiGift, color: 'text-amber-400', bg: 'bg-amber-500/10', unread: true },
   { id: 2, type: 'order', title: 'Order Shipped', desc: 'Good news! Your order DC-003 has been shipped and is on its way to you.', date: 'Yesterday', icon: FiTruck, color: 'text-emerald-400', bg: 'bg-emerald-500/10', unread: true },
   { id: 3, type: 'system', title: 'Welcome to Dharshini Creations', desc: 'Thank you for joining our community! Explore our handcrafted collections.', date: 'May 10', icon: FiInfo, color: 'text-blue-400', bg: 'bg-blue-500/10', unread: false },
 ];
 
 export default function Notifications() {
+  const [notifs, setNotifs] = useState(initialNotifications);
+
+  const markAllAsRead = () => {
+    setNotifs(notifs.map(n => ({ ...n, unread: false })));
+  };
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full min-h-[calc(100vh-180px)] py-12 md:py-20 px-6">
       <Helmet><title>Notifications — Dharshini Creations</title></Helmet>
@@ -22,14 +29,14 @@ export default function Notifications() {
               <FiBell className="text-amber-400" /> Notifications
             </h1>
           </div>
-          <button className="text-sm text-gray-400 hover:text-white transition-colors interactive">Mark all as read</button>
+          <button onClick={markAllAsRead} className="text-sm text-gray-400 hover:text-white transition-colors interactive">Mark all as read</button>
         </motion.div>
 
         <motion.div className="glass-card p-4 md:p-6 relative overflow-hidden" initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
           <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
           
           <div className="space-y-3">
-            {notifications.map((item, i) => {
+            {notifs.map((item, i) => {
               const Icon = item.icon;
               return (
                 <motion.div 

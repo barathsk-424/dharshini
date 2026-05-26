@@ -12,7 +12,6 @@ export default function AccountMenu() {
   const menuItems = [
     { to: '/orders', label: 'My Orders', icon: <FiShoppingBag size={18} /> },
     { to: '/track-order', label: 'Order Tracking', icon: <FiMapPin size={18} /> },
-    { to: '/designs', label: 'Saved Designs', icon: <FiPenTool size={18} /> },
     { to: '/wishlist', label: 'Wishlist', icon: <FiHeart size={18} /> },
     { to: '/profile-settings', label: 'Profile Settings', icon: <FiSettings size={18} /> },
     { to: '/activity', label: 'Recent Activity', icon: <FiActivity size={18} /> },
