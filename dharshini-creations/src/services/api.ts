@@ -1,4 +1,4 @@
-import {} from "../lib/supabase";
+import { supabase } from "../lib/supabase";
 
 // Fetch all categories
 export const fetchCategories = async () => {
