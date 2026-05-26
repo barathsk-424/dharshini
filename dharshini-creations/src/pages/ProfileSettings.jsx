@@ -136,7 +136,7 @@ export default function ProfileSettings() {
                     type="tel"
                     value={form.phone}
                     onChange={e => update('phone', e.target.value)}
-                    placeholder="+91 98765 43210"
+                    placeholder="+91 81224 59197"
                     className="icon-input w-full"
                   />
                 </div>

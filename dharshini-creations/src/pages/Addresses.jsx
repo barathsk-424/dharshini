@@ -5,7 +5,7 @@ import { FiMap, FiPlus, FiEdit2, FiTrash2, FiX, FiCheck, FiAlertCircle } from 'r
 import { Link } from 'react-router-dom';
 
 const initialAddresses = [
-  { id: 1, type: 'Home', name: 'Jane Doe', street: '123 Creative Street, Apt 4B', city: 'Chennai', state: 'Tamil Nadu', zip: '600001', phone: '+91 9876543210', isDefault: true },
+  { id: 1, type: 'Home', name: 'Jane Doe', street: '123 Creative Street, Apt 4B', city: 'Chennai', state: 'Tamil Nadu', zip: '600001', phone: '+91 81224 59197', isDefault: true },
 ];
 
 export default function Addresses() {
@@ -183,7 +183,7 @@ export default function Addresses() {
                   </div>
                   <div className="col-span-2 sm:col-span-1">
                     <label className="text-xs font-semibold block mb-1 text-gray-300">Phone Number</label>
-                    <input required type="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border border-white/10 outline-none focus:border-purple-500 transition-colors text-white placeholder-gray-500" placeholder="+91 9876543210" />
+                    <input required type="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border border-white/10 outline-none focus:border-purple-500 transition-colors text-white placeholder-gray-500" placeholder="+91 81224 59197" />
                   </div>
                 </div>
                 

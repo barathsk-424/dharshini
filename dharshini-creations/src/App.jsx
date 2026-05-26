@@ -31,7 +31,7 @@ import CustomCursor from './components/UI/CustomCursor';
 function App() {
   const location = useLocation();
   const { showOpeningAnimation } = useUIStore();
-  const isAdminRoute = location.pathname.startsWith('/admin');
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -41,9 +41,6 @@ function App() {
     return <OpeningAnimation />;
   }
 
-  if (isAdminRoute) {
-    return <AdminRoutes />;
-  }
 
   return (
     <>
@@ -71,6 +68,7 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/customize/:id" element={<ProductCustomize />} />
             <Route path="/review/:id" element={<OrderReview />} />
+            <Route path="/admin/*" element={<AdminRoutes />} />
           </Routes>
         </AnimatePresence>
       </Layout>

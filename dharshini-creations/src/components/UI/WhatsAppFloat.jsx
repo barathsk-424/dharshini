@@ -4,7 +4,7 @@ import { FaWhatsapp } from 'react-icons/fa';
 export default function WhatsAppFloat() {
   return (
     <motion.a
-      href="https://wa.me/919876543210?text=Hi%20Dharshini!%20I'm%20interested%20in%20your%20creations."
+      href="https://wa.me/918122459197?text=Hi%20Dharshini!%20I'm%20interested%20in%20your%20creations."
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-20 right-6 lg:left-6 lg:right-auto lg:bottom-8 z-50 w-14 h-14 rounded-full flex items-center justify-center interactive"

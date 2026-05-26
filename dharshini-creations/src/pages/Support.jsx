@@ -60,7 +60,7 @@ export default function Support() {
             <h2 className="text-xl font-cinzel font-bold text-white mb-6">Contact Us</h2>
             
             <motion.a 
-              href="https://wa.me/919876543210" 
+              href="https://wa.me/918122459197" 
               target="_blank" 
               rel="noreferrer"
               className="glass-card p-6 flex flex-col items-center text-center group interactive hover:-translate-y-1 transition-all"

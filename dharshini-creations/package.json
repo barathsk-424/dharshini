@@ -6,7 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "supabase:install": "npm install -g supabase",
+    "supabase:start": "supabase start",
+    "supabase:reset": "supabase db reset --file supabase-setup.sql",
+    "supabase:setup": "npm run supabase:reset",
+    "supabase:seed": "supabase db seed --file supabase/seed.sql"
   },
   "devDependencies": {
     "typescript": "~6.0.2",
@@ -16,12 +21,15 @@
     "@gsap/react": "^2.1.2",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
+    "@supabase/supabase-js": "^2.106.2",
     "@tailwindcss/vite": "^4.3.0",
     "@vitejs/plugin-react": "^6.0.2",
+    "chart.js": "^4.5.1",
     "framer-motion": "^12.39.0",
     "gsap": "^3.15.0",
     "konva": "^10.3.0",
     "react": "^19.2.6",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.6",
     "react-helmet-async": "^3.0.0",
     "react-icons": "^5.6.0",

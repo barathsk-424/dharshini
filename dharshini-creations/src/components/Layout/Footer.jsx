@@ -53,9 +53,9 @@ export default function Footer() {
                 className="flex items-center gap-3 text-sm interactive transition-all duration-300 hover:text-purple-400" style={{ color: 'var(--color-gray-dark)' }}>
                 <FiInstagram size={16} color="var(--color-purple-glow)" /> @threads.by.dharshini0612
               </a>
-              <a href="https://wa.me/919876543210?text=Hi%20Dharshini!%20I'm%20interested%20in%20your%20creations." target="_blank" rel="noopener noreferrer"
+              <a href="https://wa.me/918122459197?text=Hi%20Dharshini!%20I'm%20interested%20in%20your%20creations." target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-3 text-sm interactive transition-all duration-300 hover:text-purple-400" style={{ color: 'var(--color-gray-dark)' }}>
-                <FaWhatsapp size={16} color="var(--color-purple-glow)" /> +91 98765 43210
+                <FaWhatsapp size={16} color="var(--color-purple-glow)" /> +91 81224 59197
               </a>
               <div className="flex items-center gap-3 text-sm" style={{ color: 'var(--color-gray-dark)' }}>
                 <FiMapPin size={16} color="var(--color-purple-glow)" /> Tamil Nadu, India

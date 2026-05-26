@@ -39,18 +39,22 @@ export default function Users() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="space-y-6"
+      className="space-y-8"
     >
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h2 className="text-2xl font-bold">User Management</h2>
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+        <div>
+          <h2 className="text-3xl font-bold font-cinzel text-white mb-2 tracking-wider">User Management</h2>
+          <p className="text-sm text-gray-400 font-poppins">Manage administrators and customers effectively.</p>
+        </div>
         
         {/* Search */}
-        <div className="relative w-full sm:w-64">
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <div className="relative w-full sm:w-80 group">
+          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-violet-400 transition-colors" />
           <input 
             type="text" 
-            placeholder="Search users..." 
-            className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:border-purple-500 transition-colors"
+            placeholder="Search users by name or email..." 
+            className="w-full bg-white/[0.02] border border-white/[0.05] text-white rounded-2xl pl-11 pr-4 py-3 focus:outline-none focus:border-violet-500 focus:bg-white/[0.05] transition-all duration-300 font-poppins placeholder-gray-500 shadow-lg"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -58,62 +62,67 @@ export default function Users() {
       </div>
 
       {/* Users Table */}
-      <div className="bg-gray-800 rounded-xl border border-gray-700/50 overflow-hidden shadow-lg">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[700px]">
+      <div className="bg-white/[0.02] backdrop-blur-xl border border-white/[0.05] rounded-3xl shadow-2xl overflow-hidden relative group">
+        <div className="absolute inset-0 bg-gradient-to-t from-violet-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <div className="overflow-x-auto p-4 relative z-10">
+          <table className="w-full text-left border-collapse min-w-[700px] font-poppins">
             <thead>
-              <tr className="bg-gray-900/50 text-gray-400 border-b border-gray-700">
-                <th className="py-4 px-6 font-medium">Name</th>
-                <th className="py-4 px-6 font-medium">Email</th>
-                <th className="py-4 px-6 font-medium">Role</th>
-                <th className="py-4 px-6 font-medium">Status</th>
-                <th className="py-4 px-6 font-medium">Joined Date</th>
-                <th className="py-4 px-6 font-medium text-right">Actions</th>
+              <tr className="text-gray-400 text-xs uppercase tracking-wider">
+                <th className="py-5 px-6 font-semibold">Name</th>
+                <th className="py-5 px-6 font-semibold">Email</th>
+                <th className="py-5 px-6 font-semibold">Role</th>
+                <th className="py-5 px-6 font-semibold">Status</th>
+                <th className="py-5 px-6 font-semibold">Joined Date</th>
+                <th className="py-5 px-6 font-semibold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="space-y-2">
               {filteredUsers.length > 0 ? filteredUsers.map((user) => (
-                <tr key={user.id} className="border-b border-gray-700/50 hover:bg-gray-700/20 transition-colors">
-                  <td className="py-4 px-6 font-medium text-white">{user.name}</td>
-                  <td className="py-4 px-6 text-gray-300">{user.email}</td>
+                <tr key={user.id} className="hover:bg-white/[0.04] transition-colors rounded-2xl group/row">
+                  <td className="py-4 px-6 font-medium text-white group-hover/row:text-violet-300 transition-colors">{user.name}</td>
+                  <td className="py-4 px-6 text-gray-400 text-sm">{user.email}</td>
                   <td className="py-4 px-6">
-                    <span className={`px-2 py-1 rounded text-xs font-semibold ${user.role === 'Admin' ? 'bg-purple-500/20 text-purple-400' : 'bg-gray-700 text-gray-300'}`}>
+                    <span className={`px-3 py-1 rounded-full text-[11px] font-bold tracking-widest uppercase ${user.role === 'Admin' ? 'bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20' : 'bg-white/[0.05] text-gray-300 border border-white/10'}`}>
                       {user.role}
                     </span>
                   </td>
                   <td className="py-4 px-6">
-                    <span className={`flex items-center gap-1.5 text-xs font-semibold ${user.status === 'Active' ? 'text-green-400' : 'text-red-400'}`}>
+                    <span className={`flex items-center gap-1.5 text-xs font-bold tracking-wider uppercase ${user.status === 'Active' ? 'text-emerald-400' : 'text-rose-400'}`}>
                       {user.status === 'Active' ? <FiCheckCircle /> : <FiUserX />}
                       {user.status}
                     </span>
                   </td>
-                  <td className="py-4 px-6 text-gray-400 text-sm">{user.joined}</td>
+                  <td className="py-4 px-6 text-gray-500 text-sm">{user.joined}</td>
                   <td className="py-4 px-6">
                     <div className="flex items-center justify-end gap-3">
-                      <button className="text-blue-400 hover:text-blue-300 transition-colors p-1" title="Edit User">
-                        <FiEdit2 size={18} />
+                      <button className="p-2 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:border-blue-500/50 hover:bg-blue-500/10 text-gray-400 hover:text-blue-400 transition-all shadow-lg" title="Edit User">
+                        <FiEdit2 size={16} />
                       </button>
                       <button 
                         onClick={() => handleBlockUser(user.id)}
-                        className={`${user.status === 'Active' ? 'text-orange-400 hover:text-orange-300' : 'text-green-400 hover:text-green-300'} transition-colors p-1`} 
+                        className={`p-2 rounded-xl bg-white/[0.02] border border-white/[0.05] shadow-lg transition-all ${user.status === 'Active' ? 'hover:border-amber-500/50 hover:bg-amber-500/10 text-gray-400 hover:text-amber-400' : 'hover:border-emerald-500/50 hover:bg-emerald-500/10 text-gray-400 hover:text-emerald-400'}`} 
                         title={user.status === 'Active' ? 'Block User' : 'Unblock User'}
                       >
-                        {user.status === 'Active' ? <FiUserX size={18} /> : <FiCheckCircle size={18} />}
+                        {user.status === 'Active' ? <FiUserX size={16} /> : <FiCheckCircle size={16} />}
                       </button>
                       <button 
                         onClick={() => handleDeleteUser(user.id)}
-                        className="text-red-400 hover:text-red-300 transition-colors p-1" 
+                        className="p-2 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:border-rose-500/50 hover:bg-rose-500/10 text-gray-400 hover:text-rose-400 transition-all shadow-lg" 
                         title="Delete User"
                       >
-                        <FiTrash2 size={18} />
+                        <FiTrash2 size={16} />
                       </button>
                     </div>
                   </td>
                 </tr>
               )) : (
                 <tr>
-                  <td colSpan="6" className="py-8 text-center text-gray-400">
-                    No users found matching "{searchTerm}"
+                  <td colSpan="6" className="py-16 text-center">
+                    <div className="flex flex-col items-center justify-center text-gray-500">
+                      <FiSearch size={48} className="mb-4 opacity-20" />
+                      <p className="text-lg font-cinzel">No users found.</p>
+                      <p className="text-sm font-poppins mt-1 opacity-60">Try adjusting your search criteria.</p>
+                    </div>
                   </td>
                 </tr>
               )}

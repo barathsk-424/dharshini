@@ -34,7 +34,7 @@ export default function CartDrawer() {
     message += `Please confirm my order and let me know the payment details. Thanks!`;
 
     const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/919876543210?text=${encoded}`, '_blank');
+    window.open(`https://wa.me/918122459197?text=${encoded}`, '_blank');
   };
 
   return (

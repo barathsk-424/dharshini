@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase Demo – Premium UI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Supabase JS SDK via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <!-- Authentication Card -->
+    <section id="auth-section" class="glass-card">
+      <h1>Welcome</h1>
+      <div class="auth-toggle">
+        <button id="show-signin" class="active">Sign In</button>
+        <button id="show-signup">Sign Up</button>
+      </div>
+      <form id="signin-form" class="auth-form">
+        <input type="email" id="signin-email" placeholder="Email" required />
+        <input type="password" id="signin-password" placeholder="Password" required />
+        <button type="submit" class="btn-primary">Sign In</button>
+      </form>
+      <form id="signup-form" class="auth-form hidden">
+        <input type="email" id="signup-email" placeholder="Email" required />
+        <input type="password" id="signup-password" placeholder="Password" required />
+        <button type="submit" class="btn-primary">Sign Up</button>
+      </form>
+    </section>
+
+    <!-- Main App – hidden until auth -->
+    <section id="app-section" class="glass-card hidden">
+      <header class="app-header">
+        <h2>My Tasks</h2>
+        <button id="logout" class="btn-secondary">Log Out</button>
+      </header>
+      <form id="task-form" class="task-form">
+        <input type="text" id="task-input" placeholder="New task…" required />
+        <button type="submit" class="btn-primary">Add</button>
+      </form>
+      <ul id="task-list" class="task-list"></ul>
+    </section>
+  </main>
+</body>
+</html>

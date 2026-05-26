@@ -45,94 +45,103 @@ export default function Messages() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="h-[calc(100vh-8rem)] flex flex-col"
+      className="h-[calc(100vh-8rem)] flex flex-col font-poppins"
     >
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Messages</h2>
+      <div className="flex justify-between items-end mb-8">
+        <div>
+          <h2 className="text-3xl font-bold font-cinzel text-white tracking-wider mb-2">Messages</h2>
+          <p className="text-sm text-gray-400">Manage customer inquiries and support tickets.</p>
+        </div>
       </div>
 
-      <div className="flex-1 bg-gray-800 rounded-xl border border-gray-700/50 overflow-hidden shadow-lg flex flex-col md:flex-row">
+      <div className="flex-1 bg-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/[0.05] shadow-2xl overflow-hidden flex flex-col md:flex-row relative">
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-600/5 to-fuchsia-600/5 opacity-50 pointer-events-none" />
         
         {/* Left List */}
-        <div className={`w-full md:w-1/3 border-r border-gray-700/50 flex flex-col ${activeMessage ? 'hidden md:flex' : 'flex'}`}>
-          <div className="p-4 border-b border-gray-700/50">
-            <div className="relative">
-              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <div className={`w-full md:w-[380px] border-r border-white/[0.05] flex flex-col relative z-10 bg-white/[0.01] ${activeMessage ? 'hidden md:flex' : 'flex'}`}>
+          <div className="p-6 border-b border-white/[0.05]">
+            <div className="relative group">
+              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-violet-400 transition-colors" />
               <input 
                 type="text" 
                 placeholder="Search messages..." 
-                className="w-full bg-gray-900 border border-gray-700 text-white rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:border-purple-500 transition-colors"
+                className="w-full bg-white/[0.02] border border-white/[0.05] text-white rounded-2xl pl-11 pr-4 py-3 focus:outline-none focus:border-violet-500 focus:bg-white/[0.05] transition-all shadow-inner placeholder-gray-500 text-sm"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
           </div>
           
-          <div className="flex-1 overflow-y-auto custom-scrollbar">
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
             {filteredMessages.map((msg) => (
               <div 
                 key={msg.id}
                 onClick={() => handleSelectMessage(msg)}
-                className={`p-4 border-b border-gray-700/50 cursor-pointer transition-colors ${
-                  activeMessage?.id === msg.id ? 'bg-purple-900/20 border-l-4 border-l-purple-500' : 'hover:bg-gray-700/30 border-l-4 border-l-transparent'
+                className={`p-4 mb-2 rounded-2xl cursor-pointer transition-all duration-300 ${
+                  activeMessage?.id === msg.id 
+                    ? 'bg-gradient-to-r from-violet-600/20 to-fuchsia-600/10 border border-violet-500/30 shadow-lg' 
+                    : 'hover:bg-white/[0.04] border border-transparent'
                 }`}
               >
-                <div className="flex justify-between items-start mb-1">
-                  <span className={`font-medium ${msg.read ? 'text-gray-300' : 'text-white'}`}>{msg.sender}</span>
-                  <span className="text-xs text-gray-500">{msg.date}</span>
+                <div className="flex justify-between items-start mb-2">
+                  <span className={`font-bold tracking-wide text-sm ${msg.read ? 'text-gray-400' : 'text-white'}`}>{msg.sender}</span>
+                  <span className="text-xs font-semibold text-gray-500 tracking-wider uppercase">{msg.date}</span>
                 </div>
-                <div className={`text-sm mb-1 truncate ${msg.read ? 'text-gray-400' : 'text-purple-400 font-medium'}`}>
+                <div className={`text-sm mb-2 truncate tracking-wide ${msg.read ? 'text-gray-400' : 'text-fuchsia-400 font-bold'}`}>
                   {msg.subject}
                 </div>
-                <div className="text-xs text-gray-500 truncate">
+                <div className="text-xs text-gray-500 truncate leading-relaxed">
                   {msg.preview}
                 </div>
               </div>
             ))}
             {filteredMessages.length === 0 && (
-              <div className="p-8 text-center text-gray-500">No messages found.</div>
+              <div className="p-12 text-center text-gray-500 flex flex-col items-center">
+                <FiSearch size={32} className="mb-4 opacity-20" />
+                <p className="text-sm font-bold tracking-wide">No messages found.</p>
+              </div>
             )}
           </div>
         </div>
 
         {/* Right Content */}
-        <div className={`flex-1 flex flex-col ${!activeMessage ? 'hidden md:flex' : 'flex'}`}>
+        <div className={`flex-1 flex flex-col relative z-10 ${!activeMessage ? 'hidden md:flex' : 'flex'}`}>
           {activeMessage ? (
             <>
               {/* Message Header */}
-              <div className="p-6 border-b border-gray-700/50 flex justify-between items-start bg-gray-800/50">
+              <div className="p-8 border-b border-white/[0.05] flex justify-between items-start bg-white/[0.02]">
                 <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <button className="md:hidden text-gray-400 hover:text-white" onClick={() => setActiveMessage(null)}>
+                  <div className="flex items-center gap-4 mb-4">
+                    <button className="md:hidden p-2 rounded-xl bg-white/[0.05] text-gray-400 hover:text-white transition-colors" onClick={() => setActiveMessage(null)}>
                       <FiCornerUpLeft size={20} />
                     </button>
-                    <h3 className="text-xl font-bold text-white">{activeMessage.subject}</h3>
+                    <h3 className="text-2xl font-bold font-cinzel text-white tracking-wide">{activeMessage.subject}</h3>
                   </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <span className="font-medium text-purple-400">{activeMessage.sender}</span>
-                    <span className="text-gray-500">&lt;{activeMessage.email}&gt;</span>
+                  <div className="flex items-center gap-3 text-sm">
+                    <span className="font-bold tracking-wide text-violet-400 bg-violet-500/10 px-3 py-1 rounded-lg">{activeMessage.sender}</span>
+                    <span className="text-gray-500 font-medium">&lt;{activeMessage.email}&gt;</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500 mr-2">{activeMessage.date}</span>
-                  <button onClick={() => deleteMessage(activeMessage.id)} className="p-2 text-gray-400 hover:text-red-400 hover:bg-gray-700 rounded-lg transition-colors" title="Delete">
-                    <FiTrash2 size={18} />
+                <div className="flex items-center gap-4">
+                  <span className="text-xs font-bold tracking-widest uppercase text-gray-500 bg-white/[0.05] px-3 py-1.5 rounded-lg">{activeMessage.date}</span>
+                  <button onClick={() => deleteMessage(activeMessage.id)} className="p-2.5 text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all shadow-lg border border-transparent hover:border-rose-500/20" title="Delete">
+                    <FiTrash2 size={20} />
                   </button>
                 </div>
               </div>
 
               {/* Message Body */}
-              <div className="p-6 flex-1 overflow-y-auto">
-                <div className="text-gray-300 whitespace-pre-wrap leading-relaxed">
+              <div className="p-8 flex-1 overflow-y-auto custom-scrollbar bg-white/[0.01]">
+                <div className="text-gray-300 whitespace-pre-wrap leading-relaxed text-sm max-w-3xl">
                   {activeMessage.fullText}
                 </div>
               </div>
 
               {/* Reply Section */}
-              <div className="p-6 border-t border-gray-700/50 bg-gray-900/30">
-                <h4 className="text-sm font-medium text-gray-400 mb-3 flex items-center gap-2"><FiCornerUpLeft /> Reply to {activeMessage.sender}</h4>
+              <div className="p-8 border-t border-white/[0.05] bg-white/[0.02]">
+                <h4 className="text-sm font-bold tracking-wider text-gray-400 mb-4 flex items-center gap-2 uppercase"><FiCornerUpLeft className="text-violet-400" /> Reply to {activeMessage.sender}</h4>
                 <textarea 
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg p-4 text-white focus:outline-none focus:border-purple-500 transition-colors h-32 resize-none mb-4"
+                  className="w-full bg-white/[0.02] border border-white/[0.05] rounded-2xl p-5 text-white focus:outline-none focus:border-violet-500 focus:bg-white/[0.04] transition-all shadow-inner h-32 resize-none mb-4 custom-scrollbar text-sm"
                   placeholder="Type your reply here..."
                   value={replyText}
                   onChange={(e) => setReplyText(e.target.value)}
@@ -140,17 +149,20 @@ export default function Messages() {
                 <div className="flex justify-end">
                   <button 
                     onClick={sendReply}
-                    className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-lg hover:from-purple-500 hover:to-pink-500 transition-all font-medium shadow-lg shadow-purple-500/20"
+                    className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-8 py-3 rounded-xl hover:from-violet-500 hover:to-fuchsia-500 transition-all font-bold tracking-wider shadow-[0_0_20px_rgba(139,92,246,0.3)] hover:shadow-[0_0_30px_rgba(139,92,246,0.5)]"
                   >
-                    Send Reply
+                    Send Reply <FiCheck />
                   </button>
                 </div>
               </div>
             </>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-gray-500 p-8">
-              <FiMail size={48} className="mb-4 opacity-50" />
-              <p className="text-lg font-medium">Select a message to view</p>
+              <div className="w-24 h-24 rounded-full bg-white/[0.02] border border-white/[0.05] flex items-center justify-center mb-6 shadow-inner">
+                <FiMail size={40} className="text-gray-600" />
+              </div>
+              <p className="text-xl font-bold font-cinzel tracking-wider text-gray-400">Select a message</p>
+              <p className="text-sm font-poppins mt-2 opacity-60">Choose a conversation from the left to view details</p>
             </div>
           )}
         </div>

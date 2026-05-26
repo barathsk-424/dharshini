@@ -82,7 +82,7 @@ Please let me know the final quote including shipping!`;
 
     clearDraft();
     const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/919876543210?text=${encoded}`, '_blank');
+    window.open(`https://wa.me/918122459197?text=${encoded}`, '_blank');
     navigate('/shop');
   };
 

@@ -3,11 +3,11 @@ import { FiSearch, FiEye, FiCheck, FiX } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 
 const STATUS_COLORS = {
-  'Delivered': 'bg-green-500/20 text-green-400',
-  'Processing': 'bg-blue-500/20 text-blue-400',
-  'Shipped': 'bg-purple-500/20 text-purple-400',
-  'Pending': 'bg-yellow-500/20 text-yellow-400',
-  'Cancelled': 'bg-red-500/20 text-red-400',
+  'Delivered': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  'Processing': 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  'Shipped': 'bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20',
+  'Pending': 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
+  'Cancelled': 'bg-rose-500/10 text-rose-400 border-rose-500/20',
 };
 
 const STATUSES = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
@@ -40,20 +40,23 @@ export default function Orders() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="space-y-6"
+      className="space-y-8"
     >
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h2 className="text-2xl font-bold">Order Management</h2>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+        <div>
+          <h2 className="text-3xl font-bold font-cinzel text-white mb-2 tracking-wider">Order Management</h2>
+          <p className="text-sm text-gray-400 font-poppins">Manage and track customer orders seamlessly.</p>
+        </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
           {/* Search */}
-          <div className="relative w-full sm:w-64">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <div className="relative w-full sm:w-72 group">
+            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-violet-400 transition-colors" />
             <input
               type="text"
               placeholder="Search orders..."
-              className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:border-purple-500 transition-colors"
+              className="w-full bg-white/[0.02] border border-white/[0.05] text-white rounded-2xl pl-11 pr-4 py-3 focus:outline-none focus:border-violet-500 focus:bg-white/[0.05] transition-all duration-300 font-poppins placeholder-gray-500 shadow-lg"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -61,71 +64,86 @@ export default function Orders() {
 
           {/* Filter */}
           <select
-            className="bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:border-purple-500 transition-colors"
+            className="bg-white/[0.02] border border-white/[0.05] text-white rounded-2xl px-4 py-3 focus:outline-none focus:border-fuchsia-500 focus:bg-white/[0.05] transition-all duration-300 font-poppins shadow-lg appearance-none cursor-pointer pr-10 relative"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
+            style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%239CA3AF\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1.2em' }}
           >
-            <option value="All">All Statuses</option>
-            {STATUSES.map(s => <option key={s}>{s}</option>)}
+            <option value="All" className="bg-[#0f1019] text-white">All Statuses</option>
+            {STATUSES.map(s => <option key={s} value={s} className="bg-[#0f1019] text-white">{s}</option>)}
           </select>
         </div>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        {['All', ...STATUSES].map(status => {
+      <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
+        {['All', ...STATUSES].map((status, i) => {
           const count = status === 'All' ? orders.length : orders.filter(o => o.status === status).length;
+          const isActive = filterStatus === status;
           return (
-            <button
+            <motion.button
               key={status}
+              whileHover={{ y: -3 }}
               onClick={() => setFilterStatus(status)}
-              className={`p-4 rounded-xl border text-left transition-all hover:scale-105 ${
-                filterStatus === status ? 'border-purple-500 bg-purple-500/10' : 'border-gray-700/50 bg-gray-800'
+              className={`p-5 rounded-3xl border text-left transition-all duration-300 relative overflow-hidden group ${
+                isActive 
+                  ? 'border-violet-500/50 bg-violet-600/20 shadow-[0_0_20px_rgba(139,92,246,0.2)]' 
+                  : 'border-white/[0.05] bg-white/[0.02] hover:bg-white/[0.04]'
               }`}
             >
-              <div className="text-2xl font-bold text-white">{count}</div>
-              <div className="text-xs text-gray-400 mt-1">{status}</div>
-            </button>
+              <div className={`absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity ${isActive ? 'opacity-100 from-violet-500/10' : ''}`} />
+              <div className="text-3xl font-bold font-cinzel text-white relative z-10">{count}</div>
+              <div className={`text-xs uppercase tracking-widest font-semibold mt-2 relative z-10 ${isActive ? 'text-violet-300' : 'text-gray-400'}`}>{status}</div>
+            </motion.button>
           );
         })}
       </div>
 
       {/* Table */}
-      <div className="bg-gray-800 rounded-xl border border-gray-700/50 overflow-hidden shadow-lg">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[780px]">
+      <div className="bg-white/[0.02] backdrop-blur-xl border border-white/[0.05] rounded-3xl shadow-2xl overflow-hidden relative group">
+        <div className="absolute inset-0 bg-gradient-to-t from-violet-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <div className="overflow-x-auto p-4 relative z-10">
+          <table className="w-full text-left border-collapse min-w-[900px] font-poppins">
             <thead>
-              <tr className="bg-gray-900/50 text-gray-400 border-b border-gray-700">
-                <th className="py-4 px-6 font-medium">Order ID</th>
-                <th className="py-4 px-6 font-medium">Customer</th>
-                <th className="py-4 px-6 font-medium">Product</th>
-                <th className="py-4 px-6 font-medium">Date</th>
-                <th className="py-4 px-6 font-medium">Status</th>
-                <th className="py-4 px-6 font-medium">Amount</th>
-                <th className="py-4 px-6 font-medium text-right">Actions</th>
+              <tr className="text-gray-400 text-xs uppercase tracking-wider">
+                <th className="py-5 px-6 font-semibold">Order ID</th>
+                <th className="py-5 px-6 font-semibold">Customer</th>
+                <th className="py-5 px-6 font-semibold">Product</th>
+                <th className="py-5 px-6 font-semibold">Date</th>
+                <th className="py-5 px-6 font-semibold">Status</th>
+                <th className="py-5 px-6 font-semibold text-right">Amount</th>
+                <th className="py-5 px-6 font-semibold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody>
-              {filtered.length > 0 ? filtered.map((order) => (
-                <tr key={order.id} className="border-b border-gray-700/50 hover:bg-gray-700/20 transition-colors">
-                  <td className="py-4 px-6 font-bold text-purple-400">{order.id}</td>
-                  <td className="py-4 px-6 text-white font-medium">{order.customer}</td>
-                  <td className="py-4 px-6 text-gray-300 max-w-[200px] truncate">{order.product}</td>
-                  <td className="py-4 px-6 text-gray-400 text-sm">{order.date}</td>
+            <tbody className="space-y-2">
+              {filtered.length > 0 ? filtered.map((order, idx) => (
+                <tr key={order.id} className="hover:bg-white/[0.04] transition-colors rounded-2xl group/row">
                   <td className="py-4 px-6">
-                    <select
-                      className={`text-xs font-semibold px-2 py-1 rounded-full border-0 cursor-pointer focus:outline-none ${STATUS_COLORS[order.status] || 'bg-gray-700 text-gray-300'}`}
-                      value={order.status}
-                      onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                      style={{ background: 'transparent' }}
-                    >
-                      {STATUSES.map(s => <option key={s} value={s} className="bg-gray-800 text-white">{s}</option>)}
-                    </select>
+                    <span className="font-semibold font-cinzel text-lg text-violet-400 group-hover/row:text-violet-300 transition-colors tracking-wide">{order.id}</span>
                   </td>
-                  <td className="py-4 px-6 font-bold text-white">{order.amount}</td>
+                  <td className="py-4 px-6 text-white font-medium">{order.customer}</td>
+                  <td className="py-4 px-6 text-gray-400 max-w-[250px] truncate">{order.product}</td>
+                  <td className="py-4 px-6 text-gray-500 text-sm">{order.date}</td>
                   <td className="py-4 px-6">
-                    <div className="flex items-center justify-end gap-2">
-                      <button className="p-1.5 rounded-lg bg-gray-700 hover:bg-purple-500/20 text-gray-400 hover:text-purple-400 transition-all" title="View Order">
+                    <div className="relative inline-block">
+                      <select
+                        className={`text-[11px] uppercase tracking-widest font-bold px-3 py-1.5 rounded-full border cursor-pointer focus:outline-none appearance-none pr-8 transition-colors ${STATUS_COLORS[order.status] || 'bg-white/[0.05] border-white/10 text-gray-300'}`}
+                        value={order.status}
+                        onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                      >
+                        {STATUSES.map(s => <option key={s} value={s} className="bg-[#0f1019] text-white">{s}</option>)}
+                      </select>
+                      <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
+                        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-4 px-6 font-bold text-white text-right">{order.amount}</td>
+                  <td className="py-4 px-6">
+                    <div className="flex items-center justify-end gap-3">
+                      <button className="p-2 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:border-violet-500/50 hover:bg-violet-500/10 text-gray-400 hover:text-violet-400 transition-all shadow-lg" title="View Order Details">
                         <FiEye size={16} />
                       </button>
                     </div>
@@ -133,7 +151,13 @@ export default function Orders() {
                 </tr>
               )) : (
                 <tr>
-                  <td colSpan="7" className="py-10 text-center text-gray-400">No orders found.</td>
+                  <td colSpan="7" className="py-16 text-center">
+                    <div className="flex flex-col items-center justify-center text-gray-500">
+                      <FiSearch size={48} className="mb-4 opacity-20" />
+                      <p className="text-lg font-cinzel">No orders found.</p>
+                      <p className="text-sm font-poppins mt-1 opacity-60">Try adjusting your search or filters.</p>
+                    </div>
+                  </td>
                 </tr>
               )}
             </tbody>

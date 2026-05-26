@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { supabase } from '../lib/supabase';
 
 export const useCartStore = create((set, get) => ({
   items: [],
@@ -45,28 +46,53 @@ export const useCartStore = create((set, get) => ({
   clearCart: () => set({ items: [] }),
 }));
 
-export const useUserStore = create((set) => ({
-  user: JSON.parse(localStorage.getItem('dc_user')) || null,
-  profile: null,
-  isAuthenticated: !!localStorage.getItem('dc_user'),
-  wishlist: [],
 
-  setUser: (user) => {
-    if (user) {
-      localStorage.setItem('dc_user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('dc_user');
-    }
-    set({ user, isAuthenticated: !!user });
+export const useUserStore = create((set) => ({
+  user: null,
+  profile: null,
+  isAuthenticated: false,
+  wishlist: [],
+  isLoading: true,
+
+  initializeAuth: () => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      set({ 
+        user: session?.user || null, 
+        isAuthenticated: !!session?.user,
+        isLoading: false
+      });
+      if (session?.user) {
+        // Fetch profile
+        supabase.from('profiles').select('*').eq('id', session.user.id).single()
+          .then(({ data }) => {
+            if (data) set({ profile: data });
+          });
+      }
+    });
+
+    // Listen for auth changes
+    supabase.auth.onAuthStateChange((_event, session) => {
+      set({ 
+        user: session?.user || null, 
+        isAuthenticated: !!session?.user,
+        isLoading: false
+      });
+      if (!session?.user) {
+        set({ profile: null, wishlist: [] });
+      }
+    });
   },
+
+  setUser: (user) => set({ user, isAuthenticated: !!user }),
   setProfile: (profile) => set({ profile }),
   toggleWishlist: (productId) => set((state) => ({
     wishlist: state.wishlist.includes(productId)
       ? state.wishlist.filter(id => id !== productId)
       : [...state.wishlist, productId]
   })),
-  logout: () => {
-    localStorage.removeItem('dc_user');
+  logout: async () => {
+    await supabase.auth.signOut();
     set({ user: null, profile: null, isAuthenticated: false });
   },
 }));

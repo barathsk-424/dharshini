@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore, useUIStore, useUserStore } from '../../store/useStore';
-import { FiShoppingBag, FiHeart, FiMenu, FiX, FiUser } from 'react-icons/fi';
+import { FiShoppingBag, FiHeart, FiMenu, FiX, FiUser, FiShield } from 'react-icons/fi';
 import Logo from '../UI/Logo';
 
 const navLinks = [
@@ -22,6 +22,11 @@ export default function Navbar() {
   const itemCount = useCartStore(s => s.getItemCount());
   const toggleCart = useCartStore(s => s.toggleCart);
   const wishlistCount = useUserStore(s => s.wishlist.length);
+  const user = useUserStore(s => s.user);
+  const isAuthenticated = useUserStore(s => s.isAuthenticated);
+  
+  const isAdmin = isAuthenticated && user && (user.role === 'Admin' || user.email?.toLowerCase().includes('admin'));
+  const currentNavLinks = navLinks;
 
 
   useEffect(() => {
@@ -75,7 +80,7 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <div className="hidden xl:flex items-center gap-1 xl:gap-2">
-            {navLinks.map(link => (
+            {currentNavLinks.map(link => (
               <Link
                 key={link.path}
                 to={link.path}
@@ -100,7 +105,12 @@ export default function Navbar() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2">
-
+            <Link to="/admin" className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300 relative group" title="Admin Dashboard">
+              <FiShield size={18} className="text-violet-400 group-hover:text-violet-300" />
+              <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-[#141829] text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-white/[0.06]">
+                Admin Dashboard
+              </span>
+            </Link>
             <Link to="/auth" className="interactive p-2.5 rounded-full hover:bg-white/5 transition-all duration-300" title="Sign In / Join">
               <FiUser size={18} color="var(--color-gray-soft)" />
             </Link>
@@ -166,7 +176,7 @@ export default function Navbar() {
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             >
-              {navLinks.map((link, i) => (
+              {currentNavLinks.map((link, i) => (
                 <motion.div
                   key={link.path}
                   initial={{ opacity: 0, x: 20 }}

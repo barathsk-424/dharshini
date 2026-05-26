@@ -5,7 +5,7 @@ import { FaWhatsapp } from 'react-icons/fa';
 
 const contactCards = [
   { icon: FiInstagram, title: 'Instagram', desc: '@threads.by.dharshini0612', link: 'https://instagram.com/threads.by.dharshini0612', color: 'linear-gradient(135deg, #833AB4, #E1306C, #F77737)', accent: '#E1306C' },
-  { icon: FaWhatsapp, title: 'WhatsApp', desc: '+91 98765 43210', link: 'https://wa.me/919876543210?text=Hi%20Dharshini!', color: 'linear-gradient(135deg, #25D366, #128C7E)', accent: '#25D366' },
+  { icon: FaWhatsapp, title: 'WhatsApp', desc: '+91 81224 59197', link: 'https://wa.me/918122459197?text=Hi%20Dharshini!', color: 'linear-gradient(135deg, #25D366, #128C7E)', accent: '#25D366' },
 ];
 
 export default function ContactSection() {

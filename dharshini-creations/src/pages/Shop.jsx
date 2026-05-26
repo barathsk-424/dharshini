@@ -6,6 +6,8 @@ import { products, categories } from '../data/mockData';
 import { useCartStore, useUserStore } from '../store/useStore';
 import { FiShoppingBag, FiHeart, FiEye } from 'react-icons/fi';
 
+export default function Shop() {
+
 /* ── Category accent colors ── */
 const categoryAccent = {
   1: { color: '#FB923C', glow: 'rgba(251,146,60,0.25)', icon: '🎨' },
@@ -13,12 +15,46 @@ const categoryAccent = {
   3: { color: '#F59E0B', glow: 'rgba(245,158,11,0.25)', icon: '✨' },
 };
 
-export default function Shop() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeCategory, setActiveCategory] = useState('All');
   const [showWishlistOnly, setShowWishlistOnly] = useState(false);
   const addItem = useCartStore(s => s.addItem);
   const { wishlist, toggleWishlist } = useUserStore();
+
+  const [dbProducts, setDbProducts] = useState(products);
+  const [dbCategories, setDbCategories] = useState(categories);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      import('../lib/supabase').then(async ({ supabase }) => {
+        try {
+          const [catRes, prodRes] = await Promise.all([
+            supabase.from('categories').select('*').order('id'),
+            supabase.from('products').select('*, product_images(url)')
+          ]);
+          
+          if (catRes.data && catRes.data.length > 0) {
+            setDbCategories(catRes.data.map(c => ({ ...c, startingPrice: c.starting_price })));
+          }
+          if (prodRes.data && prodRes.data.length > 0) {
+            setDbProducts(prodRes.data.map(p => ({
+              ...p,
+              basePrice: p.base_price,
+              categoryId: p.category_id,
+              isCustomizable: p.is_customizable,
+              image: p.product_images?.[0]?.url || 'https://via.placeholder.com/300?text=No+Image'
+            })));
+          }
+        } catch (e) {
+          console.warn('Supabase fetch failed, falling back to mock data.', e);
+        } finally {
+          setIsLoading(false);
+        }
+      });
+    }
+    loadData();
+  }, []);
 
   useEffect(() => {
     if (searchParams.get('wishlist') === 'true') {
@@ -45,19 +81,18 @@ export default function Shop() {
   };
 
   /* Filter products */
-  const filtered = products.filter(p => {
+  const filtered = dbProducts.filter(p => {
     if (showWishlistOnly) return wishlist.includes(p.id);
     if (activeCategory === 'All') return true;
-    if (activeCategory === 'Fabric Painting') return p.categoryId === 1;
-    if (activeCategory === 'Embroidery Works') return p.categoryId === 2;
-    if (activeCategory === 'Combo Works') return p.categoryId === 3;
+    const catMatch = dbCategories.find(c => c.name === activeCategory);
+    if (catMatch) return p.categoryId === catMatch.id;
     return true;
   });
 
   /* Group by category for the organized display */
-  const groupedByCategory = categories.map(cat => ({
+  const groupedByCategory = dbCategories.map(cat => ({
     ...cat,
-    accent: categoryAccent[cat.id],
+    accent: categoryAccent[cat.id] || { color: '#8A2BE2', glow: 'rgba(138,43,226,0.25)', icon: '✨' },
     products: filtered.filter(p => p.categoryId === cat.id),
   })).filter(g => g.products.length > 0);
 
