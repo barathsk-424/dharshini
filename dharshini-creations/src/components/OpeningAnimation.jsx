@@ -17,7 +17,6 @@ export default function OpeningAnimation() {
     return () => timers.forEach(clearTimeout);
   }, [markVisited]);
 
-  const handleSkip = () => markVisited();
 
   return (
     <motion.div
@@ -26,14 +25,6 @@ export default function OpeningAnimation() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Skip button */}
-      <button
-        onClick={handleSkip}
-        className="absolute top-6 right-6 text-sm font-poppins text-gray-500 hover:text-purple-400 transition-colors z-10"
-        style={{ cursor: 'pointer' }}
-      >
-        Skip →
-      </button>
 
       {/* Phase 1: Needle drawing thread */}
       <AnimatePresence>
