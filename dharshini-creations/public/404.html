@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <script type="text/javascript">
+      var path = window.location.pathname;
+      var repoName = '/dharshini';
+      if (path.startsWith(repoName)) {
+        var route = path.substring(repoName.length);
+        window.location.replace(repoName + '/#' + route + window.location.search);
+      } else {
+        window.location.replace(repoName + '/#');
+      }
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
