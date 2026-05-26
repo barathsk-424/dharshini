@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { categories } from '../../data/mockData';
 import { FiX } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 // Unique accent color per category
 const categoryColors = {
@@ -148,9 +149,9 @@ export default function FeaturedCategories() {
                 </div>
 
                 <div className="mt-6 text-center">
-                  <a href="/contact" className="btn-primary inline-flex interactive">
+                  <Link to="/contact" className="btn-primary inline-flex interactive">
                     Order Now →
-                  </a>
+                  </Link>
                 </div>
               </motion.div>
             </motion.div>

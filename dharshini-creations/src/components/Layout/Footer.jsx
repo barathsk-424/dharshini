@@ -13,11 +13,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
           {/* Brand */}
           <div className="text-left">
-            <a href="/" className="flex items-center gap-3 mb-3 interactive group cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                window.location.href = '/';
-              }}>
+            <Link to="/" className="flex items-center gap-3 mb-3 interactive group cursor-pointer">
               <Logo size={48} className="group-hover:rotate-12 transition-transform duration-500" />
               <div>
                 <h3 className="font-cinzel text-2xl font-bold leading-none"
@@ -26,7 +22,7 @@ export default function Footer() {
                 </h3>
                 <p className="font-cinzel text-[10px] tracking-[0.25em] mt-1" style={{ color: 'var(--color-gray-dark)' }}>CREATIONS</p>
               </div>
-            </a>
+            </Link>
             <p className="font-great-vibes text-xl mb-4" style={{ color: 'var(--color-purple-glow)' }}>Every Stitch Tells A Story</p>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--color-gray-dark)' }}>
               Premium handmade embroidery and custom fabric painting, crafted with unmatched precision and creative soul in Tamil Nadu, India.
