@@ -14,15 +14,27 @@ import {
   HiOutlineX
 } from 'react-icons/hi';
 import { RiShieldStarFill } from 'react-icons/ri';
+import { useAuth } from '../context/AuthContext';
 import './admin.css';
 
 export default function AdminLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/auth');
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
+  };
 
   const menuItems = [
     { name: 'Dashboard', path: '/admin', icon: HiOutlineViewGrid, end: true },
@@ -85,13 +97,13 @@ export default function AdminLayout() {
       </nav>
 
       <div className="mt-8 pt-6 border-t border-white/[0.06]">
-        <NavLink
-          to="/admin/logout"
-          className="flex items-center gap-4 px-4 py-3.5 rounded-xl text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all duration-300 group"
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-4 px-4 py-3.5 rounded-xl text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all duration-300 group w-full"
         >
           <HiOutlineLogout className="text-xl shrink-0 transition-transform duration-300 group-hover:-translate-x-1" />
           <span className="font-medium">Sign Out</span>
-        </NavLink>
+        </button>
       </div>
     </>
   );

@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { FiMail, FiCheck, FiCornerUpLeft, FiTrash2, FiSearch } from 'react-icons/fi';
+import { FiMail, FiCheck, FiCornerUpLeft, FiTrash2, FiSearch, FiSend } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
-import { fetchAllInquiries, markInquiryResolved } from '../../services/supabase';
+import { fetchAllInquiries, markInquiryResolved, deleteInquiry, submitInquiry } from '../../services/supabase';
 
 export default function Messages() {
   const [activeMessage, setActiveMessage] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [replyText, setReplyText] = useState('');
   const [messages, setMessages] = useState([]);
+  const [isSending, setIsSending] = useState(false);
+  const [composeOpen, setComposeOpen] = useState(false);
+  const [compose, setCompose] = useState({ name: '', email: '', message: '' });
 
   useEffect(() => {
     fetchAllInquiries().then(data => { if (data) setMessages(data); });
   }, []);
 
-  const filteredMessages = messages.filter(m => 
-    m.sender.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    m.subject.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMessages = messages.filter(m =>
+    m.sender?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    m.subject?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const markAsRead = async (id) => {
@@ -23,8 +26,10 @@ export default function Messages() {
     await markInquiryResolved(id);
   };
 
-  const deleteMessage = (id) => {
-    if (window.confirm('Delete this message?')) {
+  const handleDelete = async (id) => {
+    if (!window.confirm('Delete this message?')) return;
+    const ok = await deleteInquiry(id);
+    if (ok) {
       setMessages(messages.filter(m => m.id !== id));
       if (activeMessage?.id === id) setActiveMessage(null);
     }
@@ -32,13 +37,37 @@ export default function Messages() {
 
   const handleSelectMessage = (msg) => {
     setActiveMessage(msg);
+    setReplyText('');
     if (!msg.read) markAsRead(msg.id);
   };
 
-  const sendReply = () => {
-    if (!replyText.trim()) return;
-    alert(`Reply sent to ${activeMessage.email}`);
+  const sendReply = async () => {
+    if (!replyText.trim() || !activeMessage) return;
+    setIsSending(true);
+    // Store reply as a new inquiry with admin tag
+    await submitInquiry(
+      `Admin → ${activeMessage.sender}`,
+      activeMessage.email,
+      `[REPLY to: ${activeMessage.subject}]\n\n${replyText}`
+    );
     setReplyText('');
+    setIsSending(false);
+    alert(`Reply saved for ${activeMessage.sender}`);
+  };
+
+  const sendNewMessage = async () => {
+    if (!compose.name.trim() || !compose.email.trim() || !compose.message.trim()) {
+      alert('Please fill all fields.'); return;
+    }
+    setIsSending(true);
+    const result = await submitInquiry(compose.name, compose.email, compose.message);
+    if (result.success) {
+      const refreshed = await fetchAllInquiries();
+      if (refreshed) setMessages(refreshed);
+      setCompose({ name: '', email: '', message: '' });
+      setComposeOpen(false);
+    }
+    setIsSending(false);
   };
 
   return (
@@ -48,11 +77,19 @@ export default function Messages() {
       transition={{ duration: 0.5 }}
       className="h-[calc(100vh-8rem)] flex flex-col font-poppins"
     >
-      <div className="flex justify-between items-end mb-8">
+      <div className="flex justify-between items-end mb-6">
         <div>
-          <h2 className="text-3xl font-bold font-cinzel text-white tracking-wider mb-2">Messages</h2>
-          <p className="text-sm text-gray-400">Manage customer inquiries and support tickets.</p>
+          <h2 className="text-3xl font-bold font-cinzel text-white tracking-wider mb-1">Messages</h2>
+          <p className="text-sm text-gray-400">
+            {messages.filter(m => !m.read).length} unread · {messages.length} total
+          </p>
         </div>
+        <button
+          onClick={() => setComposeOpen(true)}
+          className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-5 py-2.5 rounded-xl hover:from-violet-500 hover:to-fuchsia-500 transition-all font-bold tracking-wider text-sm shadow-[0_0_15px_rgba(139,92,246,0.3)]"
+        >
+          <FiSend size={14} /> New Message
+        </button>
       </div>
 
       <div className="flex-1 bg-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/[0.05] shadow-2xl overflow-hidden flex flex-col md:flex-row relative">

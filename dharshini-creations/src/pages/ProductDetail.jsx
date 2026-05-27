@@ -2,23 +2,41 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { products } from '../data/mockData';
+import { fetchProduct, fetchProducts } from '../services/supabase';
 import { useCartStore, useUserStore } from '../store/useStore';
-import { FiShoppingBag, FiHeart, FiChevronLeft, FiPlus, FiMinus, FiInfo, FiTruck, FiRefreshCw } from 'react-icons/fi';
+import { FiShoppingBag, FiHeart, FiChevronLeft, FiInfo, FiTruck, FiRefreshCw } from 'react-icons/fi';
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = products.find(p => p.id === parseInt(id));
-
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeAccordion, setActiveAccordion] = useState('description');
   const { wishlist, toggleWishlist } = useUserStore();
 
   useEffect(() => {
-    if (product) {
-      window.scrollTo(0, 0);
-    }
-  }, [product, id]);
+    window.scrollTo(0, 0);
+    setIsLoading(true);
+    fetchProduct(parseInt(id)).then(async (p) => {
+      setProduct(p);
+      if (p) {
+        // Load related products from same category
+        const all = await fetchProducts(p.category_id || p.categoryId);
+        if (all) setRelatedProducts(all.filter(r => r.id !== p.id).slice(0, 4));
+      }
+      setIsLoading(false);
+    });
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-6">
+        <div className="w-10 h-10 rounded-full border-2 border-purple-500/30 border-t-purple-500 animate-spin mb-4" />
+        <p className="text-gray-400 text-sm">Loading product...</p>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -35,11 +53,6 @@ export default function ProductDetail() {
   const handleCustomizeAndOrder = () => {
     navigate(`/customize/${product.id}`);
   };
-
-  // Filter out current product for related items
-  const relatedProducts = products
-    .filter(p => p.categoryId === product.categoryId && p.id !== product.id)
-    .slice(0, 4);
 
   return (
     <motion.div 
@@ -90,7 +103,7 @@ export default function ProductDetail() {
         {/* Right Column: Info & Actions */}
         <div className="flex flex-col text-left">
           <span className="text-xs font-semibold uppercase tracking-widest text-purple-400 mb-2">
-            {product.categoryId === 1 ? 'Fabric Painting' : product.categoryId === 2 ? 'Embroidery Works' : 'Combo Works'}
+            {product.categories?.name || (product.categoryId === 1 ? 'Fabric Painting' : product.categoryId === 2 ? 'Embroidery Works' : 'Combo Works')}
           </span>
           <h1 className="font-cinzel text-3xl lg:text-4xl font-black mb-4 tracking-wide" style={{ color: 'var(--color-white)' }}>
             {product.name}

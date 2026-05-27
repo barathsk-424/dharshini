@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { FiUser, FiMail, FiLock, FiArrowRight, FiLogOut, FiShoppingBag } from 'react-icons/fi';
+import { FiUser, FiMail, FiLock, FiArrowRight, FiLogOut, FiShoppingBag, FiEye, FiEyeOff } from 'react-icons/fi';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useOrderStore } from '../store/useStore';
 import { useAuth } from '../context/AuthContext';
@@ -12,6 +12,7 @@ export default function Auth() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Use Firebase Auth context
   const { currentUser, userData, login, signup, logout } = useAuth();
@@ -47,6 +48,7 @@ export default function Auth() {
   const toggleMode = () => {
     setIsLogin(!isLogin);
     setError('');
+    setShowPassword(false);
     setForm({ name: '', email: '', password: '' });
   };
 
@@ -199,7 +201,24 @@ export default function Auth() {
               </div>
               <div className="relative">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 z-10 pointer-events-none"><FiLock size={16} /></div>
-                <input type="password" value={form.password} onChange={e => update('password', e.target.value)} placeholder="••••••••" required className="icon-input w-full rounded-xl text-sm border outline-none focus:border-purple-500 transition-colors placeholder-gray-600" style={{ borderColor: 'var(--color-border-strong)', color: '#F5F5F5', background: 'rgba(255,255,255,0.05)', WebkitBoxShadow: '0 0 0 1000px rgba(12,8,22,0.9) inset', WebkitTextFillColor: '#F5F5F5' }} />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={form.password}
+                  onChange={e => update('password', e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  className="icon-input w-full rounded-xl text-sm border outline-none focus:border-purple-500 transition-colors placeholder-gray-600"
+                  style={{ borderColor: 'var(--color-border-strong)', color: '#F5F5F5', background: 'rgba(255,255,255,0.05)', WebkitBoxShadow: '0 0 0 1000px rgba(12,8,22,0.9) inset', WebkitTextFillColor: '#F5F5F5', paddingRight: '3rem' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(p => !p)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-400 transition-colors z-10"
+                  tabIndex={-1}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                </button>
               </div>
             </div>
             <button type="submit" disabled={isLoading} className="btn-primary w-full interactive flex items-center justify-center gap-2 mt-4 py-3.5 shadow-[0_0_20px_rgba(138,43,226,0.3)] disabled:opacity-70 disabled:cursor-not-allowed">

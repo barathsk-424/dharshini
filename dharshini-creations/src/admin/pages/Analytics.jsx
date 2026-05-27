@@ -78,11 +78,11 @@ export default function Analytics() {
   };
 
   const horizontalBarData = {
-    labels: ['Organic Search', 'Direct', 'Social Media', 'Email', 'Referral'],
+    labels: channels.length ? channels.map(c => c.channel) : ['Organic Search', 'Direct', 'Social Media', 'Email', 'Referral'],
     datasets: [
       {
-        label: 'Revenue ($)',
-        data: [42500, 28300, 15400, 12800, 8500],
+        label: 'Revenue (₹)',
+        data: channels.length ? channels.map(c => c.revenue) : [42500, 28300, 15400, 12800, 8500],
         backgroundColor: [
           '#8b5cf6', // violet
           '#d946ef', // fuchsia
@@ -135,15 +135,6 @@ export default function Analytics() {
       y: { grid: { display: false, drawBorder: false }, ticks: { color: '#e5e7eb', font: { family: "'Poppins', sans-serif" } } }
     }
   };
-
-  /* ── Mock Top Pages ── */
-  const topPages = [
-    { path: '/shop/t-shirts', views: '24,592', unique: '18,402', bounce: '42.1%', time: '02:45' },
-    { path: '/shop/hoodies', views: '18,245', unique: '12,890', bounce: '38.5%', time: '03:12' },
-    { path: '/customize/hoodie', views: '15,820', unique: '10,244', bounce: '25.4%', time: '08:30' },
-    { path: '/pricing', views: '12,450', unique: '9,800', bounce: '55.2%', time: '01:15' },
-    { path: '/checkout', views: '8,920', unique: '6,450', bounce: '12.8%', time: '04:20' },
-  ];
 
   /* ── Helper Components ── */
   const MetricCard = ({ title, value, trend, icon: Icon, colorClass, isPositive }) => (
@@ -207,10 +198,10 @@ export default function Analytics() {
 
       {/* ── Metrics Row ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <MetricCard title="Page Views" value="145,678" trend="+12.4%" icon={HiOutlineEye} colorClass="text-violet-400 group-hover:text-violet-300" isPositive={true} />
-        <MetricCard title="Bounce Rate" value="32.4%" trend="-5.2%" icon={HiOutlineCursorClick} colorClass="text-fuchsia-400 group-hover:text-fuchsia-300" isPositive={true} />
-        <MetricCard title="Avg. Session" value="4m 32s" trend="+8.1%" icon={HiOutlineClock} colorClass="text-blue-400 group-hover:text-blue-300" isPositive={true} />
-        <MetricCard title="Conversion Rate" value="3.2%" trend="-0.4%" icon={HiOutlineTrendingUp} colorClass="text-emerald-400 group-hover:text-emerald-300" isPositive={false} />
+        <MetricCard title="Page Views" value={metrics ? metrics.page_views.toLocaleString() : '—'} trend="+12.4%" icon={HiOutlineEye} colorClass="text-violet-400 group-hover:text-violet-300" isPositive={true} />
+        <MetricCard title="Bounce Rate" value={metrics ? `${metrics.bounce_rate}%` : '—'} trend="-5.2%" icon={HiOutlineCursorClick} colorClass="text-fuchsia-400 group-hover:text-fuchsia-300" isPositive={true} />
+        <MetricCard title="Avg. Session" value={metrics ? `${Math.floor(metrics.avg_session_sec/60)}m ${metrics.avg_session_sec%60}s` : '—'} trend="+8.1%" icon={HiOutlineClock} colorClass="text-blue-400 group-hover:text-blue-300" isPositive={true} />
+        <MetricCard title="Conversion Rate" value={metrics ? `${metrics.conversion_rate}%` : '—'} trend="-0.4%" icon={HiOutlineTrendingUp} colorClass="text-emerald-400 group-hover:text-emerald-300" isPositive={false} />
       </div>
 
       {/* ── Large Area Chart ── */}
@@ -281,10 +272,12 @@ export default function Analytics() {
               {topPages.map((page, idx) => (
                 <tr key={idx} className="hover:bg-white/[0.04] transition-colors rounded-2xl group/row">
                   <td className="py-4 px-6 font-medium text-violet-400 group-hover/row:text-violet-300 transition-colors">{page.path}</td>
-                  <td className="py-4 px-6 text-white font-bold text-right tracking-wide">{page.views}</td>
-                  <td className="py-4 px-6 text-gray-400 font-medium text-right">{page.unique}</td>
-                  <td className="py-4 px-6 text-gray-400 font-medium text-right">{page.bounce}</td>
-                  <td className="py-4 px-6 text-gray-400 font-medium text-right">{page.time}</td>
+                  <td className="py-4 px-6 text-white font-bold text-right tracking-wide">{page.views?.toLocaleString()}</td>
+                  <td className="py-4 px-6 text-gray-400 font-medium text-right">{page.unique_views?.toLocaleString()}</td>
+                  <td className="py-4 px-6 text-gray-400 font-medium text-right">{page.bounce_rate}%</td>
+                  <td className="py-4 px-6 text-gray-400 font-medium text-right">
+                    {page.avg_time_sec ? `${Math.floor(page.avg_time_sec / 60).toString().padStart(2,'0')}:${(page.avg_time_sec % 60).toString().padStart(2,'0')}` : '—'}
+                  </td>
                 </tr>
               ))}
             </tbody>
