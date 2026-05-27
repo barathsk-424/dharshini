@@ -86,7 +86,7 @@ export default function Auth() {
                     <FiUser size={40} className="text-purple-400" />
                   </div>
                   <h2 className="font-cinzel text-xl font-bold text-white mb-1 truncate">
-                    {currentUser.displayName || userData?.name || 'User'}
+                    {userData?.name || currentUser.user_metadata?.name || currentUser.email?.split('@')[0] || 'User'}
                   </h2>
                   <p className="text-xs text-purple-400 font-semibold mb-6 truncate">{currentUser.email}</p>
                   <div className="border-t border-white/10 pt-6 text-left space-y-4">

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiSearch, FiEye, FiCheck, FiX } from 'react-icons/fi';
 import { motion } from 'framer-motion';
+import { fetchAllOrders, updateOrderStatus } from '../../services/supabase';
 
 const STATUS_COLORS = {
   'Delivered': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
@@ -15,18 +16,15 @@ const STATUSES = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
 export default function Orders() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
+  const [orders, setOrders] = useState([]);
 
-  const [orders, setOrders] = useState([
-    { id: '#DC-1045', customer: 'Alice Johnson', product: 'Custom Hoodie (Black, L)', status: 'Delivered', amount: '₹3,750', date: '2026-05-20' },
-    { id: '#DC-1046', customer: 'Bob Smith', product: 'Printed T-Shirt (White, M)', status: 'Processing', amount: '₹1,850', date: '2026-05-22' },
-    { id: '#DC-1047', customer: 'Charlie Davis', product: 'Embroidered Cap', status: 'Shipped', amount: '₹1,250', date: '2026-05-23' },
-    { id: '#DC-1048', customer: 'Diana Ross', product: 'Photo Mug (Set of 2)', status: 'Pending', amount: '₹980', date: '2026-05-25' },
-    { id: '#DC-1049', customer: 'Evan Wright', product: 'Custom Hoodie (Navy, XL)', status: 'Processing', amount: '₹3,750', date: '2026-05-25' },
-    { id: '#DC-1050', customer: 'Fiona Green', product: 'Printed T-Shirt (Red, S)', status: 'Cancelled', amount: '₹1,850', date: '2026-05-26' },
-  ]);
+  useEffect(() => {
+    fetchAllOrders().then(data => { if (data) setOrders(data); });
+  }, []);
 
-  const handleStatusChange = (id, newStatus) => {
+  const handleStatusChange = async (id, newStatus) => {
     setOrders(orders.map(o => o.id === id ? { ...o, status: newStatus } : o));
+    await updateOrderStatus(id, newStatus.toLowerCase());
   };
 
   const filtered = orders.filter(o => {

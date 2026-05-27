@@ -1,25 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiMail, FiCheck, FiCornerUpLeft, FiTrash2, FiSearch } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
+import { fetchAllInquiries, markInquiryResolved } from '../../services/supabase';
 
 export default function Messages() {
   const [activeMessage, setActiveMessage] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [replyText, setReplyText] = useState('');
+  const [messages, setMessages] = useState([]);
 
-  const [messages, setMessages] = useState([
-    { id: 1, sender: 'Alice Johnson', email: 'alice@example.com', subject: 'Question about custom embroidery', preview: 'Hi, I was wondering if you can do custom logos on the hoodies?', fullText: 'Hi,\n\nI was wondering if you can do custom logos on the hoodies? I have a design for my startup and would love to get a bulk order of 20 hoodies if possible.\n\nThanks,\nAlice', date: '2 hours ago', read: false },
-    { id: 2, sender: 'Bob Smith', email: 'bob@example.com', subject: 'Order delay', preview: 'My order #DC-1045 has not arrived yet. Tracking says...', fullText: 'My order #DC-1045 has not arrived yet. Tracking says it is stuck in transit. Can you look into this?', date: '1 day ago', read: true },
-    { id: 3, sender: 'Charlie Davis', email: 'charlie@example.com', subject: 'Return policy', preview: 'What is your return policy on damaged items?', fullText: 'Hello,\n\nWhat is your return policy on damaged items? One of the mugs I received was chipped during shipping.\n\nBest,\nCharlie', date: '2 days ago', read: true },
-  ]);
+  useEffect(() => {
+    fetchAllInquiries().then(data => { if (data) setMessages(data); });
+  }, []);
 
   const filteredMessages = messages.filter(m => 
     m.sender.toLowerCase().includes(searchTerm.toLowerCase()) || 
     m.subject.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const markAsRead = (id) => {
+  const markAsRead = async (id) => {
     setMessages(messages.map(m => m.id === id ? { ...m, read: true } : m));
+    await markInquiryResolved(id);
   };
 
   const deleteMessage = (id) => {

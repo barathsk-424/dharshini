@@ -1,31 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiSearch, FiEdit2, FiTrash2, FiUserX, FiCheckCircle } from 'react-icons/fi';
 import { motion } from 'framer-motion';
+import { fetchAllUsers, updateUserStatus } from '../../services/supabase';
 
 export default function Users() {
   const [searchTerm, setSearchTerm] = useState('');
-  
-  // Mock Data
-  const [users, setUsers] = useState([
-    { id: 1, name: 'Alice Johnson', email: 'alice@example.com', role: 'Customer', status: 'Active', joined: '2025-10-12' },
-    { id: 2, name: 'Bob Smith', email: 'bob@example.com', role: 'Admin', status: 'Active', joined: '2025-08-05' },
-    { id: 3, name: 'Charlie Davis', email: 'charlie@example.com', role: 'Customer', status: 'Blocked', joined: '2026-01-20' },
-    { id: 4, name: 'Diana Ross', email: 'diana@example.com', role: 'Customer', status: 'Active', joined: '2026-03-15' },
-    { id: 5, name: 'Evan Wright', email: 'evan@example.com', role: 'Customer', status: 'Active', joined: '2026-04-10' },
-  ]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetchAllUsers().then(data => { if (data) setUsers(data); });
+  }, []);
 
   const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    user.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    user.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleBlockUser = (id) => {
-    setUsers(users.map(u => {
-      if (u.id === id) {
-        return { ...u, status: u.status === 'Active' ? 'Blocked' : 'Active' };
-      }
-      return u;
-    }));
+  const handleBlockUser = async (id) => {
+    const user = users.find(u => u.id === id);
+    const newStatus = user?.status === 'Active' ? 'Blocked' : 'Active';
+    setUsers(users.map(u => u.id === id ? { ...u, status: newStatus } : u));
+    await updateUserStatus(id, newStatus);
   };
 
   const handleDeleteUser = (id) => {

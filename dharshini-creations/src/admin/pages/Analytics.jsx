@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Chart as ChartJS, 
   CategoryScale, 
@@ -22,6 +22,12 @@ import {
   HiOutlineDownload,
   HiOutlineCalendar
 } from 'react-icons/hi';
+import {
+  fetchAnalyticsMetrics,
+  fetchAnalyticsTraffic,
+  fetchAnalyticsTopPages,
+  fetchAnalyticsChannels,
+} from '../../services/supabase';
 
 ChartJS.register(
   CategoryScale, LinearScale, PointElement, LineElement, BarElement, 
@@ -30,14 +36,25 @@ ChartJS.register(
 
 export default function Analytics() {
   const [dateRange, setDateRange] = useState('30 Days');
+  const [metrics, setMetrics] = useState(null);
+  const [traffic, setTraffic] = useState([]);
+  const [topPages, setTopPages] = useState([]);
+  const [channels, setChannels] = useState([]);
+
+  useEffect(() => {
+    fetchAnalyticsMetrics().then(d => { if (d) setMetrics(d); });
+    fetchAnalyticsTraffic().then(d => { if (d) setTraffic(d); });
+    fetchAnalyticsTopPages().then(d => { if (d) setTopPages(d); });
+    fetchAnalyticsChannels().then(d => { if (d) setChannels(d); });
+  }, []);
 
   /* ── Chart Data ── */
   const areaChartData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    labels: traffic.length ? traffic.map(d => d.month) : ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
     datasets: [
       {
         label: 'Organic Traffic',
-        data: [35000, 41000, 38000, 45000, 52000, 58000, 61000, 68000, 72000, 75000, 81000, 86000],
+        data: traffic.length ? traffic.map(d => d.organic) : [35000,41000,38000,45000,52000,58000,61000,68000,72000,75000,81000,86000],
         borderColor: '#8b5cf6', // violet-500
         backgroundColor: 'rgba(139, 92, 246, 0.2)',
         borderWidth: 2,

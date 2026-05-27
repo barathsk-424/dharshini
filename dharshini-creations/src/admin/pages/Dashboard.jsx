@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   HiOutlineUsers, 
   HiOutlineShoppingCart, 
@@ -23,6 +23,12 @@ import {
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import Card from '../components/Card';
 import { motion } from 'framer-motion';
+import {
+  fetchDashboardStats,
+  fetchAnalyticsTraffic,
+  fetchAnalyticsDailyVisitors,
+  fetchAllOrders,
+} from '../../services/supabase';
 
 ChartJS.register(
   CategoryScale, LinearScale, PointElement, LineElement, BarElement, 
@@ -32,13 +38,32 @@ ChartJS.register(
 export default function Dashboard() {
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
+  const [stats, setStats] = useState({ totalUsers: 0, totalOrders: 0, totalRevenue: 0 });
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [trafficData, setTrafficData] = useState({ labels: [], revenue: [], expenses: [], visitors: [] });
+
+  useEffect(() => {
+    fetchDashboardStats().then(s => { if (s) setStats(s); });
+    fetchAllOrders().then(orders => {
+      if (orders) setRecentOrders(orders.slice(0, 5));
+    });
+    fetchAnalyticsTraffic().then(data => {
+      if (data) setTrafficData({
+        labels:   data.map(d => d.month),
+        revenue:  data.map(d => d.revenue),
+        expenses: data.map(d => d.expenses),
+        visitors: data.map(d => d.organic + d.paid),
+      });
+    });
+  }, []);
+
   /* ── Chart Data ── */
   const lineChartData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    labels: trafficData.labels.length ? trafficData.labels : ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
     datasets: [
       {
         label: 'Revenue',
-        data: [12000, 19000, 15000, 22000, 18000, 32000, 28000, 35000, 31000, 42000, 38000, 48290],
+        data: trafficData.revenue.length ? trafficData.revenue : [12000,19000,15000,22000,18000,32000,28000,35000,31000,42000,38000,48290],
         borderColor: '#8b5cf6', // violet-500
         backgroundColor: 'rgba(139, 92, 246, 0.15)', // violet-500 with opacity
         borderWidth: 2,
@@ -53,7 +78,7 @@ export default function Dashboard() {
       },
       {
         label: 'Expenses',
-        data: [8000, 11000, 9000, 13000, 12000, 18000, 16000, 20000, 19000, 24000, 22000, 28000],
+        data: trafficData.expenses.length ? trafficData.expenses : [8000,11000,9000,13000,12000,18000,16000,20000,19000,24000,22000,28000],
         borderColor: '#d946ef', // fuchsia-500
         backgroundColor: 'transparent',
         borderWidth: 2,
@@ -153,13 +178,13 @@ export default function Dashboard() {
   };
 
   /* ── Mock Data ── */
-  const recentOrders = [
-    { id: '#DC-1052', customer: 'Sarah Williams', product: 'Premium Cotton T-Shirt', status: 'Pending', amount: '$45.00', bg: 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20' },
-    { id: '#DC-1051', customer: 'Michael Chen', product: 'Embroidered Hoodie', status: 'Processing', amount: '$85.00', bg: 'bg-blue-500/10 text-blue-400 border border-blue-500/20' },
-    { id: '#DC-1050', customer: 'Emma Thompson', product: 'Ceramic Coffee Mug', status: 'Shipped', amount: '$18.50', bg: 'bg-violet-500/10 text-violet-400 border border-violet-500/20' },
-    { id: '#DC-1049', customer: 'James Wilson', product: 'Classic Snapback Cap', status: 'Delivered', amount: '$25.00', bg: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' },
-    { id: '#DC-1048', customer: 'Olivia Davis', product: 'Custom Canvas Print', status: 'Delivered', amount: '$120.00', bg: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' },
-  ];
+  const STATUS_BG = {
+    'pending':    'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20',
+    'processing': 'bg-blue-500/10 text-blue-400 border border-blue-500/20',
+    'shipped':    'bg-violet-500/10 text-violet-400 border border-violet-500/20',
+    'delivered':  'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
+    'cancelled':  'bg-rose-500/10 text-rose-400 border border-rose-500/20',
+  };
 
   return (
     <motion.div 
@@ -184,9 +209,9 @@ export default function Dashboard() {
       
       {/* ── Stat Cards ── */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card title="Total Users" value="12,845" icon={<HiOutlineUsers />} trend="12.5%" trendUp={true} gradient="violet" />
-        <Card title="Total Orders" value="3,672" icon={<HiOutlineShoppingCart />} trend="8.2%" trendUp={true} gradient="fuchsia" />
-        <Card title="Revenue" value="$48,290" icon={<HiOutlineCurrencyDollar />} trend="15.3%" trendUp={true} gradient="emerald" />
+        <Card title="Total Users" value={stats.totalUsers.toLocaleString()} icon={<HiOutlineUsers />} trend="12.5%" trendUp={true} gradient="violet" />
+        <Card title="Total Orders" value={stats.totalOrders.toLocaleString()} icon={<HiOutlineShoppingCart />} trend="8.2%" trendUp={true} gradient="fuchsia" />
+        <Card title="Revenue" value={`₹${stats.totalRevenue.toLocaleString()}`} icon={<HiOutlineCurrencyDollar />} trend="15.3%" trendUp={true} gradient="emerald" />
         <Card title="Active Visitors" value="284" icon={<HiOutlineStatusOnline />} trend="2.4%" trendUp={false} gradient="rose" />
       </div>
 
@@ -252,8 +277,8 @@ export default function Dashboard() {
                     <td className="py-4 px-6 text-white font-medium">{order.customer}</td>
                     <td className="py-4 px-6 text-gray-400 text-sm">{order.product}</td>
                     <td className="py-4 px-6">
-                      <span className={`px-3 py-1 rounded-full text-[11px] font-bold tracking-wider ${order.bg}`}>
-                        {order.status.toUpperCase()}
+                      <span className={`px-3 py-1 rounded-full text-[11px] font-bold tracking-wider ${STATUS_BG[order.status?.toLowerCase()] || STATUS_BG['pending']}`}>
+                        {order.status?.toUpperCase()}
                       </span>
                     </td>
                     <td className="py-4 px-6 text-right text-white font-medium">{order.amount}</td>

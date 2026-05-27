@@ -146,3 +146,168 @@ export const fetchUserProfile = async (userId) => {
   if (error) { console.error('fetchUserProfile:', error.message); return null; }
   return data;
 };
+
+// ── ADMIN: ANALYTICS ────────────────────────────────────────
+
+export const fetchAnalyticsMetrics = async () => {
+  const { data, error } = await supabase
+    .from('analytics_metrics')
+    .select('*')
+    .order('date', { ascending: false })
+    .limit(1)
+    .single();
+  if (error) { console.error('fetchAnalyticsMetrics:', error.message); return null; }
+  return data;
+};
+
+export const fetchAnalyticsTraffic = async () => {
+  const { data, error } = await supabase
+    .from('analytics_traffic')
+    .select('*')
+    .order('id');
+  if (error) { console.error('fetchAnalyticsTraffic:', error.message); return null; }
+  return data;
+};
+
+export const fetchAnalyticsDailyVisitors = async () => {
+  const { data, error } = await supabase
+    .from('analytics_daily_visitors')
+    .select('*')
+    .order('id');
+  if (error) { console.error('fetchAnalyticsDailyVisitors:', error.message); return null; }
+  return data;
+};
+
+export const fetchAnalyticsTopPages = async () => {
+  const { data, error } = await supabase
+    .from('analytics_top_pages')
+    .select('*')
+    .order('views', { ascending: false });
+  if (error) { console.error('fetchAnalyticsTopPages:', error.message); return null; }
+  return data;
+};
+
+export const fetchAnalyticsChannels = async () => {
+  const { data, error } = await supabase
+    .from('analytics_channels')
+    .select('*')
+    .order('revenue', { ascending: false });
+  if (error) { console.error('fetchAnalyticsChannels:', error.message); return null; }
+  return data;
+};
+
+// ── ADMIN: ORDERS ────────────────────────────────────────────
+
+export const fetchAllOrders = async () => {
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*, users(name, email)')
+    .order('created_at', { ascending: false });
+  if (error) { console.error('fetchAllOrders:', error.message); return null; }
+  return data.map(o => ({
+    ...o,
+    customer: o.users?.name || o.shipping_address?.fullName || 'Guest',
+    email:    o.users?.email || o.shipping_address?.email || '',
+    date:     new Date(o.created_at).toISOString().split('T')[0],
+    amount:   `₹${o.total}`,
+    product:  Array.isArray(o.items) ? o.items.map(i => i.name).join(', ') : '',
+  }));
+};
+
+export const updateOrderStatus = async (id, status) => {
+  const { error } = await supabase
+    .from('orders')
+    .update({ status })
+    .eq('id', id);
+  if (error) { console.error('updateOrderStatus:', error.message); return false; }
+  return true;
+};
+
+// ── ADMIN: USERS ─────────────────────────────────────────────
+
+export const fetchAllUsers = async () => {
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) { console.error('fetchAllUsers:', error.message); return null; }
+  return data.map(u => ({
+    ...u,
+    joined: new Date(u.created_at).toISOString().split('T')[0],
+    status: u.status || 'Active',
+  }));
+};
+
+export const updateUserStatus = async (id, status) => {
+  const { error } = await supabase
+    .from('users')
+    .update({ status })
+    .eq('id', id);
+  if (error) { console.error('updateUserStatus:', error.message); return false; }
+  return true;
+};
+
+// ── ADMIN: MESSAGES (inquiries) ──────────────────────────────
+
+export const fetchAllInquiries = async () => {
+  const { data, error } = await supabase
+    .from('inquiries')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) { console.error('fetchAllInquiries:', error.message); return null; }
+  return data.map(m => ({
+    ...m,
+    sender:   m.name,
+    subject:  m.message.substring(0, 60) + (m.message.length > 60 ? '...' : ''),
+    preview:  m.message.substring(0, 100),
+    fullText: m.message,
+    read:     m.resolved,
+    date:     new Date(m.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }),
+  }));
+};
+
+export const markInquiryResolved = async (id) => {
+  const { error } = await supabase
+    .from('inquiries')
+    .update({ resolved: true })
+    .eq('id', id);
+  if (error) { console.error('markInquiryResolved:', error.message); return false; }
+  return true;
+};
+
+// ── ADMIN: SITE SETTINGS ─────────────────────────────────────
+
+export const fetchSiteSettings = async () => {
+  const { data, error } = await supabase
+    .from('site_settings')
+    .select('*');
+  if (error) { console.error('fetchSiteSettings:', error.message); return null; }
+  // Convert array to key-value object
+  return data.reduce((acc, row) => ({ ...acc, [row.key]: row.value }), {});
+};
+
+export const updateSiteSetting = async (key, value) => {
+  const { error } = await supabase
+    .from('site_settings')
+    .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+  if (error) { console.error('updateSiteSetting:', error.message); return false; }
+  return true;
+};
+
+// ── ADMIN: DASHBOARD STATS ───────────────────────────────────
+
+export const fetchDashboardStats = async () => {
+  const [usersRes, ordersRes, revenueRes] = await Promise.all([
+    supabase.from('users').select('id', { count: 'exact', head: true }),
+    supabase.from('orders').select('id', { count: 'exact', head: true }),
+    supabase.from('orders').select('total'),
+  ]);
+
+  const totalUsers   = usersRes.count ?? 0;
+  const totalOrders  = ordersRes.count ?? 0;
+  const totalRevenue = revenueRes.data
+    ? revenueRes.data.reduce((sum, o) => sum + Number(o.total), 0)
+    : 0;
+
+  return { totalUsers, totalOrders, totalRevenue };
+};

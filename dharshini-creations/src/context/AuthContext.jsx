@@ -50,11 +50,22 @@ export function AuthProvider({ children }) {
   // ── Auth state listener ──────────────────────────────────
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       const user = session?.user ?? null;
       setCurrentUser(user);
       if (user) {
-        fetchUserProfile(user.id).then(setUserData);
+        // Try to fetch profile; create it if it doesn't exist yet
+        let profile = await fetchUserProfile(user.id);
+        if (!profile) {
+          await upsertUserProfile({
+            id:    user.id,
+            name:  user.user_metadata?.name || user.email?.split('@')[0] || 'User',
+            email: user.email,
+            role:  'user',
+          });
+          profile = await fetchUserProfile(user.id);
+        }
+        setUserData(profile);
       }
       setLoading(false);
     });
@@ -65,7 +76,16 @@ export function AuthProvider({ children }) {
         const user = session?.user ?? null;
         setCurrentUser(user);
         if (user) {
-          const profile = await fetchUserProfile(user.id);
+          let profile = await fetchUserProfile(user.id);
+          if (!profile) {
+            await upsertUserProfile({
+              id:    user.id,
+              name:  user.user_metadata?.name || user.email?.split('@')[0] || 'User',
+              email: user.email,
+              role:  'user',
+            });
+            profile = await fetchUserProfile(user.id);
+          }
           setUserData(profile);
         } else {
           setUserData(null);
