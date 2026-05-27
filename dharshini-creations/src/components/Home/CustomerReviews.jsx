@@ -1,6 +1,7 @@
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { reviews } from '../../data/mockData';
+import { reviews as mockReviews } from '../../data/mockData';
+import { fetchReviews } from '../../services/supabase';
 import { FiStar, FiPlay } from 'react-icons/fi';
 
 // Unique accent color per review card for visual variety
@@ -9,6 +10,11 @@ const reviewAccents = ['#F472B6', '#38BDF8', '#FB923C', '#2DD4BF', '#818CF8', '#
 export default function CustomerReviews() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-100px' });
+  const [reviews, setReviews] = useState(mockReviews);
+
+  useEffect(() => {
+    fetchReviews().then(data => { if (data) setReviews(data); });
+  }, []);
 
   return (
     <section ref={ref} className="relative">

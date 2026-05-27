@@ -1,6 +1,7 @@
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { instagramPosts } from '../../data/mockData';
+import { instagramPosts as mockPosts } from '../../data/mockData';
+import { fetchInstagramPosts } from '../../services/supabase';
 import { FiInstagram, FiExternalLink } from 'react-icons/fi';
 
 // Unique gradient overlay per post for visual variety
@@ -18,6 +19,11 @@ const postAccents = ['#833AB4', '#E1306C', '#F77737', '#FCAF45', '#405DE6', '#C1
 export default function InstagramFeed() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-100px' });
+  const [instagramPosts, setInstagramPosts] = useState(mockPosts);
+
+  useEffect(() => {
+    fetchInstagramPosts().then(data => { if (data) setInstagramPosts(data); });
+  }, []);
 
   return (
     <section ref={ref} className="relative gradient-bg">

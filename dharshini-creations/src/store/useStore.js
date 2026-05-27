@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { supabase } from '../lib/supabase';
 
 export const useCartStore = create((set, get) => ({
   items: [],
@@ -54,45 +53,14 @@ export const useUserStore = create((set) => ({
   wishlist: [],
   isLoading: true,
 
-  initializeAuth: () => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      set({ 
-        user: session?.user || null, 
-        isAuthenticated: !!session?.user,
-        isLoading: false
-      });
-      if (session?.user) {
-        // Fetch profile
-        supabase.from('profiles').select('*').eq('id', session.user.id).single()
-          .then(({ data }) => {
-            if (data) set({ profile: data });
-          });
-      }
-    });
-
-    // Listen for auth changes
-    supabase.auth.onAuthStateChange((_event, session) => {
-      set({ 
-        user: session?.user || null, 
-        isAuthenticated: !!session?.user,
-        isLoading: false
-      });
-      if (!session?.user) {
-        set({ profile: null, wishlist: [] });
-      }
-    });
-  },
-
-  setUser: (user) => set({ user, isAuthenticated: !!user }),
+  setUser: (user) => set({ user, isAuthenticated: !!user, isLoading: false }),
   setProfile: (profile) => set({ profile }),
   toggleWishlist: (productId) => set((state) => ({
     wishlist: state.wishlist.includes(productId)
       ? state.wishlist.filter(id => id !== productId)
       : [...state.wishlist, productId]
   })),
-  logout: async () => {
-    await supabase.auth.signOut();
+  logout: () => {
     set({ user: null, profile: null, isAuthenticated: false });
   },
 }));
@@ -114,32 +82,7 @@ export const useUIStore = create((set) => ({
   },
 }));
 
-export const useOrderStore = create((set, get) => ({
-  orders: JSON.parse(localStorage.getItem('dc_orders')) || [],
-  placeOrder: (orderData) => {
-    const newOrder = {
-      ...orderData,
-      id: `DC-${Math.floor(1000 + Math.random() * 9000)}`,
-      date: new Date().toLocaleDateString(),
-      status: 'packed',
-      dest: `${orderData.shippingAddress.city}, ${orderData.shippingAddress.state}`,
-      est: '5 days',
-      items: orderData.items.map(item => `${item.name} × ${item.quantity}`).join(', '),
-      rawItems: orderData.items,
-      total: orderData.total
-    };
-    
-    const updatedOrders = [newOrder, ...get().orders];
-    localStorage.setItem('dc_orders', JSON.stringify(updatedOrders));
-    set({ orders: updatedOrders });
-    
-    return newOrder;
-  },
-  clearOrders: () => {
-    localStorage.removeItem('dc_orders');
-    set({ orders: [] });
-  }
-}));
+
 
 export const useCustomizationStore = create((set, get) => ({
   draft: JSON.parse(localStorage.getItem('dc_customization_draft')) || null,
@@ -154,4 +97,25 @@ export const useCustomizationStore = create((set, get) => ({
     localStorage.removeItem('dc_customization_draft');
     set({ draft: null });
   }
+}));
+
+
+// ── ORDER STORE ──────────────────────────────────────────────
+// Keeps a local cache of orders; Checkout also persists to Supabase.
+export const useOrderStore = create((set, get) => ({
+  orders: [],
+
+  setOrders: (orders) => set({ orders }),
+
+  placeOrder: (orderData) => {
+    const id = 'DC' + Date.now().toString(36).toUpperCase();
+    const newOrder = {
+      id,
+      date: new Date().toLocaleDateString('en-IN'),
+      status: 'pending',
+      ...orderData,
+    };
+    set({ orders: [newOrder, ...get().orders] });
+    return newOrder;
+  },
 }));

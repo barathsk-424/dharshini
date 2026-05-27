@@ -4,10 +4,13 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate, Link } from 'react-router-dom';
 import { FiCreditCard, FiTruck, FiCheckCircle, FiCopy, FiChevronLeft } from 'react-icons/fi';
 import { useCartStore, useOrderStore } from '../store/useStore';
+import { useAuth } from '../context/AuthContext';
+import { createOrder } from '../services/supabase';
 
 export default function Checkout() {
   const { items, getTotal, clearCart } = useCartStore();
   const placeOrder = useOrderStore(s => s.placeOrder);
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -36,27 +39,40 @@ export default function Checkout() {
     setForm(prev => ({ ...prev, [field]: value }));
   };
 
-  const handlePlaceOrder = (e) => {
+  const handlePlaceOrder = async (e) => {
     e.preventDefault();
     if (items.length === 0) return;
 
     setIsProcessing(true);
 
-    // Simulate network request/processing
-    setTimeout(() => {
-      const newOrder = placeOrder({
-        shippingAddress: form,
-        items: items,
-        subtotal: subtotal,
-        shipping: shipping,
-        total: grandTotal,
-        paymentMethod
-      });
+    // Place order in local store first (optimistic)
+    const newOrder = placeOrder({
+      shippingAddress: form,
+      items,
+      subtotal,
+      shipping,
+      total: grandTotal,
+      paymentMethod,
+    });
 
-      clearCart();
-      setIsProcessing(false);
-      setOrderSuccess(newOrder);
-    }, 2000);
+    // Persist to Supabase if user is logged in
+    if (currentUser) {
+      await createOrder({
+        id:               newOrder.id,
+        user_id:          currentUser.id,
+        items:            items,
+        subtotal:         subtotal,
+        shipping:         shipping,
+        total:            grandTotal,
+        payment_method:   paymentMethod,
+        status:           'pending',
+        shipping_address: form,
+      });
+    }
+
+    clearCart();
+    setIsProcessing(false);
+    setOrderSuccess(newOrder);
   };
 
   if (orderSuccess) {

@@ -1,0 +1,148 @@
+/**
+ * supabase.js — all Supabase data-fetching helpers
+ * Replaces the Firebase api.js
+ */
+import { supabase } from '../lib/supabase';
+
+// ── CATEGORIES ──────────────────────────────────────────────
+
+export const fetchCategories = async () => {
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*')
+    .order('id');
+  if (error) { console.error('fetchCategories:', error.message); return null; }
+  // Normalise snake_case → camelCase for backward compat
+  return data.map(c => ({ ...c, startingPrice: c.starting_price }));
+};
+
+// ── PRODUCTS ────────────────────────────────────────────────
+
+export const fetchProducts = async (categoryId = null) => {
+  let query = supabase
+    .from('products')
+    .select('*, product_images(url, is_primary)')
+    .order('id');
+
+  if (categoryId) query = query.eq('category_id', categoryId);
+
+  const { data, error } = await query;
+  if (error) { console.error('fetchProducts:', error.message); return null; }
+
+  return data.map(p => ({
+    ...p,
+    basePrice:      p.base_price,
+    categoryId:     p.category_id,
+    isCustomizable: p.is_customizable,
+    image: p.product_images?.find(i => i.is_primary)?.url
+        || p.product_images?.[0]?.url
+        || 'https://via.placeholder.com/300?text=No+Image',
+  }));
+};
+
+// ── SINGLE PRODUCT ──────────────────────────────────────────
+
+export const fetchProduct = async (id) => {
+  const { data, error } = await supabase
+    .from('products')
+    .select('*, product_images(url, is_primary), categories(name, slug)')
+    .eq('id', id)
+    .single();
+  if (error) { console.error('fetchProduct:', error.message); return null; }
+  return {
+    ...data,
+    basePrice:      data.base_price,
+    categoryId:     data.category_id,
+    isCustomizable: data.is_customizable,
+    image: data.product_images?.find(i => i.is_primary)?.url
+        || data.product_images?.[0]?.url
+        || 'https://via.placeholder.com/300?text=No+Image',
+  };
+};
+
+// ── REVIEWS ─────────────────────────────────────────────────
+
+export const fetchReviews = async () => {
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) { console.error('fetchReviews:', error.message); return null; }
+  return data.map(r => ({ ...r, hasVideo: r.has_video }));
+};
+
+// ── GALLERY IMAGES ──────────────────────────────────────────
+
+export const fetchGalleryImages = async () => {
+  const { data, error } = await supabase
+    .from('gallery_images')
+    .select('*')
+    .order('id');
+  if (error) { console.error('fetchGalleryImages:', error.message); return null; }
+  return data;
+};
+
+// ── INSTAGRAM POSTS ─────────────────────────────────────────
+
+export const fetchInstagramPosts = async () => {
+  const { data, error } = await supabase
+    .from('instagram_posts')
+    .select('*')
+    .order('fetched_at', { ascending: false });
+  if (error) { console.error('fetchInstagramPosts:', error.message); return null; }
+  return data.map(p => ({ ...p, mediaUrl: p.media_url }));
+};
+
+// ── INQUIRIES ───────────────────────────────────────────────
+
+export const submitInquiry = async (name, email, message) => {
+  const { data, error } = await supabase
+    .from('inquiries')
+    .insert([{ name, email, message }])
+    .select()
+    .single();
+  if (error) { console.error('submitInquiry:', error.message); return { success: false, error: error.message }; }
+  return { success: true, id: data.id };
+};
+
+// ── ORDERS ──────────────────────────────────────────────────
+
+export const createOrder = async (order) => {
+  const { data, error } = await supabase
+    .from('orders')
+    .insert([order])
+    .select()
+    .single();
+  if (error) { console.error('createOrder:', error.message); return { success: false, error: error.message }; }
+  return { success: true, order: data };
+};
+
+export const fetchUserOrders = async (userId) => {
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+  if (error) { console.error('fetchUserOrders:', error.message); return null; }
+  return data;
+};
+
+// ── USER PROFILE ────────────────────────────────────────────
+
+export const upsertUserProfile = async (profile) => {
+  const { error } = await supabase
+    .from('users')
+    .upsert(profile, { onConflict: 'id' });
+  if (error) { console.error('upsertUserProfile:', error.message); return false; }
+  return true;
+};
+
+export const fetchUserProfile = async (userId) => {
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', userId)
+    .single();
+  if (error) { console.error('fetchUserProfile:', error.message); return null; }
+  return data;
+};

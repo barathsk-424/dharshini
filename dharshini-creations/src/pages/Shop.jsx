@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { products, categories } from '../data/mockData';
 import { useCartStore, useUserStore } from '../store/useStore';
 import { FiShoppingBag, FiHeart, FiEye } from 'react-icons/fi';
+import { fetchCategories, fetchProducts } from '../services/supabase';
 
 export default function Shop() {
 
@@ -27,31 +28,18 @@ const categoryAccent = {
 
   useEffect(() => {
     async function loadData() {
-      import('../lib/supabase').then(async ({ supabase }) => {
-        try {
-          const [catRes, prodRes] = await Promise.all([
-            supabase.from('categories').select('*').order('id'),
-            supabase.from('products').select('*, product_images(url)')
-          ]);
-          
-          if (catRes.data && catRes.data.length > 0) {
-            setDbCategories(catRes.data.map(c => ({ ...c, startingPrice: c.starting_price })));
-          }
-          if (prodRes.data && prodRes.data.length > 0) {
-            setDbProducts(prodRes.data.map(p => ({
-              ...p,
-              basePrice: p.base_price,
-              categoryId: p.category_id,
-              isCustomizable: p.is_customizable,
-              image: p.product_images?.[0]?.url || 'https://via.placeholder.com/300?text=No+Image'
-            })));
-          }
-        } catch (e) {
-          console.warn('Supabase fetch failed, falling back to mock data.', e);
-        } finally {
-          setIsLoading(false);
-        }
-      });
+      try {
+        const [cats, prods] = await Promise.all([
+          fetchCategories(),
+          fetchProducts(),
+        ]);
+        if (cats && cats.length > 0) setDbCategories(cats);
+        if (prods && prods.length > 0) setDbProducts(prods);
+      } catch (e) {
+        console.warn('Supabase fetch failed, falling back to mock data.', e);
+      } finally {
+        setIsLoading(false);
+      }
     }
     loadData();
   }, []);

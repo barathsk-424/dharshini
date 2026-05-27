@@ -27,11 +27,12 @@ import Checkout from './pages/Checkout';
 import ProductCustomize from './pages/ProductCustomize';
 import OrderReview from './pages/OrderReview';
 import CustomCursor from './components/UI/CustomCursor';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const location = useLocation();
   const { showOpeningAnimation } = useUIStore();
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -41,38 +42,44 @@ function App() {
     return <OpeningAnimation />;
   }
 
-
   return (
-    <>
-      <CustomCursor />
-      <Layout>
-        <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Home />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/shop/:id" element={<ProductDetail />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/reviews" element={<Reviews />} />
-            <Route path="/orders" element={<Orders />} />
-          <Route path="/track-order" element={<TrackOrder />} />
-          <Route path="/designs" element={<Designs />} />
-          <Route path="/wishlist" element={<Wishlist />} />
-          <Route path="/profile-settings" element={<ProfileSettings />} />
-          <Route path="/activity" element={<Activity />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/addresses" element={<Addresses />} />
-          <Route path="/support" element={<Support />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/customize/:id" element={<ProductCustomize />} />
-            <Route path="/review/:id" element={<OrderReview />} />
-            <Route path="/admin/*" element={<AdminRoutes />} />
-          </Routes>
-        </AnimatePresence>
-      </Layout>
-    </>
+    <AuthProvider>
+      <>
+        <CustomCursor />
+        <Layout>
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              {/* Public Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/shop/:id" element={<ProductDetail />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/reviews" element={<Reviews />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/customize/:id" element={<ProductCustomize />} />
+              
+              {/* Protected Routes (Dashboard / Account) */}
+              <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+              <Route path="/track-order" element={<ProtectedRoute><TrackOrder /></ProtectedRoute>} />
+              <Route path="/designs" element={<ProtectedRoute><Designs /></ProtectedRoute>} />
+              <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
+              <Route path="/profile-settings" element={<ProtectedRoute><ProfileSettings /></ProtectedRoute>} />
+              <Route path="/activity" element={<ProtectedRoute><Activity /></ProtectedRoute>} />
+              <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+              <Route path="/addresses" element={<ProtectedRoute><Addresses /></ProtectedRoute>} />
+              <Route path="/support" element={<ProtectedRoute><Support /></ProtectedRoute>} />
+              <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+              <Route path="/review/:id" element={<ProtectedRoute><OrderReview /></ProtectedRoute>} />
+              
+              {/* Admin Routes */}
+              <Route path="/admin/*" element={<AdminRoutes />} />
+            </Routes>
+          </AnimatePresence>
+        </Layout>
+      </>
+    </AuthProvider>
   );
 }
 

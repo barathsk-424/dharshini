@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { galleryImages } from '../../data/mockData';
+import { galleryImages as mockGallery } from '../../data/mockData';
+import { fetchGalleryImages } from '../../services/supabase';
 import { FiHeart, FiX } from 'react-icons/fi';
 
 const filters = ['All', 'Embroidery', 'Fabric Painting', 'Combo', 'Customer Orders'];
@@ -28,6 +29,11 @@ export default function GallerySection() {
   const [activeFilter, setActiveFilter] = useState('All');
   const [lightbox, setLightbox] = useState(null);
   const [likes, setLikes] = useState({});
+  const [galleryImages, setGalleryImages] = useState(mockGallery);
+
+  useEffect(() => {
+    fetchGalleryImages().then(data => { if (data) setGalleryImages(data); });
+  }, []);
 
   const filtered = activeFilter === 'All' ? galleryImages : galleryImages.filter(img => img.category === filterMap[activeFilter]);
 

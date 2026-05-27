@@ -1,20 +1,20 @@
-// src/pages/Auth.jsx
-
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { FiUser, FiMail, FiLock, FiArrowRight, FiLogOut, FiShoppingBag } from 'react-icons/fi';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useUserStore, useOrderStore } from '../store/useStore';
-import auth from '../services/auth';
+import { useOrderStore } from '../store/useStore';
+import { useAuth } from '../context/AuthContext';
 import AccountMenu from '../components/Layout/AccountMenu';
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { user, isAuthenticated, setUser, logout } = useUserStore();
+  // Use Firebase Auth context
+  const { currentUser, userData, login, signup, logout } = useAuth();
   const { orders } = useOrderStore();
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,33 +24,23 @@ export default function Auth() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    const registeredUsers = JSON.parse(localStorage.getItem('dc_users')) || [];
+    setIsLoading(true);
 
-    if (isLogin) {
-      // SIGN IN using auth service
-      try {
-        const result = await auth.login({ email: form.email, password: form.password });
-        setUser({ name: result.user.email.split('@')[0], email: result.user.email });
+    try {
+      if (isLogin) {
+        await login(form.email, form.password);
         const from = location.state?.from || '/';
         navigate(from);
-      } catch (err) {
-        setError(err.message || 'Login failed');
+      } else {
+        await signup(form.email, form.password, form.name);
+        const from = location.state?.from || '/';
+        navigate(from);
       }
-    } else {
-      // SIGN UP – mock registration
-      const userExists = registeredUsers.some(u => u.email.toLowerCase() === form.email.toLowerCase());
-      if (userExists) {
-        setError('Email address already registered. Please sign in.');
-        return;
-      }
-      const newUser = { name: form.name, email: form.email, password: form.password };
-      const updatedUsers = [...registeredUsers, newUser];
-      localStorage.setItem('dc_users', JSON.stringify(updatedUsers));
-
-      const result = await auth.signup(newUser);
-      setUser({ name: newUser.name, email: newUser.email });
-      const from = location.state?.from || '/';
-      navigate(from);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Authentication failed');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -61,12 +51,16 @@ export default function Auth() {
   };
 
   // If user is logged in, show the profile dashboard
-  if (isAuthenticated) {
-    const handleLogout = () => {
-      logout();
-      auth.logout();
-      navigate('/auth');
+  if (currentUser) {
+    const handleLogout = async () => {
+      try {
+        await logout();
+        navigate('/auth');
+      } catch (err) {
+        console.error("Failed to log out", err);
+      }
     };
+
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -91,8 +85,10 @@ export default function Auth() {
                   <div className="w-20 h-20 mx-auto bg-purple-500/10 border border-purple-500/20 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(138,43,226,0.2)]">
                     <FiUser size={40} className="text-purple-400" />
                   </div>
-                  <h2 className="font-cinzel text-xl font-bold text-white mb-1 truncate">{user?.name}</h2>
-                  <p className="text-xs text-purple-400 font-semibold mb-6 truncate">{user?.email}</p>
+                  <h2 className="font-cinzel text-xl font-bold text-white mb-1 truncate">
+                    {currentUser.displayName || userData?.name || 'User'}
+                  </h2>
+                  <p className="text-xs text-purple-400 font-semibold mb-6 truncate">{currentUser.email}</p>
                   <div className="border-t border-white/10 pt-6 text-left space-y-4">
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-gray-400">Account Status:</span>
@@ -165,7 +161,6 @@ export default function Auth() {
       <Helmet><title>{isLogin ? 'Sign In' : 'Create Account'} — Dharshini Creations</title></Helmet>
       <div className="w-full max-w-md animate-fade-in">
         <motion.div className="glass-card p-8 md:p-10 relative overflow-hidden" initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
-          {/* Decorative elements */}
           <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl pointer-events-none" />
           <div className="relative z-10 text-center mb-8">
@@ -207,7 +202,9 @@ export default function Auth() {
                 <input type="password" value={form.password} onChange={e => update('password', e.target.value)} placeholder="••••••••" required className="icon-input w-full rounded-xl text-sm border outline-none focus:border-purple-500 transition-colors placeholder-gray-600" style={{ borderColor: 'var(--color-border-strong)', color: '#F5F5F5', background: 'rgba(255,255,255,0.05)', WebkitBoxShadow: '0 0 0 1000px rgba(12,8,22,0.9) inset', WebkitTextFillColor: '#F5F5F5' }} />
               </div>
             </div>
-            <button type="submit" className="btn-primary w-full interactive flex items-center justify-center gap-2 mt-4 py-3.5 shadow-[0_0_20px_rgba(138,43,226,0.3)]">{isLogin ? 'Sign In' : 'Create Account'} <FiArrowRight size={18} /></button>
+            <button type="submit" disabled={isLoading} className="btn-primary w-full interactive flex items-center justify-center gap-2 mt-4 py-3.5 shadow-[0_0_20px_rgba(138,43,226,0.3)] disabled:opacity-70 disabled:cursor-not-allowed">
+              {isLoading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Account')} <FiArrowRight size={18} />
+            </button>
           </form>
           <div className="mt-8 text-center relative z-10">
             <p className="text-sm" style={{ color: 'var(--color-gray-dark)' }}>{isLogin ? "Don't have an account? " : "Already have an account? "}<button onClick={toggleMode} className="font-semibold hover:text-white transition-colors" style={{ color: 'var(--color-purple-glow)' }}>{isLogin ? 'Sign up' : 'Sign in'}</button></p>

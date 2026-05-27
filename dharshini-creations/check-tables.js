@@ -6,11 +6,11 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 async function checkTables() {
-  const { data, error } = await supabase.from('categories').select('*').limit(1);
+  const { data, error } = await supabase.from('products').select('*').limit(1);
   if (error) {
-    console.error('Error:', error.message, error.code);
+    console.error('Error fetching products:', error.message);
   } else {
-    console.log('Success! Tables exist. Data:', data);
+    console.log('Products data:', data);
   }
 }
 
