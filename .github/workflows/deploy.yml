@@ -29,17 +29,20 @@ jobs:
         with:
           node-version: 22
           cache: 'npm'
+          cache-dependency-path: dharshini-creations/package-lock.json
 
       - name: Install dependencies 🔧
-        run: |
-          npm ci --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
+        working-directory: dharshini-creations
 
       - name: Build 🏗️
         env:
-          VITE_SUPABASE_URL: https://pzdulbzdolnrtyxnuxkp.supabase.co
-          VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB6ZHVsYnpkb2xucnR5eG51eGtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4NjEyMjQsImV4cCI6MjA5NTQzNzIyNH0.PtllPqeRqTBjB7ktGiQWMhWmhUcQqZmDTH50y9Lv4KM
-        run: |
-          npm run build
+          # Store these in GitHub → Settings → Secrets and variables → Actions
+          # Add: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: npm run build
+        working-directory: dharshini-creations
 
       - name: Create 404.html for SPA Routing 📄
         run: cp dharshini-creations/dist/index.html dharshini-creations/dist/404.html

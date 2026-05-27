@@ -8,49 +8,60 @@ export function useAuth() {
 }
 
 // ── Sync profile to customer_profiles table ──────────────────
-// Uses .maybeSingle() — returns null instead of throwing 406
-// when no row exists yet.
+// Uses upsert so it works for both new and returning users.
+// Never stores passwords — auth is handled entirely by Supabase Auth.
 async function syncProfile(user) {
   if (!user) return null;
   try {
-    // Check if profile already exists
-    const { data: existing, error: fetchError } = await supabase
-      .from('customer_profiles')
-      .select('*')
-      .eq('id', user.id)
-      .maybeSingle();   // ← won't throw 406 if row is missing
-
-    if (fetchError) {
-      console.warn('Profile fetch error:', fetchError.message);
-    }
-
-    if (existing) return existing;
-
-    // Create profile for new user
     const profile = {
-      id:       user.id,
-      name:     user.user_metadata?.name || user.email?.split('@')[0] || 'User',
-      email:    user.email,
-      role:     'user',
-      status:   'Active',
-      password: user.user_metadata?.password || null,
+      id:     user.id,
+      name:   user.user_metadata?.name || user.email?.split('@')[0] || 'User',
+      email:  user.email,
+      role:   user.user_metadata?.role || 'user',
+      status: 'Active',
     };
 
-    const { data: inserted, error: insertError } = await supabase
+    const { data, error } = await supabase
       .from('customer_profiles')
-      .insert(profile)
+      .upsert(profile, { onConflict: 'id', ignoreDuplicates: false })
       .select()
       .maybeSingle();
 
-    if (insertError) {
-      console.warn('Profile insert error (non-fatal):', insertError.message);
+    if (error) {
+      console.warn('Profile sync error (non-fatal):', error.message);
       return profile; // return local object so UI still works
     }
-    return inserted ?? profile;
+    return data ?? profile;
   } catch (e) {
     console.warn('syncProfile error (non-fatal):', e.message);
     return null;
   }
+}
+
+// ── Map Supabase error codes to user-friendly messages ───────
+function friendlyAuthError(error) {
+  const msg = error?.message || '';
+  const code = error?.code || '';
+
+  if (code === 'invalid_credentials' || msg.includes('Invalid login credentials')) {
+    return 'Invalid email or password. Please check your credentials and try again.';
+  }
+  if (code === 'email_not_confirmed' || msg.includes('Email not confirmed')) {
+    return 'Your email address has not been confirmed. Please check your inbox.';
+  }
+  if (code === 'user_already_exists' || msg.includes('User already registered')) {
+    return 'This email is already registered. Please sign in instead.';
+  }
+  if (msg.includes('Password should be at least')) {
+    return 'Password must be at least 6 characters long.';
+  }
+  if (msg.includes('Unable to validate email address')) {
+    return 'Please enter a valid email address.';
+  }
+  if (msg.includes('signup_disabled')) {
+    return 'New registrations are currently disabled. Please contact support.';
+  }
+  return msg || 'Authentication failed. Please try again.';
 }
 
 export function AuthProvider({ children }) {
@@ -63,12 +74,13 @@ export function AuthProvider({ children }) {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { name, password } },  // stored in user_metadata for profile sync
+      options: {
+        data: { name },  // stored in user_metadata — no password in metadata
+      },
     });
-    if (error) {
-      console.error('Signup error:', error);
-      throw new Error(error.message || 'Signup failed. Please try again.');
-    }
+    if (error) throw new Error(friendlyAuthError(error));
+    // If email confirmation is disabled, user is immediately active
+    // If enabled, data.user will exist but session will be null
     return data.user;
   }
 
@@ -78,10 +90,7 @@ export function AuthProvider({ children }) {
       email,
       password,
     });
-    if (error) {
-      console.error('Login error:', error);
-      throw new Error(error.message || 'Login failed. Please check your credentials.');
-    }
+    if (error) throw new Error(friendlyAuthError(error));
     return data.user;
   }
 
@@ -93,6 +102,7 @@ export function AuthProvider({ children }) {
 
   // ── Auth state listener ──────────────────────────────────
   useEffect(() => {
+    // Get initial session
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       const user = session?.user ?? null;
       setCurrentUser(user);
@@ -103,8 +113,9 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
 
+    // Listen for auth changes (login, logout, token refresh)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      async (event, session) => {
         const user = session?.user ?? null;
         setCurrentUser(user);
         if (user) {

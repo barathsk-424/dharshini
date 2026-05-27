@@ -31,24 +31,15 @@ export default function Auth() {
       if (isLogin) {
         await login(form.email, form.password);
         const from = location.state?.from || '/';
-        navigate(from);
+        navigate(from, { replace: true });
       } else {
         await signup(form.email, form.password, form.name);
         const from = location.state?.from || '/';
-        navigate(from);
+        navigate(from, { replace: true });
       }
     } catch (err) {
-      console.error('Auth error:', err);
-      // Show user-friendly error messages
-      let errorMsg = err.message || 'Authentication failed. Please try again.';
-      if (errorMsg.includes('Invalid login credentials')) {
-        errorMsg = 'Invalid email or password. Please check your credentials and try again.';
-      } else if (errorMsg.includes('Email not confirmed')) {
-        errorMsg = 'Please confirm your email address before logging in. Check your inbox for the confirmation link.';
-      } else if (errorMsg.includes('User already registered')) {
-        errorMsg = 'This email is already registered. Please log in instead.';
-      }
-      setError(errorMsg);
+      // AuthContext already returns user-friendly messages
+      setError(err.message || 'Authentication failed. Please try again.');
     } finally {
       setIsLoading(false);
     }

@@ -7,12 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "typecheck": "tsc --noEmit",
-    "preview": "vite preview",
-    "supabase:install": "npm install -g supabase",
-    "supabase:start": "supabase start",
-    "supabase:reset": "supabase db reset --file supabase-setup.sql",
-    "supabase:setup": "npm run supabase:reset",
-    "supabase:seed": "supabase db seed --file supabase/seed.sql"
+    "preview": "vite preview"
   },
   "devDependencies": {
     "typescript": "~6.0.2",
