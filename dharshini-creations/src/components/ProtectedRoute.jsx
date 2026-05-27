@@ -1,15 +1,19 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+/**
+ * Wraps any route that requires the user to be logged in.
+ * Redirects to /auth if not authenticated, preserving the intended destination.
+ */
 export default function ProtectedRoute({ children }) {
-  const { currentUser } = useAuth();
+  const { currentUser, loading } = useAuth();
   const location = useLocation();
 
+  // Still resolving session — render nothing (AuthProvider already blocks
+  // the whole tree, but this guard is here for safety)
+  if (loading) return null;
+
   if (!currentUser) {
-    // Redirect them to the /auth page, but save the current location they were
-    // trying to go to when they were redirected. This allows us to send them
-    // along to that page after they login, which is a nicer user experience
-    // than dropping them off on the home page.
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 

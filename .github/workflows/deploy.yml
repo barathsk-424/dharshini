@@ -6,13 +6,11 @@ on:
       - main
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -37,10 +35,10 @@ jobs:
 
       - name: Build 🏗️
         env:
-          # Store these in GitHub → Settings → Secrets and variables → Actions
-          # Add: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          # Public Supabase config — anon key is safe in frontend builds.
+          # Override via GitHub Secrets if you rotate the project keys.
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://pzdulbzdolnrtyxnuxkp.supabase.co' }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB6ZHVsYnpkb2xucnR5eG51eGtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4NjEyMjQsImV4cCI6MjA5NTQzNzIyNH0.PtllPqeRqTBjB7ktGiQWMhWmhUcQqZmDTH50y9Lv4KM' }}
         run: npm run build
         working-directory: dharshini-creations
 
