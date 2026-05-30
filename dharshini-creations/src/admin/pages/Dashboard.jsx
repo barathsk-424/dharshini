@@ -26,9 +26,9 @@ import { motion } from 'framer-motion';
 import {
   fetchDashboardStats,
   fetchAnalyticsTraffic,
-  fetchAnalyticsDailyVisitors,
   fetchAllOrders,
 } from '../../services/supabase';
+import { supabase } from '../../lib/supabase';
 
 ChartJS.register(
   CategoryScale, LinearScale, PointElement, LineElement, BarElement, 
@@ -43,18 +43,45 @@ export default function Dashboard() {
   const [trafficData, setTrafficData] = useState({ labels: [], revenue: [], expenses: [], visitors: [] });
 
   useEffect(() => {
-    fetchDashboardStats().then(s => { if (s) setStats(s); });
-    fetchAllOrders().then(orders => {
-      if (orders) setRecentOrders(orders.slice(0, 5));
-    });
-    fetchAnalyticsTraffic().then(data => {
-      if (data) setTrafficData({
-        labels:   data.map(d => d.month),
-        revenue:  data.map(d => d.revenue),
-        expenses: data.map(d => d.expenses),
-        visitors: data.map(d => d.organic + d.paid),
-      });
-    });
+    let mounted = true;
+    const loadDashboard = async () => {
+      const [statsData, ordersData, traffic] = await Promise.all([
+        fetchDashboardStats(),
+        fetchAllOrders(),
+        fetchAnalyticsTraffic(),
+      ]);
+
+      if (!mounted) return;
+
+      if (statsData) setStats(statsData);
+      if (ordersData) setRecentOrders(ordersData.slice(0, 5));
+      if (traffic) {
+        setTrafficData({
+          labels: traffic.map(d => d.month),
+          revenue: traffic.map(d => d.revenue),
+          expenses: traffic.map(d => d.expenses),
+          visitors: traffic.map(d => d.organic + d.paid),
+        });
+      }
+    };
+
+    loadDashboard();
+
+    const ordersChannel = supabase
+      .channel('admin-dashboard-orders')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, loadDashboard)
+      .subscribe();
+
+    const usersChannel = supabase
+      .channel('admin-dashboard-users')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, loadDashboard)
+      .subscribe();
+
+    return () => {
+      mounted = false;
+      supabase.removeChannel(ordersChannel);
+      supabase.removeChannel(usersChannel);
+    };
   }, []);
 
   /* ── Chart Data ── */

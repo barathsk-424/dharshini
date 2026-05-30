@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiMail, FiCheck, FiCornerUpLeft, FiTrash2, FiSearch, FiSend } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchAllInquiries, markInquiryResolved, deleteInquiry, submitInquiry } from '../../services/supabase';
+import { supabase } from '../../lib/supabase';
 
 export default function Messages() {
   const [activeMessage, setActiveMessage] = useState(null);
@@ -13,7 +14,23 @@ export default function Messages() {
   const [compose, setCompose] = useState({ name: '', email: '', message: '' });
 
   useEffect(() => {
-    fetchAllInquiries().then(data => { if (data) setMessages(data); });
+    let mounted = true;
+    const loadMessages = async () => {
+      const data = await fetchAllInquiries();
+      if (mounted && data) setMessages(data);
+    };
+
+    loadMessages();
+
+    const channel = supabase
+      .channel('admin-messages-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'inquiries' }, loadMessages)
+      .subscribe();
+
+    return () => {
+      mounted = false;
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const filteredMessages = messages.filter(m =>
@@ -162,7 +179,7 @@ export default function Messages() {
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="text-xs font-bold tracking-widest uppercase text-gray-500 bg-white/[0.05] px-3 py-1.5 rounded-lg">{activeMessage.date}</span>
-                  <button onClick={() => deleteMessage(activeMessage.id)} className="p-2.5 text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all shadow-lg border border-transparent hover:border-rose-500/20" title="Delete">
+                  <button onClick={() => handleDelete(activeMessage.id)} className="p-2.5 text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all shadow-lg border border-transparent hover:border-rose-500/20" title="Delete">
                     <FiTrash2 size={20} />
                   </button>
                 </div>

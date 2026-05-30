@@ -1,15 +1,50 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { FiHeart, FiShoppingBag, FiTrash2, FiArrowRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import { useUserStore, useCartStore } from '../store/useStore';
-import { products } from '../data/mockData';
+import { useCartStore, useUserStore } from '../store/useStore';
+import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabase';
+import { fetchProducts } from '../services/supabase';
+import { products as mockProducts } from '../data/mockData';
 
 export default function Wishlist() {
-  const { wishlist, toggleWishlist } = useUserStore();
+  const { currentUser } = useAuth();
   const addItem = useCartStore(s => s.addItem);
+  const { wishlist, toggleWishlist } = useUserStore();
+  const [allProducts, setAllProducts] = useState(mockProducts);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const wishlistProducts = products.filter(p => wishlist.includes(p.id));
+  // Load products from Supabase (fallback to mock)
+  useEffect(() => {
+    fetchProducts().then(prods => { if (prods?.length) setAllProducts(prods); });
+  }, []);
+
+  // Mark loading done once auth resolves
+  useEffect(() => {
+    setIsLoading(false);
+  }, [currentUser]);
+
+  const removeFromWishlist = async (productId) => {
+    toggleWishlist(productId); // local update immediately
+    if (!currentUser) return;
+    await supabase
+      .from('wishlist')
+      .delete()
+      .eq('user_id', currentUser.id)
+      .eq('product_id', productId);
+  };
+
+  const wishlistProducts = allProducts.filter(p => wishlist.includes(p.id));
+
+  if (isLoading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-purple-500/30 border-t-purple-500 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full min-h-[calc(100vh-180px)] py-12 md:py-20 px-6">
@@ -37,7 +72,7 @@ export default function Wishlist() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {wishlistProducts.map((p, i) => (
-              <motion.div 
+              <motion.div
                 key={p.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -47,20 +82,19 @@ export default function Wishlist() {
                 <div className="relative h-48 overflow-hidden">
                   <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  <button 
-                    onClick={() => toggleWishlist(p.id)}
+                  <button
+                    onClick={() => removeFromWishlist(p.id)}
                     className="absolute top-3 right-3 p-2 rounded-full bg-black/50 backdrop-blur-md text-pink-400 hover:bg-pink-500/20 hover:text-pink-300 transition-colors interactive"
                     title="Remove from Wishlist"
                   >
                     <FiTrash2 size={16} />
                   </button>
                 </div>
-                
                 <div className="p-5 flex flex-col flex-1">
                   <h4 className="font-poppins font-semibold text-sm mb-2 text-white truncate">{p.name}</h4>
                   <div className="flex items-center justify-between mt-auto pt-4">
-                    <span className="font-cinzel font-bold text-lg text-purple-300">₹{p.basePrice}+</span>
-                    <button 
+                    <span className="font-cinzel font-bold text-lg text-purple-300">₹{p.basePrice || p.base_price}+</span>
+                    <button
                       onClick={() => addItem(p)}
                       className="p-2.5 rounded-full bg-purple-500/20 text-purple-400 hover:bg-purple-500/40 hover:text-white transition-all interactive"
                       title="Add to Cart"

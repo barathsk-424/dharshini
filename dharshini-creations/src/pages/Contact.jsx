@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { FiInstagram, FiMail, FiMapPin, FiSend } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
+import { submitInquiry } from '../services/supabase';
 
 const contactCards = [
   { icon: FiInstagram, title: 'Instagram', desc: '@threads.by.dharshini0612', link: 'https://instagram.com/threads.by.dharshini0612', gradient: 'linear-gradient(135deg, #833AB4, #E1306C, #F77737)' },
@@ -10,24 +11,32 @@ const contactCards = [
 ];
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const update = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
-  const handleWhatsAppSubmit = () => {
-    if (!form.name || !form.message) {
-      alert("Please fill in your name and message.");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.message.trim()) {
+      setError('Please fill in your name and message.');
       return;
     }
-    
-    let text = `*New Contact Inquiry*\n\n`;
-    text += `*Name:* ${form.name}\n`;
-    text += `*Message:* ${form.message}\n`;
-    
-    const encoded = encodeURIComponent(text);
-    window.open(`https://wa.me/918122459197?text=${encoded}`, '_blank');
-    
-    setSubmitted(true);
+    setIsLoading(true);
+    setError('');
+    try {
+      const result = await submitInquiry(form.name.trim(), form.email.trim(), form.message.trim());
+      if (result.success) {
+        setSubmitted(true);
+      } else {
+        setError(result.error || 'Failed to send message. Please try again.');
+      }
+    } catch (err) {
+      setError('Failed to send message. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -69,21 +78,35 @@ export default function Contact() {
               <button onClick={() => { setSubmitted(false); setForm({ name: '', email: '', message: '' }); }} className="btn-primary mt-6 interactive">Send Another</button>
             </motion.div>
           ) : (
-            <div className="glass-card p-8">
+            <form className="glass-card p-8" onSubmit={handleSubmit}>
+              {error && (
+                <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-sm">
+                  ⚠️ {error}
+                </div>
+              )}
               <div className="mb-6">
-                <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Your Name</label>
-                <input value={form.name} onChange={e => update('name', e.target.value)} placeholder="Full name"
+                <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Your Name *</label>
+                <input value={form.name} onChange={e => update('name', e.target.value)} placeholder="Full name" required
                   className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors" style={{ borderColor: 'rgba(106,13,173,0.3)', color: '#F5F5F5' }} />
               </div>
               <div className="mb-6">
-                <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Message</label>
-                <textarea value={form.message} onChange={e => update('message', e.target.value)} rows={5} placeholder="Tell us about your project, question, or just say hello..."
+                <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Email Address</label>
+                <input value={form.email} onChange={e => update('email', e.target.value)} type="email" placeholder="your@email.com"
+                  className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors" style={{ borderColor: 'rgba(106,13,173,0.3)', color: '#F5F5F5' }} />
+              </div>
+              <div className="mb-6">
+                <label className="text-xs font-semibold block mb-2" style={{ color: '#E5E7EB' }}>Message *</label>
+                <textarea value={form.message} onChange={e => update('message', e.target.value)} rows={5} required placeholder="Tell us about your project, question, or just say hello..."
                   className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 resize-none transition-colors" style={{ borderColor: 'rgba(106,13,173,0.3)', color: '#F5F5F5' }} />
               </div>
-              <button onClick={handleWhatsAppSubmit} className="btn-primary w-full interactive flex items-center justify-center gap-2" style={{ background: 'linear-gradient(135deg, #25D366, #128C7E)' }}>
-                <FaWhatsapp size={18} /> Send via WhatsApp
+              <button type="submit" disabled={isLoading} className="btn-primary w-full interactive flex items-center justify-center gap-2 disabled:opacity-70">
+                {isLoading ? (
+                  <><span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> Sending...</>
+                ) : (
+                  <><FiSend size={16} /> Send Message</>
+                )}
               </button>
-            </div>
+            </form>
           )}
         </div>
 

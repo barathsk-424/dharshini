@@ -3,13 +3,34 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { FiMap, FiPlus, FiEdit2, FiTrash2, FiX, FiCheck, FiAlertCircle } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { submitInquiry } from '../services/supabase';
 
 const initialAddresses = [
   { id: 1, type: 'Home', name: 'Jane Doe', street: '123 Creative Street, Apt 4B', city: 'Chennai', state: 'Tamil Nadu', zip: '600001', phone: '+91 81224 59197', isDefault: true },
 ];
 
+function loadSavedAddresses() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem('dc_saved_addresses') || 'null');
+    return Array.isArray(parsed) ? parsed : initialAddresses;
+  } catch {
+    return initialAddresses;
+  }
+}
+
 export default function Addresses() {
-  const [addresses, setAddresses] = useState(initialAddresses);
+  const [addresses, setAddresses] = useState(loadSavedAddresses);
+  const { currentUser } = useAuth();
+
+  const persistAddresses = (next) => {
+    setAddresses(next);
+    try {
+      localStorage.setItem('dc_saved_addresses', JSON.stringify(next));
+    } catch {
+      // non-fatal local storage failure
+    }
+  };
   
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,16 +60,31 @@ export default function Addresses() {
   const handleSave = (e) => {
     e.preventDefault();
     if (currentEditId !== null) {
-      setAddresses(addresses.map(a => a.id === currentEditId ? { ...formData, id: currentEditId, isDefault: a.isDefault } : a));
+      persistAddresses(addresses.map(a => a.id === currentEditId ? { ...formData, id: currentEditId, isDefault: a.isDefault } : a));
     } else {
       const newId = Math.max(0, ...addresses.map(a => a.id)) + 1;
-      setAddresses([...addresses, { ...formData, id: newId, isDefault: addresses.length === 0 }]);
+      persistAddresses([...addresses, { ...formData, id: newId, isDefault: addresses.length === 0 }]);
+    }
+
+    if (currentUser?.email) {
+      submitInquiry(
+        `Activity: ${currentUser.email}`,
+        currentUser.email,
+        `${currentEditId ? 'Updated' : 'Added'} address (${formData.type}) in account settings.`
+      );
     }
     closeModal();
   };
 
   const confirmDelete = () => {
-    setAddresses(addresses.filter(a => a.id !== deleteId));
+    persistAddresses(addresses.filter(a => a.id !== deleteId));
+    if (currentUser?.email) {
+      submitInquiry(
+        `Activity: ${currentUser.email}`,
+        currentUser.email,
+        'Deleted a saved address in account settings.'
+      );
+    }
     setDeleteId(null);
   };
 

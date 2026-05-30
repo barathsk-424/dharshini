@@ -6,6 +6,8 @@ import { products, categories } from '../data/mockData';
 import { useCartStore, useUserStore } from '../store/useStore';
 import { FiShoppingBag, FiHeart, FiEye } from 'react-icons/fi';
 import { fetchCategories, fetchProducts } from '../services/supabase';
+import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabase';
 
 export default function Shop() {
 
@@ -21,6 +23,21 @@ const categoryAccent = {
   const [showWishlistOnly, setShowWishlistOnly] = useState(false);
   const addItem = useCartStore(s => s.addItem);
   const { wishlist, toggleWishlist } = useUserStore();
+  const { currentUser } = useAuth();
+
+  // Wishlist toggle with Supabase sync
+  const handleWishlistToggle = async (e, productId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleWishlist(productId); // local update immediately
+    if (!currentUser) return;
+    const isInWishlist = wishlist.includes(productId);
+    if (isInWishlist) {
+      await supabase.from('wishlist').delete().eq('user_id', currentUser.id).eq('product_id', productId);
+    } else {
+      await supabase.from('wishlist').insert({ user_id: currentUser.id, product_id: productId });
+    }
+  };
 
   const [dbProducts, setDbProducts] = useState(products);
   const [dbCategories, setDbCategories] = useState(categories);
@@ -208,7 +225,7 @@ const categoryAccent = {
 
                       {/* Wishlist Button */}
                       <button
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(p.id); }}
+                        onClick={(e) => handleWishlistToggle(e, p.id)}
                         className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center interactive z-10"
                         style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
                       >

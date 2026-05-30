@@ -33,8 +33,9 @@ export default function Auth() {
       if (isLogin) {
         // login() returns { user, profile } so we can redirect by role immediately
         const { profile } = await login(form.email, form.password);
+        const resolvedRole = String(profile?.role || '').trim().toLowerCase();
 
-        if (profile?.role === 'admin') {
+        if (resolvedRole === 'admin') {
           // Admin → go to admin dashboard
           navigate('/admin', { replace: true });
         } else {
@@ -67,7 +68,7 @@ export default function Auth() {
     const handleLogout = async () => {
       try {
         await logout();
-        navigate('/auth');
+        navigate('/', { replace: true });
       } catch (err) {
         console.error('Logout failed:', err);
       }

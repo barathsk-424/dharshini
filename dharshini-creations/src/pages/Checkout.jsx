@@ -9,19 +9,12 @@ import { createOrder } from '../services/supabase';
 
 export default function Checkout() {
   const { items, getTotal, clearCart } = useCartStore();
-  const placeOrder = useOrderStore(s => s.placeOrder);
+  const { placeOrder, checkoutForm, setCheckoutForm } = useOrderStore();
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    state: '',
-    pincode: ''
-  });
+  // Form state is now managed globally to persist across reloads
+  const form = checkoutForm;
 
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -36,7 +29,7 @@ export default function Checkout() {
   }, []);
 
   const update = (field, value) => {
-    setForm(prev => ({ ...prev, [field]: value }));
+    setCheckoutForm({ ...form, [field]: value });
   };
 
   const handlePlaceOrder = async (e) => {
@@ -55,19 +48,20 @@ export default function Checkout() {
       paymentMethod,
     });
 
-    // Persist to Supabase if user is logged in
-    if (currentUser) {
-      await createOrder({
-        id:               newOrder.id,
-        user_id:          currentUser.id,
-        items:            items,
-        subtotal:         subtotal,
-        shipping:         shipping,
-        total:            grandTotal,
-        payment_method:   paymentMethod,
-        status:           'pending',
-        shipping_address: form,
-      });
+    // Persist to Supabase unconditionally (guest or logged in)
+    const result = await createOrder({
+      id:               newOrder.id,
+      user_id:          currentUser ? currentUser.id : null,
+      items:            items,
+      subtotal:         subtotal,
+      shipping:         shipping,
+      total:            grandTotal,
+      payment_method:   paymentMethod,
+      status:           'pending',
+      shipping_address: form,
+    });
+    if (!result.success) {
+      console.warn('Order saved locally but Supabase sync failed:', result.error);
     }
 
     clearCart();

@@ -1,6 +1,10 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
-export const useCartStore = create((set, get) => ({
+// NOTE: supabase is NOT imported here at module level to avoid circular deps.
+// Wishlist sync is handled by AuthContext which owns the supabase client.
+
+export const useCartStore = create(persist((set, get) => ({
   items: [],
   isOpen: false,
 
@@ -9,7 +13,6 @@ export const useCartStore = create((set, get) => ({
     const existingIndex = items.findIndex(
       item => item.id === product.id && JSON.stringify(item.options) === JSON.stringify(options)
     );
-
     if (existingIndex > -1) {
       const newItems = [...items];
       newItems[existingIndex].quantity += 1;
@@ -24,58 +27,63 @@ export const useCartStore = create((set, get) => ({
   },
 
   updateQuantity: (index, quantity) => {
-    if (quantity <= 0) {
-      get().removeItem(index);
-      return;
-    }
+    if (quantity <= 0) { get().removeItem(index); return; }
     const newItems = [...get().items];
     newItems[index].quantity = quantity;
     set({ items: newItems });
   },
 
-  getTotal: () => {
-    return get().items.reduce((total, item) => total + (item.basePrice || item.price || 0) * item.quantity, 0);
-  },
+  getTotal: () =>
+    get().items.reduce((total, item) => total + (item.basePrice || item.base_price || item.price || 0) * item.quantity, 0),
 
-  getItemCount: () => {
-    return get().items.reduce((count, item) => count + item.quantity, 0);
-  },
+  getItemCount: () =>
+    get().items.reduce((count, item) => count + item.quantity, 0),
 
   toggleCart: () => set({ isOpen: !get().isOpen }),
-  clearCart: () => set({ items: [] }),
+  clearCart:  () => set({ items: [] }),
+}), {
+  name: 'dc-cart-store',
+  storage: createJSONStorage(() => localStorage),
+  partialize: (state) => ({ items: state.items }),
 }));
 
 
-export const useUserStore = create((set) => ({
-  user: null,
-  profile: null,
+export const useUserStore = create((set, get) => ({
+  user:            null,
+  profile:         null,
   isAuthenticated: false,
-  wishlist: [],
-  isLoading: true,
+  wishlist:        [],   // array of product_id numbers
+  isLoading:       true,
 
-  setUser: (user) => set({ user, isAuthenticated: !!user, isLoading: false }),
-  setProfile: (profile) => set({ profile }),
-  toggleWishlist: (productId) => set((state) => ({
-    wishlist: state.wishlist.includes(productId)
-      ? state.wishlist.filter(id => id !== productId)
-      : [...state.wishlist, productId]
-  })),
-  logout: () => {
-    set({ user: null, profile: null, isAuthenticated: false });
+  setUser:     (user)    => set({ user, isAuthenticated: !!user, isLoading: false }),
+  setProfile:  (profile) => set({ profile }),
+  setWishlist: (ids)     => set({ wishlist: ids }),
+
+  // Simple local toggle — Supabase sync is done in the component/context that calls this
+  toggleWishlist: (productId) => {
+    const { wishlist } = get();
+    set({
+      wishlist: wishlist.includes(productId)
+        ? wishlist.filter(id => id !== productId)
+        : [...wishlist, productId],
+    });
   },
+
+  logout: () => set({ user: null, profile: null, isAuthenticated: false, wishlist: [] }),
 }));
+
 
 export const useUIStore = create((set) => ({
-  soundEnabled: false,
+  soundEnabled:         false,
   showOpeningAnimation: true,
-  cursorType: 'default',
-  activeModal: null,
+  cursorType:           'default',
+  activeModal:          null,
 
-  toggleSound: () => set((state) => ({ soundEnabled: !state.soundEnabled })),
+  toggleSound:             () => set(s => ({ soundEnabled: !s.soundEnabled })),
   setShowOpeningAnimation: (show) => set({ showOpeningAnimation: show }),
-  setCursorType: (type) => set({ cursorType: type }),
-  openModal: (modal) => set({ activeModal: modal }),
-  closeModal: () => set({ activeModal: null }),
+  setCursorType:           (type) => set({ cursorType: type }),
+  openModal:               (modal) => set({ activeModal: modal }),
+  closeModal:              () => set({ activeModal: null }),
   markVisited: () => {
     sessionStorage.setItem('dc_visited', 'true');
     set({ showOpeningAnimation: false });
@@ -83,39 +91,47 @@ export const useUIStore = create((set) => ({
 }));
 
 
+export const useCustomizationStore = create((set) => ({
+  draft: (() => {
+    try { return JSON.parse(localStorage.getItem('dc_customization_draft')) || null; }
+    catch { return null; }
+  })(),
 
-export const useCustomizationStore = create((set, get) => ({
-  draft: JSON.parse(localStorage.getItem('dc_customization_draft')) || null,
-  
   saveDraft: (productId, data) => {
     const draftData = { productId, ...data, updatedAt: new Date().toISOString() };
-    localStorage.setItem('dc_customization_draft', JSON.stringify(draftData));
+    try { localStorage.setItem('dc_customization_draft', JSON.stringify(draftData)); } catch {}
     set({ draft: draftData });
   },
-  
+
   clearDraft: () => {
-    localStorage.removeItem('dc_customization_draft');
+    try { localStorage.removeItem('dc_customization_draft'); } catch {}
     set({ draft: null });
-  }
+  },
 }));
 
 
 // ── ORDER STORE ──────────────────────────────────────────────
-// Keeps a local cache of orders; Checkout also persists to Supabase.
-export const useOrderStore = create((set, get) => ({
+export const useOrderStore = create(persist((set, get) => ({
   orders: [],
+  checkoutForm: {
+    fullName: '', email: '', phone: '', address: '', city: '', state: '', pincode: ''
+  },
 
   setOrders: (orders) => set({ orders }),
+  setCheckoutForm: (form) => set({ checkoutForm: form }),
 
   placeOrder: (orderData) => {
     const id = 'DC' + Date.now().toString(36).toUpperCase();
     const newOrder = {
       id,
-      date: new Date().toLocaleDateString('en-IN'),
+      date:   new Date().toLocaleDateString('en-IN'),
       status: 'pending',
       ...orderData,
     };
     set({ orders: [newOrder, ...get().orders] });
     return newOrder;
   },
+}), {
+  name: 'dc-order-store',
+  storage: createJSONStorage(() => localStorage),
 }));

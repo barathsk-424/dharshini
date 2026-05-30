@@ -2,7 +2,7 @@
 
 import { FiShoppingBag, FiMapPin, FiPenTool, FiHeart, FiSettings, FiActivity, FiBell, FiMap, FiHelpCircle, FiLogOut } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
-import { useUserStore } from '../../store/useStore';
+import { useAuth } from '../../context/AuthContext';
 
 /**
  * Premium account navigation menu displayed on the profile dashboard.
@@ -20,12 +20,12 @@ export default function AccountMenu() {
     { to: '/support', label: 'Help & Support', icon: <FiHelpCircle size={18} /> },
   ];
 
-  const logout = useUserStore(s => s.logout);
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/auth');
+  const handleLogout = async () => {
+    await logout();
+    navigate('/', { replace: true });
   };
 
   return (

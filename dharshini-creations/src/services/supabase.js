@@ -186,12 +186,12 @@ export const fetchAnalyticsChannels = async () => {
 // ── ADMIN: ORDERS ────────────────────────────────────────────
 
 export const fetchAllOrders = async () => {
-  const { data, error } = await supabase.from('orders').select('*, users(name, email)').order('created_at', { ascending: false });
+  const { data, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
   if (error) { console.error('fetchAllOrders:', error.message); return null; }
   return data.map(o => ({
     ...o,
-    customer: o.users?.name || o.shipping_address?.fullName || 'Guest',
-    email:    o.users?.email || o.shipping_address?.email || '',
+    customer: o.shipping_address?.fullName || 'Guest',
+    email:    o.shipping_address?.email || '',
     date:     new Date(o.created_at).toISOString().split('T')[0],
     amount:   `₹${o.total}`,
     product:  Array.isArray(o.items) ? o.items.map(i => i.name).join(', ') : '',

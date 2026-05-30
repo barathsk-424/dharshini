@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiSearch, FiEye, FiCheck, FiX } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { fetchAllOrders, updateOrderStatus } from '../../services/supabase';
+import { supabase } from '../../lib/supabase';
 
 const STATUS_COLORS = {
   'Delivered': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
@@ -19,7 +20,23 @@ export default function Orders() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    fetchAllOrders().then(data => { if (data) setOrders(data); });
+    let mounted = true;
+    const loadOrders = async () => {
+      const data = await fetchAllOrders();
+      if (mounted && data) setOrders(data);
+    };
+
+    loadOrders();
+
+    const channel = supabase
+      .channel('admin-orders-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, loadOrders)
+      .subscribe();
+
+    return () => {
+      mounted = false;
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const handleStatusChange = async (id, newStatus) => {

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useOrderStore } from '../store/useStore';
 import { useAuth } from '../context/AuthContext';
 import { fetchUserOrders } from '../services/supabase';
+import { supabase } from '../lib/supabase';
 
 export default function Orders() {
   const localOrders = useOrderStore(s => s.orders);
@@ -15,17 +16,23 @@ export default function Orders() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
+
     if (!currentUser) {
-      setLocalOrders(localOrders);
+      if (mounted) setLocalOrders(localOrders);
       setIsLoading(false);
-      return;
+      return () => { mounted = false; };
     }
-    fetchUserOrders(currentUser.id).then(data => {
+
+    const loadOrders = async () => {
+      const data = await fetchUserOrders(currentUser.id);
+      if (!mounted) return;
+
       if (data && data.length > 0) {
         // Normalise for display
         const normalised = data.map(o => ({
           ...o,
-          date:   new Date(o.created_at).toLocaleDateString('en-IN'),
+          date: new Date(o.created_at).toLocaleDateString('en-IN'),
           status: o.status,
         }));
         setLocalOrders(normalised);
@@ -34,7 +41,23 @@ export default function Orders() {
         setLocalOrders(localOrders);
       }
       setIsLoading(false);
-    });
+    };
+
+    loadOrders();
+
+    const channel = supabase
+      .channel(`user-orders-${currentUser.id}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'orders', filter: `user_id=eq.${currentUser.id}` },
+        loadOrders
+      )
+      .subscribe();
+
+    return () => {
+      mounted = false;
+      supabase.removeChannel(channel);
+    };
   }, [currentUser]);
 
   return (

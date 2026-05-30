@@ -42,7 +42,6 @@ export default function AdminRoutes() {
   return (
     <Routes>
       <Route
-        path="/"
         element={
           <AdminGuard>
             <AdminLayout />
@@ -57,6 +56,7 @@ export default function AdminRoutes() {
         <Route path="messages" element={<Messages />} />
         <Route path="settings" element={<Settings />} />
       </Route>
+      <Route path="*" element={<Navigate to="." replace />} />
     </Routes>
   );
 }
