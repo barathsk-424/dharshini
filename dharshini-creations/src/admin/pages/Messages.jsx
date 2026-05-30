@@ -201,12 +201,12 @@ export default function Messages() {
         {/* Left List */}
         <div className={`w-full md:w-[380px] border-r border-white/[0.05] flex flex-col relative z-10 bg-white/[0.01] ${activeMessage ? 'hidden md:flex' : 'flex'}`}>
           <div className="p-6 border-b border-white/[0.05]">
-            <div className="relative group">
-              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-violet-400 transition-colors" />
+            <div className="flex items-center gap-3 w-full bg-white/[0.02] border border-white/[0.05] rounded-2xl px-4 py-3 focus-within:border-violet-500 focus-within:bg-white/[0.05] transition-all duration-300 shadow-inner group">
+              <FiSearch className="text-gray-400 group-focus-within:text-violet-400 transition-colors shrink-0 text-sm" />
               <input 
                 type="text" 
                 placeholder="Search messages..." 
-                className="w-full bg-white/[0.02] border border-white/[0.05] text-white rounded-2xl pl-11 pr-4 py-3 focus:outline-none focus:border-violet-500 focus:bg-white/[0.05] transition-all shadow-inner placeholder-gray-500 text-sm"
+                className="flex-1 bg-transparent border-0 outline-none text-white placeholder-gray-500 text-sm"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />

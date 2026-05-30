@@ -53,50 +53,55 @@ export default function AdminLayout() {
   };
 
   const SidebarContent = () => (
-    <>
-      <div className="flex items-center gap-3 px-2 mb-8">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(139,92,246,0.3)]">
-          <RiShieldStarFill className="text-white text-2xl" />
+    <div className="flex flex-col flex-1 min-h-0">
+      {/* Scrollable Navigation section */}
+      <div className="flex-1 overflow-y-auto custom-scrollbar pr-1">
+        {/* Logo / Header */}
+        <div className="flex items-center gap-3 px-2 mb-8">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(139,92,246,0.3)]">
+            <RiShieldStarFill className="text-white text-2xl" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold font-cinzel tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Admin</h2>
+            <p className="text-xs text-gray-500 tracking-widest uppercase font-semibold">Workspace</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-xl font-bold font-cinzel tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Admin</h2>
-          <p className="text-xs text-gray-500 tracking-widest uppercase font-semibold">Workspace</p>
-        </div>
+
+        <nav className="space-y-2">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.name}
+                to={item.path}
+                end={item.end}
+                className={({ isActive }) => `
+                  relative flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 group overflow-hidden
+                  ${isActive 
+                    ? 'active-nav-link text-white shadow-[0_4px_20px_rgba(0,0,0,0.2)]' 
+                    : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
+                  }
+                `}
+              >
+                {/* Active Background Glow */}
+                <div className="absolute inset-0 bg-gradient-to-r from-violet-600/20 to-fuchsia-600/10 opacity-0 [.active-nav-link_&]:opacity-100 transition-opacity" />
+                
+                {/* Active Indicator Line */}
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-violet-500 to-fuchsia-500 rounded-r-full shadow-[0_0_10px_rgba(139,92,246,0.8)] opacity-0 [.active-nav-link_&]:opacity-100 transition-opacity" />
+                
+                <Icon className="text-xl relative z-10 shrink-0 transition-transform duration-300 group-hover:scale-110 [.active-nav-link_&]:text-violet-400" />
+                
+                <span className="font-medium relative z-10 transition-transform duration-300 group-hover:translate-x-1">
+                  {item.name}
+                </span>
+              </NavLink>
+            );
+          })}
+        </nav>
       </div>
 
-      <nav className="flex-1 space-y-2">
-        {menuItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.name}
-              to={item.path}
-              end={item.end}
-              className={({ isActive }) => `
-                relative flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 group overflow-hidden
-                ${isActive 
-                  ? 'active-nav-link text-white shadow-[0_4px_20px_rgba(0,0,0,0.2)]' 
-                  : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
-                }
-              `}
-            >
-              {/* Active Background Glow */}
-              <div className="absolute inset-0 bg-gradient-to-r from-violet-600/20 to-fuchsia-600/10 opacity-0 [.active-nav-link_&]:opacity-100 transition-opacity" />
-              
-              {/* Active Indicator Line */}
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-violet-500 to-fuchsia-500 rounded-r-full shadow-[0_0_10px_rgba(139,92,246,0.8)] opacity-0 [.active-nav-link_&]:opacity-100 transition-opacity" />
-              
-              <Icon className="text-xl relative z-10 shrink-0 transition-transform duration-300 group-hover:scale-110 [.active-nav-link_&]:text-violet-400" />
-              
-              <span className="font-medium relative z-10 transition-transform duration-300 group-hover:translate-x-1">
-                {item.name}
-              </span>
-            </NavLink>
-          );
-        })}
-      </nav>
-
-      <div className="mt-8 pt-6 border-t border-white/[0.06]">
+      {/* Pinned Sign Out section */}
+      <div className="mt-auto pt-6 border-t border-white/[0.06] shrink-0">
         <button
           onClick={handleLogout}
           className="flex items-center gap-4 px-4 py-3.5 rounded-xl text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all duration-300 group w-full"
@@ -105,7 +110,7 @@ export default function AdminLayout() {
           <span className="font-medium">Sign Out</span>
         </button>
       </div>
-    </>
+    </div>
   );
 
   return (

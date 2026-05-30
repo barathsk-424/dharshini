@@ -75,12 +75,12 @@ export default function Users() {
         </div>
         
         {/* Search */}
-        <div className="relative w-full sm:w-80 group">
-          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-violet-400 transition-colors" />
+        <div className="flex items-center gap-3 w-full sm:w-80 bg-white/[0.02] border border-white/[0.05] rounded-2xl px-4 py-3 focus-within:border-violet-500 focus-within:bg-white/[0.05] transition-all duration-300 shadow-lg group">
+          <FiSearch className="text-gray-400 group-focus-within:text-violet-400 transition-colors shrink-0 text-lg" />
           <input 
             type="text" 
             placeholder="Search users by name or email..." 
-            className="w-full bg-white/[0.02] border border-white/[0.05] text-white rounded-2xl pl-11 pr-4 py-3 focus:outline-none focus:border-violet-500 focus:bg-white/[0.05] transition-all duration-300 font-poppins placeholder-gray-500 shadow-lg"
+            className="flex-1 bg-transparent border-0 outline-none text-white font-poppins placeholder-gray-500 text-sm"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
