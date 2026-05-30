@@ -46,10 +46,6 @@ export default function OrderReview() {
   };
 
   const handleWhatsAppOrder = () => {
-    if (!isAuthenticated) {
-      navigate('/auth');
-      return;
-    }
 
     // Add to cart for local record tracking as well
     addItem(product, {

@@ -25,6 +25,7 @@ export default function Products() {
   const [isLoading, setIsLoading]     = useState(true);
   const [isSaving, setIsSaving]       = useState(false);
   const fileInputRef = useRef(null);
+  const [deleteProductId, setDeleteProductId] = useState(null);
 
   // ── Load data ──────────────────────────────────────────────
   useEffect(() => {
@@ -85,12 +86,12 @@ export default function Products() {
     };
 
     if (editingProduct) {
-      const ok = await updateProduct(editingProduct.id, payload);
-      if (ok) {
+      const result = await updateProduct(editingProduct.id, payload);
+      if (result.success) {
         const refreshed = await fetchProducts();
         if (refreshed) setProducts(refreshed);
       } else {
-        alert('Failed to update product.');
+        alert('Failed to update product: ' + (result.error || 'Unknown error'));
       }
     } else {
       const result = await createProduct(payload);
@@ -106,13 +107,36 @@ export default function Products() {
   };
 
   // ── Delete ─────────────────────────────────────────────────
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this product? This cannot be undone.')) return;
-    const ok = await deleteProduct(id);
-    if (ok) {
-      setProducts(products.filter(p => p.id !== id));
-    } else {
-      alert('Failed to delete product.');
+  const handleDelete = (id) => {
+    console.log('handleDelete handler fired with id:', id);
+    setDeleteProductId(id);
+  };
+
+  const confirmDelete = async () => {
+    const id = deleteProductId;
+    if (!id) return;
+    console.log('User confirmed deletion for ID:', id);
+    setDeleteProductId(null);
+    try {
+      console.log('Calling deleteProduct service with id:', id);
+      const result = await deleteProduct(id);
+      console.log('deleteProduct service result:', result);
+      
+      if (result && result.success) {
+        console.log('Deletion successful, updating UI state...');
+        setProducts(prevProducts => {
+          const updated = prevProducts.filter(p => p.id !== id);
+          console.log('Updated local products list count:', updated.length);
+          return updated;
+        });
+      } else {
+        const errMsg = result ? result.error : 'No response from service';
+        console.error('Deletion failed:', errMsg);
+        alert('Failed to delete product: ' + (errMsg || 'Unknown error'));
+      }
+    } catch (err) {
+      console.error('Uncaught error inside confirmDelete:', err);
+      alert('An error occurred during deletion: ' + err.message);
     }
   };
 
@@ -411,6 +435,55 @@ export default function Products() {
                   ) : (
                     <><FiSave size={16} /> {editingProduct ? 'Update Product' : 'Save Product'}</>
                   )}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Custom Deletion Confirmation Modal ── */}
+      <AnimatePresence>
+        {deleteProductId !== null && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center px-4 font-poppins">
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/85 backdrop-blur-md"
+              onClick={() => setDeleteProductId(null)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-[#0f1019] border border-red-500/20 w-full max-w-md rounded-3xl shadow-[0_0_50px_rgba(239,68,68,0.15)] z-10 overflow-hidden flex flex-col"
+            >
+              <div className="p-6 border-b border-white/[0.05] flex justify-between items-center bg-white/[0.01]">
+                <h3 className="text-xl font-bold font-cinzel text-red-400 tracking-wider">
+                  Delete Product?
+                </h3>
+                <button onClick={() => setDeleteProductId(null)} className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/[0.05] transition-colors">
+                  <FiX size={20} />
+                </button>
+              </div>
+
+              <div className="p-6 text-gray-300">
+                <p className="text-sm font-poppins leading-relaxed">
+                  Are you sure you want to delete this product? This action is permanent and cannot be undone.
+                </p>
+              </div>
+
+              <div className="p-6 border-t border-white/[0.05] bg-white/[0.01] flex justify-end gap-3">
+                <button
+                  onClick={() => setDeleteProductId(null)}
+                  className="px-5 py-2 rounded-xl font-semibold tracking-wider text-gray-400 hover:text-white hover:bg-white/[0.05] transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="px-6 py-2 rounded-xl font-bold tracking-wider bg-red-600 hover:bg-red-500 text-white transition-all shadow-[0_0_15px_rgba(239,68,68,0.4)] flex items-center gap-2"
+                >
+                  <FiTrash2 size={16} /> Yes, Delete
                 </button>
               </div>
             </motion.div>

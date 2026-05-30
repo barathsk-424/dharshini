@@ -10,11 +10,6 @@ export default function CartDrawer() {
   const navigate = useNavigate();
 
   const handleCheckout = () => {
-    if (!isAuthenticated) {
-      toggleCart();
-      navigate('/auth');
-      return;
-    }
     if (items.length === 0) return;
 
     let message = `Hi Dharshini Creations! I'd like to place an order for the following items:\n\n`;

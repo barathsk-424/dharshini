@@ -94,6 +94,92 @@ export default function Messages() {
       transition={{ duration: 0.5 }}
       className="h-[calc(100vh-8rem)] flex flex-col font-poppins"
     >
+      {/* ── Compose Modal ── */}
+      <AnimatePresence>
+        {composeOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
+            onClick={(e) => { if (e.target === e.currentTarget) setComposeOpen(false); }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.25 }}
+              className="bg-[#0f0f1a] border border-white/[0.08] rounded-3xl p-8 w-full max-w-lg shadow-2xl relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-48 h-48 bg-violet-600/10 rounded-full blur-[60px] pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-fuchsia-600/10 rounded-full blur-[60px] pointer-events-none" />
+
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-bold font-cinzel text-white tracking-wider">New Message</h3>
+                  <button
+                    onClick={() => setComposeOpen(false)}
+                    className="w-8 h-8 flex items-center justify-center rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-gray-400 hover:text-white transition-all text-lg font-bold"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase text-gray-500 mb-2">Name</label>
+                    <input
+                      type="text"
+                      value={compose.name}
+                      onChange={(e) => setCompose({ ...compose, name: e.target.value })}
+                      placeholder="Sender name"
+                      className="w-full bg-white/[0.03] border border-white/[0.07] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500 focus:bg-white/[0.06] transition-all placeholder-gray-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase text-gray-500 mb-2">Email</label>
+                    <input
+                      type="email"
+                      value={compose.email}
+                      onChange={(e) => setCompose({ ...compose, email: e.target.value })}
+                      placeholder="sender@example.com"
+                      className="w-full bg-white/[0.03] border border-white/[0.07] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500 focus:bg-white/[0.06] transition-all placeholder-gray-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold tracking-widest uppercase text-gray-500 mb-2">Message</label>
+                    <textarea
+                      value={compose.message}
+                      onChange={(e) => setCompose({ ...compose, message: e.target.value })}
+                      placeholder="Type your message..."
+                      rows={5}
+                      className="w-full bg-white/[0.03] border border-white/[0.07] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500 focus:bg-white/[0.06] transition-all placeholder-gray-600 resize-none custom-scrollbar"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-3 mt-6">
+                  <button
+                    onClick={() => setComposeOpen(false)}
+                    className="flex-1 py-3 rounded-xl border border-white/[0.08] text-gray-400 hover:text-white hover:bg-white/[0.05] font-bold tracking-wider text-sm transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={sendNewMessage}
+                    disabled={isSending}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-bold tracking-wider text-sm transition-all shadow-[0_0_20px_rgba(139,92,246,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <FiSend size={14} />
+                    {isSending ? 'Sending...' : 'Send Message'}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="flex justify-between items-end mb-6">
         <div>
           <h2 className="text-3xl font-bold font-cinzel text-white tracking-wider mb-1">Messages</h2>

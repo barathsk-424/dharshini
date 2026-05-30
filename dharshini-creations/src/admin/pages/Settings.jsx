@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../../lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   HiOutlineUser,
@@ -10,8 +11,14 @@ import {
   HiOutlineDeviceMobile,
   HiOutlineGlobe,
   HiOutlineLockClosed,
-
 } from 'react-icons/hi';
+
+/* ── Icon key → component map (so icons survive JSON serialization) ── */
+const SESSION_ICON_MAP = {
+  desktop: HiOutlineDesktopComputer,
+  mobile: HiOutlineDeviceMobile,
+  globe: HiOutlineGlobe,
+};
 
 /* ── Inline Toggle Component ── */
 const Toggle = ({ enabled, onChange, label, description }) => (
@@ -38,14 +45,26 @@ const Toggle = ({ enabled, onChange, label, description }) => (
 
 /* ── Tab Configuration ── */
 const TABS = [
-  { id: 'profile', label: 'Profile', icon: HiOutlineUser },
   { id: 'notifications', label: 'Notifications', icon: HiOutlineBell },
   { id: 'security', label: 'Security', icon: HiOutlineShieldCheck },
-  { id: 'integrations', label: 'Integrations', icon: HiOutlinePuzzle },
-];
+  ];
 
 export default function Settings() {
-  const [activeTab, setActiveTab] = useState('profile');
+  // Load persisted settings on component mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('adminSettings');
+      if (saved) {
+        const { notifs: savedNotifs, twoFactor: savedTwoFactor } = JSON.parse(saved);
+        if (savedNotifs) setNotifs(savedNotifs);
+        if (typeof savedTwoFactor === 'boolean') setTwoFactor(savedTwoFactor);
+      }
+    } catch (e) {
+      console.error('Failed to load settings', e);
+    }
+  }, []);
+
+  const [activeTab, setActiveTab] = useState('notifications');
 
   /* Profile State */
   const [profile, setProfile] = useState({
@@ -72,12 +91,41 @@ export default function Settings() {
   /* Security State */
   const [passwords, setPasswords] = useState({ current: '', newPw: '', confirm: '' });
   const [twoFactor, setTwoFactor] = useState(false);
+  const [sessions, setSessions] = useState([]);
 
-  const [sessions] = useState([
-    { device: 'Chrome on Windows', icon: HiOutlineDesktopComputer, location: 'Chennai, India', lastActive: 'Active now', current: true },
-    { device: 'Safari on iPhone', icon: HiOutlineDeviceMobile, location: 'Mumbai, India', lastActive: '2 hours ago', current: false },
-    { device: 'Firefox on macOS', icon: HiOutlineGlobe, location: 'Bangalore, India', lastActive: '3 days ago', current: false },
-  ]);
+  // Load persisted sessions on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('adminSessions');
+      if (saved) {
+        setSessions(JSON.parse(saved));
+      } else {
+        // Initialize with a default current session
+        const init = [{
+          id: Date.now(),
+          device: 'Chrome on Windows',
+          iconKey: 'desktop',
+          location: 'Chennai, India',
+          lastActive: 'Active now',
+          current: true,
+        }];
+        setSessions(init);
+        localStorage.setItem('adminSessions', JSON.stringify(init));
+      }
+    } catch (e) {
+      console.error('Failed to load sessions', e);
+    }
+  }, []);
+
+  // Load persisted two‑factor flag
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('adminTwoFactor');
+      if (saved !== null) setTwoFactor(JSON.parse(saved));
+    } catch (e) {
+      console.error('Failed to load two‑factor', e);
+    }
+  }, []);
 
   /* Integrations State */
   const [integrations, setIntegrations] = useState([
@@ -91,7 +139,56 @@ export default function Settings() {
     setIntegrations(integrations.map(i => i.id === id ? { ...i, connected: !i.connected } : i));
   };
 
-  const handleSave = () => alert('Settings saved successfully!');
+  const handleSave = () => {
+    // Persist notification and two‑factor settings to localStorage
+    const payload = { notifs, twoFactor };
+    try {
+      localStorage.setItem('adminSettings', JSON.stringify(payload));
+      alert('Settings saved successfully!');
+    } catch (e) {
+      console.error('Failed to save settings', e);
+      alert('Error saving settings');
+    }
+  };
+
+  // Change password handler – uses Supabase auth
+  const handlePasswordUpdate = async () => {
+    if (!passwords.newPw || passwords.newPw !== passwords.confirm) {
+      alert('New passwords do not match or are empty');
+      return;
+    }
+    try {
+      const { error } = await supabase.auth.updateUser({ password: passwords.newPw });
+      if (error) throw error;
+      alert('Password updated successfully');
+      setPasswords({ current: '', newPw: '', confirm: '' });
+    } catch (e) {
+      console.error('Password update failed', e);
+      alert('Failed to update password');
+    }
+  };
+
+  // Two‑factor toggle persistence
+  const toggleTwoFactor = () => {
+    const newVal = !twoFactor;
+    setTwoFactor(newVal);
+    try { localStorage.setItem('adminTwoFactor', JSON.stringify(newVal)); } catch (_) {}
+  };
+
+  // Revoke a session (non‑current)
+  const revokeSession = (id) => {
+    const updated = sessions.filter(s => s.id !== id);
+    setSessions(updated);
+    try { localStorage.setItem('adminSessions', JSON.stringify(updated)); } catch (_) {}
+  };
+
+  // Revoke all other sessions
+  const revokeAllOthers = () => {
+    const current = sessions.find(s => s.current);
+    const updated = current ? [current] : [];
+    setSessions(updated);
+    try { localStorage.setItem('adminSessions', JSON.stringify(updated)); } catch (_) {}
+  };
 
   /* ── Accent Colors ── */
   const accentColors = [
@@ -105,93 +202,6 @@ export default function Settings() {
   /* ── Tab Content Renderer ── */
   const renderContent = () => {
     switch (activeTab) {
-
-      /* ═══════ PROFILE ═══════ */
-      case 'profile':
-        return (
-          <div className="space-y-8 font-poppins">
-            <div>
-              <h3 className="text-2xl font-bold font-cinzel text-white mb-2 tracking-wider">Profile Settings</h3>
-              <p className="text-gray-400 text-sm">Manage your personal information</p>
-            </div>
-
-            {/* Avatar */}
-            <div className="flex items-center gap-6">
-              <div className="relative group cursor-pointer">
-                <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-violet-600 to-fuchsia-500 flex items-center justify-center text-white text-3xl font-bold shadow-[0_0_20px_rgba(139,92,246,0.3)] group-hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] transition-all">
-                  A
-                </div>
-                <button className="absolute inset-0 rounded-3xl bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm">
-                  <HiOutlineCamera className="text-white text-2xl" />
-                </button>
-              </div>
-              <div>
-                <p className="text-white font-bold text-xl tracking-wide">{profile.name}</p>
-                <p className="text-fuchsia-400 font-medium text-sm mt-1">{profile.role}</p>
-                <button className="mt-3 text-xs font-semibold tracking-widest uppercase text-gray-400 hover:text-white transition-colors bg-white/[0.05] hover:bg-white/[0.1] px-3 py-1.5 rounded-lg">Change Avatar</button>
-              </div>
-            </div>
-
-            {/* Form */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-              <div>
-                <label className="block text-sm font-semibold tracking-wide text-gray-400 mb-2">Full Name</label>
-                <input
-                  type="text"
-                  value={profile.name}
-                  onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                  className="w-full bg-white/[0.02] border border-white/[0.05] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500 focus:bg-white/[0.05] transition-all shadow-inner"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold tracking-wide text-gray-400 mb-2">Email Address</label>
-                <input
-                  type="email"
-                  value={profile.email}
-                  onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                  className="w-full bg-white/[0.02] border border-white/[0.05] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500 focus:bg-white/[0.05] transition-all shadow-inner"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold tracking-wide text-gray-400 mb-2">Phone Number</label>
-                <input
-                  type="tel"
-                  value={profile.phone}
-                  onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-                  className="w-full bg-white/[0.02] border border-white/[0.05] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500 focus:bg-white/[0.05] transition-all shadow-inner"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold tracking-wide text-gray-400 mb-2">Role</label>
-                <input
-                  type="text"
-                  value={profile.role}
-                  disabled
-                  className="w-full bg-white/[0.01] border border-white/[0.03] rounded-xl px-4 py-3 text-gray-500 text-sm cursor-not-allowed shadow-inner"
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-semibold tracking-wide text-gray-400 mb-2">Bio</label>
-                <textarea
-                  rows={3}
-                  value={profile.bio}
-                  onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
-                  className="w-full bg-white/[0.02] border border-white/[0.05] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500 focus:bg-white/[0.05] transition-all resize-none shadow-inner custom-scrollbar"
-                />
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex items-center gap-4 pt-4 border-t border-white/[0.05]">
-              <button onClick={handleSave} className="px-8 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-bold tracking-wider transition-all shadow-[0_0_20px_rgba(139,92,246,0.3)] hover:shadow-[0_0_30px_rgba(139,92,246,0.5)]">
-                Save Changes
-              </button>
-              <button className="px-8 py-3 rounded-xl bg-white/[0.02] border border-white/[0.05] text-gray-300 hover:text-white hover:bg-white/[0.05] font-bold tracking-wider transition-all">
-                Cancel
-              </button>
-            </div>
-          </div>
-        );
 
       /* ═══════ NOTIFICATIONS ═══════ */
       case 'notifications':
@@ -209,6 +219,8 @@ export default function Settings() {
                 <Toggle label="Email Notifications" description="Receive updates via email" enabled={notifs.email} onChange={(v) => setNotifs({ ...notifs, email: v })} />
                 <Toggle label="Push Notifications" description="Browser and mobile push alerts" enabled={notifs.push} onChange={(v) => setNotifs({ ...notifs, push: v })} />
                 <Toggle label="SMS Notifications" description="Get text messages for critical alerts" enabled={notifs.sms} onChange={(v) => setNotifs({ ...notifs, sms: v })} />
+                {/* Two‑Factor Switch */}
+                <Toggle label="Two‑Factor Authentication" description="Add an extra layer of security" enabled={twoFactor} onChange={toggleTwoFactor} />
               </div>
             </div>
 
@@ -267,7 +279,7 @@ export default function Settings() {
                   <input type="password" value={passwords.confirm} onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })} className="w-full bg-white/[0.02] border border-white/[0.05] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-violet-500 focus:bg-white/[0.05] transition-all shadow-inner" placeholder="••••••••" />
                 </div>
                 <div className="pt-2">
-                  <button onClick={() => alert('Password updated!')} className="px-8 py-3 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.1] text-white font-bold tracking-wider transition-all shadow-lg">
+                  <button onClick={handlePasswordUpdate} className="px-8 py-3 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.1] text-white font-bold tracking-wider transition-all shadow-lg">
                     Update Password
                   </button>
                 </div>
@@ -291,7 +303,7 @@ export default function Settings() {
                   {twoFactor ? 'Enabled' : 'Disabled'}
                 </span>
                 <button
-                  onClick={() => setTwoFactor(!twoFactor)}
+                  onClick={toggleTwoFactor}
                   className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 shadow-inner ${
                     twoFactor ? 'bg-gradient-to-r from-emerald-500 to-teal-500' : 'bg-white/[0.1]'
                   }`}
@@ -307,11 +319,11 @@ export default function Settings() {
               <h4 className="text-white font-bold text-lg tracking-wide mb-4 relative z-10">Active Sessions</h4>
               
               <div className="relative z-10 space-y-1">
-                {sessions.map((s, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 rounded-2xl hover:bg-white/[0.02] transition-colors group/session">
+                {sessions.map((s) => (
+                  <div key={s.id} className="flex items-center justify-between p-4 rounded-2xl hover:bg-white/[0.02] transition-colors group/session">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-xl bg-white/[0.05] flex items-center justify-center shadow-inner group-hover/session:bg-white/[0.1] transition-colors">
-                        <s.icon className="text-gray-400 text-xl group-hover/session:text-fuchsia-400 transition-colors" />
+                        {(() => { const IconComp = SESSION_ICON_MAP[s.iconKey] || HiOutlineDesktopComputer; return <IconComp className="text-gray-400 text-xl group-hover/session:text-fuchsia-400 transition-colors" />; })()}
                       </div>
                       <div>
                         <p className="text-white text-sm font-bold tracking-wide flex items-center gap-3">
@@ -322,7 +334,7 @@ export default function Settings() {
                       </div>
                     </div>
                     {!s.current && (
-                      <button className="text-xs font-bold tracking-wider uppercase text-rose-400 hover:text-rose-300 px-4 py-2 rounded-xl border border-rose-500/20 hover:bg-rose-500/10 transition-colors">
+                      <button onClick={() => revokeSession(s.id)} className="text-xs font-bold tracking-wider uppercase text-rose-400 hover:text-rose-300 px-4 py-2 rounded-xl border border-rose-500/20 hover:bg-rose-500/10 transition-colors">
                         Revoke
                       </button>
                     )}
@@ -331,57 +343,10 @@ export default function Settings() {
               </div>
               
               <div className="pt-6 relative z-10">
-                <button className="px-6 py-3 rounded-xl border border-rose-500/30 text-rose-400 hover:bg-rose-500/10 hover:border-rose-500/50 text-sm font-bold tracking-wider transition-all duration-300 shadow-lg">
+                <button onClick={revokeAllOthers} className="px-6 py-3 rounded-xl border border-rose-500/30 text-rose-400 hover:bg-rose-500/10 hover:border-rose-500/50 text-sm font-bold tracking-wider transition-all duration-300 shadow-lg">
                   Revoke All Other Sessions
                 </button>
               </div>
-            </div>
-          </div>
-        );
-
-      /* ═══════ INTEGRATIONS ═══════ */
-      case 'integrations':
-        return (
-          <div className="space-y-8 font-poppins">
-            <div>
-              <h3 className="text-2xl font-bold font-cinzel text-white mb-2 tracking-wider">Integrations</h3>
-              <p className="text-gray-400 text-sm">Connect third-party services to your dashboard</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {integrations.map((integ) => (
-                <div key={integ.id} className="bg-white/[0.01] rounded-3xl border border-white/[0.05] p-6 hover:bg-white/[0.02] hover:border-white/[0.1] transition-all duration-300 group relative overflow-hidden">
-                  <div className={`absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none ${integ.connected ? 'from-emerald-500/5' : 'from-violet-500/5'} to-transparent`} />
-                  
-                  <div className="relative z-10 flex items-start justify-between mb-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 rounded-2xl bg-white/[0.05] flex items-center justify-center text-3xl shadow-inner group-hover:scale-110 transition-transform duration-500">
-                        {integ.emoji}
-                      </div>
-                      <div>
-                        <h4 className="text-white font-bold text-lg tracking-wide">{integ.name}</h4>
-                        <span className={`inline-block mt-1 text-[10px] font-bold tracking-widest uppercase px-2.5 py-0.5 rounded-full border ${
-                          integ.connected ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-white/[0.05] text-gray-400 border-white/10'
-                        }`}>
-                          {integ.connected ? 'Connected' : 'Disconnected'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="relative z-10 text-gray-400 text-sm mb-6 leading-relaxed h-10">{integ.desc}</p>
-                  
-                  <button
-                    onClick={() => toggleIntegration(integ.id)}
-                    className={`relative z-10 w-full py-3 rounded-xl text-sm font-bold tracking-wider uppercase transition-all duration-300 shadow-lg ${
-                      integ.connected
-                        ? 'border border-rose-500/30 text-rose-400 hover:bg-rose-500/10 hover:border-rose-500/50'
-                        : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_25px_rgba(139,92,246,0.5)]'
-                    }`}
-                  >
-                    {integ.connected ? 'Disconnect' : 'Connect'}
-                  </button>
-                </div>
-              ))}
             </div>
           </div>
         );
