@@ -108,27 +108,17 @@ export default function Products() {
 
   // ── Delete ─────────────────────────────────────────────────
   const handleDelete = (id) => {
-    console.log('handleDelete handler fired with id:', id);
     setDeleteProductId(id);
   };
 
   const confirmDelete = async () => {
     const id = deleteProductId;
     if (!id) return;
-    console.log('User confirmed deletion for ID:', id);
     setDeleteProductId(null);
     try {
-      console.log('Calling deleteProduct service with id:', id);
       const result = await deleteProduct(id);
-      console.log('deleteProduct service result:', result);
-      
       if (result && result.success) {
-        console.log('Deletion successful, updating UI state...');
-        setProducts(prevProducts => {
-          const updated = prevProducts.filter(p => p.id !== id);
-          console.log('Updated local products list count:', updated.length);
-          return updated;
-        });
+        setProducts(prevProducts => prevProducts.filter(p => p.id !== id));
       } else {
         const errMsg = result ? result.error : 'No response from service';
         console.error('Deletion failed:', errMsg);

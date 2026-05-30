@@ -74,7 +74,6 @@ export const updateProduct = async (id, updates) => {
     colors:          updates.colors,
     sizes:           updates.sizes,
   };
-  console.log('updateProduct payload:', { id, payload });
   const { data, error } = await supabase
     .from('products')
     .update(payload)
@@ -84,17 +83,11 @@ export const updateProduct = async (id, updates) => {
     console.error('updateProduct error:', error.message, error);
     return { success: false, error: error.message };
   }
-  console.log('updateProduct success:', data);
   return { success: true, product: data?.[0] };
 };
 
 export const deleteProduct = async (id) => {
-  console.log('deleteProduct service initiated for ID:', id);
   try {
-    if (!supabase) {
-      throw new Error('Supabase client is not initialized or imported correctly!');
-    }
-    console.log('Dispatching DELETE query to products table via Supabase...');
     const { data, error } = await supabase
       .from('products')
       .delete()
@@ -102,14 +95,12 @@ export const deleteProduct = async (id) => {
       .select();
     
     if (error) {
-      console.error('Database query returned an error:', error.message, error);
+      console.error('deleteProduct DB error:', error.message, error);
       return { success: false, error: error.message };
     }
-    
-    console.log('Database query completed successfully. Returned data:', data);
     return { success: true, data };
   } catch (err) {
-    console.error('Exception caught inside deleteProduct service function:', err);
+    console.error('Exception caught inside deleteProduct service:', err);
     return { success: false, error: err.message || 'Exception during delete query' };
   }
 };
@@ -269,18 +260,40 @@ export const fetchAnalyticsTraffic = async () => {
 // ── ADMIN: ORDERS ────────────────────────────────────────────
 
 export const fetchAllOrders = async () => {
-  const { data, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
-  if (error) { console.error('fetchAllOrders:', error.message); return null; }
-  return data.map(o => ({
-    ...o,
-    customer: o.shipping_address?.fullName || 'Guest',
-    email:    o.shipping_address?.email || '',
-    date:     new Date(o.created_at).toISOString().split('T')[0],
-    amount:   `₹${o.total}`,
-    product:  Array.isArray(o.items) ? o.items.map(i => i.name).join(', ') : '',
-    // Normalise status to Title Case for display
-    status:   o.status ? o.status.charAt(0).toUpperCase() + o.status.slice(1) : 'Pending',
-  }));
+  try {
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('fetchAllOrders:', error.message);
+      return null;
+    }
+
+    if (!data) return [];
+
+    return data.map(o => {
+      const totalAmount = o.total !== undefined ? o.total : o.total_amount;
+      let customerName = 'Guest';
+      if (o.shipping_address) {
+        customerName = o.shipping_address.fullName || o.shipping_address.name || 'Guest';
+      }
+
+      return {
+        ...o,
+        customer: customerName,
+        email:    o.shipping_address?.email || '',
+        date:     o.created_at ? new Date(o.created_at).toISOString().split('T')[0] : '',
+        amount:   `₹${totalAmount !== undefined ? totalAmount : 0}`,
+        product:  Array.isArray(o.items) ? o.items.map(i => i.name).join(', ') : (o.product || ''),
+        status:   o.status ? o.status.charAt(0).toUpperCase() + o.status.slice(1) : 'Pending',
+      };
+    });
+  } catch (err) {
+    console.error('fetchAllOrders exception:', err);
+    return null;
+  }
 };
 
 export const updateOrderStatus = async (id, status) => {

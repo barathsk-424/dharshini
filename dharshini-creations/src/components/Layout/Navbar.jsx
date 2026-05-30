@@ -29,17 +29,6 @@ export default function Navbar() {
   // ── Use AuthContext for role — this is the single source of truth ──
   const { currentUser, isAdmin, loading, userData } = useAuth();
 
-  // TEMPORARY DEBUG — remove after confirming admin works
-  useEffect(() => {
-    console.log('[Navbar Debug]', {
-      hasUser: !!currentUser,
-      email: currentUser?.email,
-      loading,
-      role: userData?.role,
-      isAdmin,
-    });
-  }, [currentUser, loading, userData, isAdmin]);
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll);

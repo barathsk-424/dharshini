@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function CustomCursor() {
@@ -65,6 +65,8 @@ export default function CustomCursor() {
         }}
         transition={{ type: 'spring', damping: 20, stiffness: 300, mass: 0.5 }}
         style={{
+          top: 0,
+          left: 0,
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(178,102,255,0.6) 0%, rgba(138,43,226,0.3) 50%, transparent 70%)',
           mixBlendMode: 'screen',
@@ -82,6 +84,8 @@ export default function CustomCursor() {
         }}
         transition={{ type: 'spring', damping: 30, stiffness: 500 }}
         style={{
+          top: 0,
+          left: 0,
           width: 6,
           height: 6,
           borderRadius: '50%',

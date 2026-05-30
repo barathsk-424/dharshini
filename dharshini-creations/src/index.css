@@ -510,3 +510,10 @@ textarea:focus {
   }
 }
 
+/* Custom Cursor Global Rules: Hide default browser cursor on all elements on desktop */
+@media (min-width: 768px) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+

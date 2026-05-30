@@ -23,14 +23,18 @@ export default function Orders() {
     let mounted = true;
     const loadOrders = async () => {
       const data = await fetchAllOrders();
-      if (mounted && data) setOrders(data);
+      if (mounted) {
+        setOrders(data || []);
+      }
     };
 
     loadOrders();
 
     const channel = supabase
       .channel('admin-orders-realtime')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, loadOrders)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => {
+        loadOrders();
+      })
       .subscribe();
 
     return () => {
@@ -45,7 +49,9 @@ export default function Orders() {
   };
 
   const filtered = orders.filter(o => {
-    const matchSearch = o.customer.toLowerCase().includes(searchTerm.toLowerCase()) || o.id.toLowerCase().includes(searchTerm.toLowerCase());
+    const custName = o.customer || 'Guest';
+    const orderId  = o.id || '';
+    const matchSearch = custName.toLowerCase().includes(searchTerm.toLowerCase()) || orderId.toLowerCase().includes(searchTerm.toLowerCase());
     const matchStatus = filterStatus === 'All' || o.status === filterStatus;
     return matchSearch && matchStatus;
   });

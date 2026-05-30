@@ -43,7 +43,6 @@ function App() {
 
   return (
     <>
-      <CustomCursor />
       <Layout>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
@@ -76,6 +75,7 @@ function App() {
           </Routes>
         </AnimatePresence>
       </Layout>
+      <CustomCursor />
     </>
   );
 }

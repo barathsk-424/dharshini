@@ -109,7 +109,7 @@ export default function AdminLayout() {
   );
 
   return (
-    <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-8 md:py-12 relative min-h-[85vh]">
+    <div className="admin-workspace max-w-[1400px] mx-auto px-4 sm:px-6 py-8 md:py-12 relative min-h-[85vh]">
       {/* Background ambient glows specific to admin */}
       <div className="absolute top-20 right-20 w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-20 left-10 w-[600px] h-[600px] bg-fuchsia-600/10 rounded-full blur-[150px] pointer-events-none" />

@@ -200,15 +200,19 @@ function downloadPDF(metrics, timeSeries, dateRange) {
   doc.setTextColor(150, 150, 150);
   doc.text('This is an automatically generated system report from Dharshini Creations.', 14, 287);
   
-  const blob = doc.output('blob');
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'Analytics_Report.pdf';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  const pdfBlob = doc.output('blob');
+  const pdfUrl = URL.createObjectURL(pdfBlob);
+  const link = document.createElement('a');
+  link.href = pdfUrl;
+  link.download = 'analytics-report.pdf';
+  document.body.appendChild(link);
+  link.click();
+  
+  // Delay cleanup to prevent browser download race condition
+  setTimeout(() => {
+    document.body.removeChild(link);
+    URL.revokeObjectURL(pdfUrl);
+  }, 150);
 }
 
 const CHART_OPTS = {

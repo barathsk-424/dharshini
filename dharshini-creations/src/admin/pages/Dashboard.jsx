@@ -29,6 +29,7 @@ import {
   fetchAllOrders,
 } from '../../services/supabase';
 import { supabase } from '../../lib/supabase';
+import { jsPDF } from 'jspdf';
 
 ChartJS.register(
   CategoryScale, LinearScale, PointElement, LineElement, BarElement, 
@@ -213,6 +214,124 @@ export default function Dashboard() {
     'cancelled':  'bg-rose-500/10 text-rose-400 border border-rose-500/20',
   };
 
+  const handleDownloadReport = () => {
+    const doc = new jsPDF();
+    
+    // Header background (Dark obsidian luxury theme)
+    doc.setFillColor(15, 10, 25);
+    doc.rect(0, 0, 210, 40, 'F');
+    
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(22);
+    doc.setTextColor(255, 255, 255);
+    doc.text('DHARSHINI CREATIONS', 14, 25);
+    
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(200, 200, 200);
+    doc.text('ADMIN DASHBOARD SUMMARY REPORT', 14, 33);
+    
+    doc.setTextColor(150, 150, 150);
+    doc.setFontSize(9);
+    doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`, 145, 25);
+    
+    doc.setDrawColor(220, 220, 220);
+    doc.setLineWidth(0.5);
+    doc.line(14, 50, 196, 50);
+    
+    // Key Performance Indicators Section
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(15, 10, 25);
+    doc.text('Key Performance Indicators', 14, 62);
+    
+    const summaryItems = [
+      { label: 'Total Registered Users', value: stats.totalUsers.toLocaleString() },
+      { label: 'Total Orders Placed', value: stats.totalOrders.toLocaleString() },
+      { label: 'Total Revenue Generated', value: `INR ${stats.totalRevenue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}` }
+    ];
+    
+    let y = 72;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    summaryItems.forEach(item => {
+      doc.setTextColor(100, 100, 100);
+      doc.text(item.label, 16, y);
+      doc.setTextColor(15, 10, 25);
+      doc.setFont('helvetica', 'bold');
+      doc.text(item.value, 120, y);
+      doc.setFont('helvetica', 'normal');
+      
+      doc.setDrawColor(240, 240, 240);
+      doc.line(14, y + 2, 196, y + 2);
+      y += 10;
+    });
+    
+    // Recent Activity Section
+    y += 10;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(15, 10, 25);
+    doc.text('Recent Orders Activity', 14, y);
+    
+    y += 10;
+    doc.setFillColor(245, 245, 250);
+    doc.rect(14, y - 6, 182, 8, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(50, 50, 50);
+    doc.text('Order ID', 16, y - 1);
+    doc.text('Customer', 65, y - 1);
+    doc.text('Date', 115, y - 1);
+    doc.text('Amount', 145, y - 1);
+    doc.text('Status', 175, y - 1);
+    
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(80, 80, 80);
+    
+    recentOrders.forEach((order, index) => {
+      y += 8;
+      
+      if (index % 2 === 1) {
+        doc.setFillColor(250, 250, 252);
+        doc.rect(14, y - 5, 182, 7, 'F');
+      }
+      
+      const orderId = String(order.id || '').substring(0, 15);
+      const customer = String(order.customer || 'Guest').substring(0, 20);
+      const date = order.date || '';
+      const amount = order.amount || '0';
+      const status = order.status || 'Pending';
+      
+      doc.text(orderId, 16, y);
+      doc.text(customer, 65, y);
+      doc.text(date, 115, y);
+      doc.text(amount, 145, y);
+      doc.text(status.toUpperCase(), 175, y);
+    });
+    
+    // Footer
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text('This is an automatically generated system dashboard report from Dharshini Creations.', 14, 287);
+    
+    const pdfBlob = doc.output('blob');
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = pdfUrl;
+    link.download = 'dashboard-report.pdf';
+    document.body.appendChild(link);
+    link.click();
+    
+    // Delay cleanup to prevent browser download race condition
+    setTimeout(() => {
+      document.body.removeChild(link);
+      URL.revokeObjectURL(pdfUrl);
+    }, 150);
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -228,7 +347,10 @@ export default function Dashboard() {
           </h2>
           <p className="text-gray-400 font-poppins text-sm">{today}</p>
         </div>
-        <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-gray-300 hover:text-white hover:bg-white/[0.08] transition-all duration-300 shadow-[0_0_15px_rgba(0,0,0,0.2)] hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] group">
+        <button 
+          onClick={handleDownloadReport}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-gray-300 hover:text-white hover:bg-white/[0.08] transition-all duration-300 shadow-[0_0_15px_rgba(0,0,0,0.2)] hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] group"
+        >
           <HiOutlineDownload className="text-lg group-hover:-translate-y-0.5 transition-transform" />
           <span className="font-medium font-poppins text-sm">Download Report</span>
         </button>
