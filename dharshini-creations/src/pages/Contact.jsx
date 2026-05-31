@@ -42,10 +42,10 @@ export default function Contact() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <Helmet><title>Contact — Dharshini Creations</title></Helmet>
-      <section className="gradient-mesh min-h-[40vh] flex items-center justify-center">
-        <div className="text-center">
+      <section className="gradient-mesh min-h-[40vh] flex items-center justify-center px-4">
+        <div className="text-center w-full max-w-lg">
           <motion.p className="font-great-vibes text-2xl mb-2" style={{ color: '#B266FF' }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>Let's Connect</motion.p>
-          <motion.h1 className="font-cinzel text-4xl md:text-5xl font-bold glow-text" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+          <motion.h1 className="font-cinzel text-3xl sm:text-4xl md:text-5xl font-bold glow-text" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
             style={{ background: 'linear-gradient(135deg, #F5F5F5, #8A2BE2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Contact Us</motion.h1>
         </div>
       </section>
@@ -78,7 +78,7 @@ export default function Contact() {
               <button onClick={() => { setSubmitted(false); setForm({ name: '', email: '', message: '' }); }} className="btn-primary mt-6 interactive">Send Another</button>
             </motion.div>
           ) : (
-            <form className="glass-card p-8" onSubmit={handleSubmit}>
+            <form className="glass-card p-4 sm:p-6 md:p-8" onSubmit={handleSubmit}>
               {error && (
                 <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-sm">
                   ⚠️ {error}
@@ -112,14 +112,14 @@ export default function Contact() {
 
         {/* Map with beautiful vector styling */}
         <motion.div className="mt-16 max-w-4xl mx-auto glass-card overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          <div className="relative h-72 flex items-center justify-center overflow-hidden" style={{ background: 'rgba(5, 3, 10, 0.95)' }}>
+          <div className="relative h-56 sm:h-72 flex items-center justify-center overflow-hidden" style={{ background: 'rgba(5, 3, 10, 0.95)' }}>
             {/* Fine Gridlines Background */}
             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(rgba(138,43,226,0.4) 1px, transparent 0)', backgroundSize: '24px 24px' }} />
             
             {/* Glowing Concentric Rings */}
-            <div className="absolute w-96 h-96 rounded-full border border-purple-500/10 animate-pulse-glow" style={{ animationDuration: '4s' }} />
-            <div className="absolute w-64 h-64 rounded-full border border-purple-500/20 animate-pulse-glow" style={{ animationDuration: '3s' }} />
-            <div className="absolute w-40 h-40 rounded-full border border-purple-500/30 animate-pulse-glow" style={{ animationDuration: '2s' }} />
+            <div className="absolute map-rings-lg rounded-full border border-purple-500/10 animate-pulse-glow" style={{ animationDuration: '4s' }} />
+            <div className="absolute map-rings-md rounded-full border border-purple-500/20 animate-pulse-glow" style={{ animationDuration: '3s' }} />
+            <div className="absolute map-rings-sm rounded-full border border-purple-500/30 animate-pulse-glow" style={{ animationDuration: '2s' }} />
             
             {/* Pulsating Glowing Map Marker */}
             <div className="relative z-10 text-center px-6">
@@ -128,7 +128,7 @@ export default function Contact() {
                 <span className="absolute inset-2 rounded-full bg-purple-500/60 animate-pulse" />
                 <FiMapPin size={32} color="#B266FF" className="relative z-10 drop-shadow-[0_0_12px_rgba(178,102,255,0.8)]" />
               </div>
-              <h3 className="font-cinzel text-xl font-bold tracking-widest mb-1" style={{ color: '#F5F5F5' }}>Dharshini Creations Studio</h3>
+              <h3 className="font-cinzel text-lg sm:text-xl font-bold tracking-widest mb-1 px-2" style={{ color: '#F5F5F5' }}>Dharshini Creations Studio</h3>
               <p className="text-sm font-semibold tracking-wider" style={{ color: '#B266FF' }}>Tamil Nadu, India 🇮🇳</p>
               <p className="text-xs max-w-sm mx-auto mt-2 leading-relaxed" style={{ color: '#E5E7EB' }}>
                 Our artisan embroidery and custom painting workshop. Serving clients globally with premium express shipping.

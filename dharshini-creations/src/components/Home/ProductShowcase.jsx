@@ -34,15 +34,14 @@ export default function ProductShowcase() {
         </motion.div>
 
         {/* Horizontal scrollable product ribbon */}
-        <div className="overflow-x-auto pb-4 -mx-6 px-6 scrollbar-hide" style={{ scrollbarWidth: 'none' }}>
-          <div className="flex gap-6" style={{ width: 'max-content' }}>
+        <div className="overflow-x-auto pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 scrollbar-hide" style={{ scrollbarWidth: 'none' }}>
+          <div className="flex gap-4 sm:gap-6" style={{ width: 'max-content' }}>
             {showcaseItems.map((product, i) => {
               const accent = categoryAccent[product.categoryId] || '#B266FF';
               return (
                 <Link key={product.id} to={`/shop/${product.id}`} className="block">
                   <motion.div
-                    className="glass-card overflow-hidden group interactive flex-shrink-0"
-                    style={{ width: 280 }}
+                    className="glass-card overflow-hidden group interactive flex-shrink-0 w-[min(280px,calc(100vw-3rem))]"
                     initial={{ opacity: 0, y: 30 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ delay: i * 0.1 }}

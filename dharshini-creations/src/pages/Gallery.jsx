@@ -24,10 +24,10 @@ export default function Gallery() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <Helmet><title>Gallery — Dharshini Creations</title></Helmet>
-      <section className="gradient-mesh min-h-[40vh] flex items-center justify-center">
-        <div className="text-center">
+      <section className="gradient-mesh min-h-[40vh] flex items-center justify-center px-4">
+        <div className="text-center w-full max-w-lg">
           <motion.p className="font-great-vibes text-2xl mb-2" style={{ color: 'var(--color-purple-glow)' }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>Our Portfolio</motion.p>
-          <motion.h1 className="font-cinzel text-4xl md:text-5xl font-bold glow-text" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+          <motion.h1 className="font-cinzel text-3xl sm:text-4xl md:text-5xl font-bold glow-text" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
             style={{ background: 'linear-gradient(135deg, var(--color-white), var(--color-purple-primary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Gallery</motion.h1>
         </div>
       </section>

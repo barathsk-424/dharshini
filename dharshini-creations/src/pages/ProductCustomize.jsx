@@ -119,11 +119,11 @@ export default function ProductCustomize() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10">
         
         {/* Left Column: Form Wrapper */}
         <div className="lg:col-span-7">
-          <div className="glass-card p-6 md:p-10 relative overflow-hidden min-h-[500px] flex flex-col">
+          <div className="glass-card p-4 sm:p-6 md:p-10 relative overflow-hidden min-h-[400px] sm:min-h-[500px] flex flex-col">
             
             {/* Step Indicator */}
             <div className="flex items-center justify-between mb-8 relative">
@@ -146,7 +146,7 @@ export default function ProductCustomize() {
               <AnimatePresence mode="wait">
                 {step === 1 && (
                   <motion.div key="step1" initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -20, opacity: 0 }} className="space-y-6">
-                    <h2 className="font-cinzel text-2xl font-bold text-white mb-6">Base Configuration</h2>
+                    <h2 className="font-cinzel text-xl sm:text-2xl font-bold text-white mb-6">Base Configuration</h2>
                     
                     {product.colors && product.colors.length > 0 && (
                       <div>
@@ -198,7 +198,7 @@ export default function ProductCustomize() {
 
                 {step === 2 && (
                   <motion.div key="step2" initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -20, opacity: 0 }} className="space-y-6">
-                    <h2 className="font-cinzel text-2xl font-bold text-white mb-6">Artwork & Design</h2>
+                    <h2 className="font-cinzel text-xl sm:text-2xl font-bold text-white mb-6">Artwork & Design</h2>
                     
                     <div>
                       <label className="text-xs font-semibold block mb-2 text-gray-300 uppercase tracking-widest">Design Description</label>
@@ -244,7 +244,7 @@ export default function ProductCustomize() {
 
                 {step === 3 && (
                   <motion.div key="step3" initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -20, opacity: 0 }} className="space-y-6">
-                    <h2 className="font-cinzel text-2xl font-bold text-white mb-6">Typography</h2>
+                    <h2 className="font-cinzel text-xl sm:text-2xl font-bold text-white mb-6">Typography</h2>
                     
                     <div>
                       <label className="text-xs font-semibold block mb-2 text-gray-300 uppercase tracking-widest">Custom Text / Name</label>
@@ -282,7 +282,7 @@ export default function ProductCustomize() {
 
                 {step === 4 && (
                   <motion.div key="step4" initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -20, opacity: 0 }} className="space-y-6">
-                    <h2 className="font-cinzel text-2xl font-bold text-white mb-6">Final Details</h2>
+                    <h2 className="font-cinzel text-xl sm:text-2xl font-bold text-white mb-6">Final Details</h2>
                     
                     <div>
                       <label className="text-xs font-semibold block mb-2 text-gray-300 uppercase tracking-widest">Special Instructions / Notes</label>

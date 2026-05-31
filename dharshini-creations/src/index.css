@@ -61,6 +61,9 @@ html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: var(--color-purple-primary) var(--color-bg-primary);
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -216,46 +219,41 @@ h1, h2, h3 {
 
 /* ─── Sleek Luxury Forms ─── */
 :where(input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select, textarea) {
-  height: 50px !important;
-  border-radius: 14px !important;
-  background: rgba(255, 255, 255, 0.04) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  color: #ffffff !important;
-  font-family: var(--font-poppins) !important;
-  font-size: 0.9rem !important;
-  outline: none !important;
-  transition: all 0.3s ease !important;
+  height: 50px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-family: var(--font-poppins);
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.3s ease;
   box-sizing: border-box;
   vertical-align: middle;
 }
 
 /* Default horizontal padding for inputs without icons */
-input[type="text"]:not(.icon-input),
+:where(input[type="text"]:not(.icon-input),
 input[type="email"]:not(.icon-input),
 input[type="password"]:not(.icon-input),
-input[type="tel"]:not(.icon-input) {
-  padding: 0 20px !important;
+input[type="tel"]:not(.icon-input)) {
+  padding: 0 20px;
 }
 
 /* Inputs with leading icon */
-input.icon-input {
-  padding: 0 16px 0 44px !important;
+:where(input.icon-input) {
+  padding: 0 16px 0 44px;
 }
 
-
-textarea {
-  height: auto !important;
-  padding: 16px 20px !important;
+:where(textarea) {
+  height: auto;
+  padding: 16px 20px;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-select:focus,
-textarea:focus {
-  border-color: rgba(167, 139, 250, 0.6) !important;
-  box-shadow: 0 0 20px rgba(167, 139, 250, 0.15) !important;
-  background: rgba(255, 255, 255, 0.04) !important;
+:where(input[type="text"], input[type="email"], input[type="password"], select, textarea):focus {
+  border-color: rgba(167, 139, 250, 0.6);
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.15);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 
@@ -419,94 +417,160 @@ textarea:focus {
   .section-container {
     padding: 64px 24px;
   }
+
+  .price-display {
+    font-size: 2.25rem;
+  }
 }
 
 @media (max-width: 768px) {
   body {
     cursor: auto;
   }
+
+  /* Prevent horizontal overflow from decorative elements */
+  #root {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* Spacing: adjust margins and padding cleanly for smaller viewports */
   .section-container {
     padding: 48px 16px;
+    width: 100%;
+    max-width: 100%;
   }
+
+  /* Section typography — scoped so page-specific Tailwind sizes are preserved */
   .section-title {
-    font-size: clamp(1.6rem, 6vw, 2.2rem);
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
     margin-bottom: 8px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
+
   .section-subtitle {
-    font-size: clamp(1.1rem, 4vw, 1.5rem);
-    margin-bottom: 12px;
-  }
-  .glass-card {
-    border-radius: 18px;
-  }
-  .btn-primary, .btn-ghost {
-    height: 46px !important;
-    padding: 0 28px !important;
-    font-size: 0.85rem;
-  }
-}
-
-/* ------- Mobile Responsiveness (max-width: 768px) ------- */
-@media (max-width: 768px) {
-  /* Containers become full width with appropriate padding */
-  .max-w-3xl, .max-w-4xl {
-    max-width: 100% !important;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+    margin-bottom: 24px;
   }
 
-  /* Grid layout: single column for readability */
-  .grid-cols-2, .grid-cols-1 {
-    grid-template-columns: 1fr !important;
-  }
-  .grid {
-    gap: 1rem !important;
+  /* Text readability — prevent overlap and clipping */
+  p, span, a, li, label {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
 
-  /* Glass cards adapt to full width with reduced padding */
-  .glass-card {
-    padding: 1.5rem !important;
-    border-radius: 16px !important;
+  /* Glass cards: only reduce padding when not explicitly set via Tailwind */
+  .glass-card:not([class*="p-"]) {
+    padding: 20px;
+    border-radius: 16px;
   }
 
-  /* Reduce heading sizes for mobile */
-  h1, .font-cinzel.text-3xl {
-    font-size: 2rem !important;
-  }
-  h2, .font-cinzel.text-2xl {
-    font-size: 1.75rem !important;
-  }
-  .font-poppins.text-lg {
-    font-size: 1rem !important;
-  }
-
-  /* Ensure images never overflow containers */
+  /* Ensure images never overflow their containers */
   img {
-    max-width: 100% !important;
-    height: auto !important;
-    object-fit: contain !important;
+    max-width: 100%;
+  }
+
+  /* Masonry gallery negative margin fix */
+  .masonry-grid {
+    margin-left: 0;
+  }
+
+  .masonry-grid_column {
+    padding-left: 12px;
+  }
+
+  /* Modals scroll on small screens */
+  .modal-overlay {
+    align-items: flex-start;
+    padding: 16px;
+    overflow-y: auto;
+  }
+
+  .modal-overlay > .glass-card {
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    margin: auto 0;
+  }
+
+  /* Horizontal scroll ribbons stay within viewport */
+  .scrollbar-hide {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  /* Map decorative rings scale down on mobile */
+  .map-rings-lg {
+    width: min(24rem, 90vw) !important;
+    height: min(24rem, 90vw) !important;
+  }
+
+  .map-rings-md {
+    width: min(16rem, 70vw) !important;
+    height: min(16rem, 70vw) !important;
+  }
+
+  .map-rings-sm {
+    width: min(10rem, 50vw) !important;
+    height: min(10rem, 50vw) !important;
+  }
+
+  /* Price display */
+  .price-display {
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
   }
 
   /* Adjust button sizing for thumb-friendly taps */
   .btn-primary, .btn-ghost {
-    height: 44px !important;
-    padding: 0 1.5rem !important;
-    font-size: 0.9rem !important;
+    height: 48px !important;
+    padding: 0 24px !important;
+    font-size: 0.875rem !important;
+    max-width: 100%;
   }
 
-  /* Form inputs: keep icon alignment and full width */
-  .icon-input {
-    width: 100% !important;
-    padding: 0 1rem 0 3rem !important; /* left space for icon */
-    height: 50px !important;
+  /* Preserve object-cover inside aspect-ratio containers only */
+  .aspect-square img,
+  .aspect-video img,
+  [class*="aspect-"] img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
   }
 
-  /* Reduce margins/padding on sections */
+  /* Safe area for notched phones + bottom nav */
+  .mobile-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* ------- Extra-Small Phones (max-width: 480px) ------- */
+@media (max-width: 480px) {
   .section-container {
-    padding: 2rem 1rem !important;
+    padding: 36px 12px;
   }
+
   .section-title {
-    margin-bottom: 0.5rem !important;
+    font-size: clamp(1.4rem, 6vw, 1.9rem);
+  }
+
+  .section-subtitle {
+    font-size: clamp(1rem, 4vw, 1.25rem);
+    margin-bottom: 20px;
+  }
+
+  .glass-card:not([class*="p-"]) {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .btn-primary, .btn-ghost {
+    height: 44px !important;
+    padding: 0 20px !important;
+    font-size: 0.8rem !important;
+  }
+
+  .price-display {
+    font-size: clamp(1.5rem, 7vw, 2rem);
   }
 }
 
@@ -516,4 +580,3 @@ textarea:focus {
     cursor: none !important;
   }
 }
-

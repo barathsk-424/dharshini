@@ -72,24 +72,26 @@ export default function ProductDetail() {
         <FiChevronLeft size={16} /> Back to Shop
       </Link>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-        {/* Left Column: Image */}
-        <div className="relative rounded-3xl overflow-hidden glass-card p-2 border border-white/5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-start">
+        <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden glass-card p-1.5 sm:p-2 border border-white/5">
           <div className="relative aspect-square rounded-2xl overflow-hidden group">
             <img 
               src={product.image} 
               alt={product.name} 
               className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
             />
-            {product.tags?.map((tag, idx) => (
-              <span 
-                key={tag} 
-                className="absolute top-4 left-4 px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-purple-600/90 text-white backdrop-blur-sm shadow-lg border border-purple-500/30"
-                style={{ left: idx > 0 ? `${idx * 80 + 16}px` : '16px' }}
-              >
-                {tag}
-              </span>
-            ))}
+            {product.tags?.length > 0 && (
+              <div className="absolute top-4 left-4 right-14 flex flex-wrap gap-2 z-10">
+                {product.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-purple-600/90 text-white backdrop-blur-sm shadow-lg border border-purple-500/30"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
             <button 
               onClick={() => toggleWishlist(product.id)}
               className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center interactive"
@@ -105,11 +107,11 @@ export default function ProductDetail() {
           <span className="text-xs font-semibold uppercase tracking-widest text-purple-400 mb-2">
             {product.categories?.name || (product.categoryId === 1 ? 'Fabric Painting' : product.categoryId === 2 ? 'Embroidery Works' : 'Combo Works')}
           </span>
-          <h1 className="font-cinzel text-3xl lg:text-4xl font-black mb-4 tracking-wide" style={{ color: 'var(--color-white)' }}>
+          <h1 className="font-cinzel text-2xl sm:text-3xl lg:text-4xl font-black mb-4 tracking-wide" style={{ color: 'var(--color-white)' }}>
             {product.name}
           </h1>
-          <div className="flex items-center gap-4 mb-6">
-            <span className="font-cinzel text-3xl font-bold" style={{ color: 'var(--color-purple-glow)' }}>
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6">
+            <span className="font-cinzel text-2xl sm:text-3xl font-bold" style={{ color: 'var(--color-purple-glow)' }}>
               ₹{product.basePrice}
             </span>
             <span className="px-2.5 py-1 rounded-md text-[10px] font-semibold tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">

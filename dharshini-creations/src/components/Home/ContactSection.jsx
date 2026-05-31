@@ -42,14 +42,14 @@ export default function ContactSection() {
 
         {/* Map placeholder with beautiful vector styling */}
         <motion.div className="mt-12 max-w-4xl mx-auto glass-card overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.4 }}>
-          <div className="relative h-72 flex items-center justify-center overflow-hidden" style={{ background: 'rgba(5, 3, 10, 0.95)' }}>
+          <div className="relative h-56 sm:h-72 flex items-center justify-center overflow-hidden" style={{ background: 'rgba(5, 3, 10, 0.95)' }}>
             {/* Fine Gridlines Background */}
             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(rgba(129,140,248,0.4) 1px, transparent 0)', backgroundSize: '24px 24px' }} />
             
             {/* Glowing Concentric Rings */}
-            <div className="absolute w-96 h-96 rounded-full border animate-pulse-glow" style={{ borderColor: 'rgba(129,140,248,0.1)', animationDuration: '4s' }} />
-            <div className="absolute w-64 h-64 rounded-full border animate-pulse-glow" style={{ borderColor: 'rgba(129,140,248,0.2)', animationDuration: '3s' }} />
-            <div className="absolute w-40 h-40 rounded-full border animate-pulse-glow" style={{ borderColor: 'rgba(129,140,248,0.3)', animationDuration: '2s' }} />
+            <div className="absolute map-rings-lg rounded-full border animate-pulse-glow" style={{ borderColor: 'rgba(129,140,248,0.1)', animationDuration: '4s' }} />
+            <div className="absolute map-rings-md rounded-full border animate-pulse-glow" style={{ borderColor: 'rgba(129,140,248,0.2)', animationDuration: '3s' }} />
+            <div className="absolute map-rings-sm rounded-full border animate-pulse-glow" style={{ borderColor: 'rgba(129,140,248,0.3)', animationDuration: '2s' }} />
             
             {/* Pulsating Glowing Map Marker */}
             <div className="relative z-10 text-center px-6">
@@ -58,7 +58,7 @@ export default function ContactSection() {
                 <span className="absolute inset-2 rounded-full animate-pulse" style={{ background: 'rgba(129,140,248,0.6)' }} />
                 <FiMapPin size={32} color="#818CF8" className="relative z-10" style={{ filter: 'drop-shadow(0 0 12px rgba(129,140,248,0.8))' }} />
               </div>
-              <h3 className="font-cinzel text-xl font-bold tracking-widest mb-1" style={{ color: '#F5F5F5' }}>Dharshini Creations Studio</h3>
+              <h3 className="font-cinzel text-lg sm:text-xl font-bold tracking-widest mb-1 px-2" style={{ color: '#F5F5F5' }}>Dharshini Creations Studio</h3>
               <p className="text-sm font-semibold tracking-wider" style={{ color: '#818CF8' }}>Tamil Nadu, India 🇮🇳</p>
               <p className="text-xs max-w-sm mx-auto mt-2 leading-relaxed" style={{ color: '#E5E7EB' }}>
                 Our artisan embroidery and custom painting workshop. Serving clients globally with premium express shipping.

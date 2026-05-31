@@ -47,20 +47,20 @@ export default function TrackOrder() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <Helmet><title>Track Order — Dharshini Creations</title></Helmet>
-      <section className="gradient-mesh min-h-[40vh] flex items-center justify-center">
-        <div className="text-center">
+      <section className="gradient-mesh min-h-[40vh] flex items-center justify-center px-4">
+        <div className="text-center w-full max-w-lg">
           <motion.p className="font-great-vibes text-2xl mb-2" style={{ color: '#B266FF' }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>Where's My Order?</motion.p>
-          <motion.h1 className="font-cinzel text-4xl md:text-5xl font-bold glow-text" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+          <motion.h1 className="font-cinzel text-3xl sm:text-4xl md:text-5xl font-bold glow-text" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
             style={{ background: 'linear-gradient(135deg, #F5F5F5, #8A2BE2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Track Order</motion.h1>
         </div>
       </section>
       <div className="section-container max-w-3xl mx-auto" style={{ paddingTop: 40 }}>
-        <div className="glass-card p-8">
-          <div className="flex gap-3 mb-8">
+        <div className="glass-card p-4 sm:p-6 md:p-8">
+          <div className="flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8">
             <input type="text" value={orderId} onChange={e => setOrderId(e.target.value)} placeholder="Enter Order ID (e.g. DC-001)"
-              className="flex-1 px-5 py-4 rounded-xl text-base bg-white/5 border outline-none focus:border-purple-500 transition-colors"
+              className="flex-1 min-w-0 px-4 sm:px-5 py-3 sm:py-4 rounded-xl text-sm sm:text-base bg-white/5 border outline-none focus:border-purple-500 transition-colors"
               style={{ borderColor: 'rgba(106,13,173,0.3)', color: '#F5F5F5' }} onKeyDown={e => e.key === 'Enter' && handleTrack()} />
-            <button onClick={handleTrack} className="btn-primary px-8 interactive flex items-center gap-2"><FiSearch size={18} /> Track</button>
+            <button onClick={handleTrack} className="btn-primary px-6 sm:px-8 interactive flex items-center justify-center gap-2 flex-shrink-0"><FiSearch size={18} /> Track</button>
           </div>
           {error && <p className="text-sm text-center mb-6" style={{ color: '#ef4444' }}>{error}</p>}
           {tracking && (
@@ -81,18 +81,20 @@ export default function TrackOrder() {
                 </svg>
               </div>
               {/* Timeline */}
-              <div className="flex items-center justify-between relative mb-10">
-                <div className="absolute top-6 left-0 right-0 h-0.5" style={{ background: 'rgba(106,13,173,0.3)' }} />
-                <motion.div className="absolute top-6 left-0 h-0.5" style={{ background: 'linear-gradient(90deg, #8A2BE2, #B266FF)' }}
+              <div className="overflow-x-auto pb-2 -mx-1 px-1 mb-8 sm:mb-10">
+              <div className="flex items-center justify-between relative min-w-[280px]">
+                <div className="absolute top-5 sm:top-6 left-0 right-0 h-0.5" style={{ background: 'rgba(106,13,173,0.3)' }} />
+                <motion.div className="absolute top-5 sm:top-6 left-0 h-0.5" style={{ background: 'linear-gradient(90deg, #8A2BE2, #B266FF)' }}
                   initial={{ width: 0 }} animate={{ width: `${((statusIndex + 1) / steps.length) * 100}%` }} transition={{ duration: 1.2 }} />
                 {steps.map((step, i) => (
                   <div key={step.key} className="relative z-10 flex flex-col items-center gap-2">
-                    <motion.div className="w-12 h-12 rounded-full flex items-center justify-center text-xl"
+                    <motion.div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-base sm:text-xl"
                       style={{ background: i <= statusIndex ? 'linear-gradient(135deg, #8A2BE2, #B266FF)' : 'rgba(20,10,40,0.8)', border: `2px solid ${i <= statusIndex ? '#B266FF' : '#6A0DAD'}` }}
                       initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: i * 0.15 }}>{step.emoji}</motion.div>
-                    <span className="text-xs font-poppins text-center max-w-[80px]" style={{ color: i <= statusIndex ? '#B266FF' : 'var(--color-gray-dark)' }}>{step.label}</span>
+                    <span className="text-[10px] sm:text-xs font-poppins text-center max-w-[64px] sm:max-w-[80px] leading-tight" style={{ color: i <= statusIndex ? '#B266FF' : 'var(--color-gray-dark)' }}>{step.label}</span>
                   </div>
                 ))}
+              </div>
               </div>
               {/* Details */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

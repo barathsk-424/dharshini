@@ -36,8 +36,8 @@ export default function HeroSection() {
         ))}
       </div>
 
-      <div className="section-container w-full relative z-10 pt-20">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <div className="section-container w-full relative z-10 pt-16 sm:pt-20 pb-24 sm:pb-8">
+        <div className="grid lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-center">
           {/* Left Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -56,7 +56,7 @@ export default function HeroSection() {
             </motion.p>
 
             <h1
-              className="font-cinzel text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] mb-6 glow-text tracking-wide"
+              className="font-cinzel text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.15] sm:leading-[1.1] mb-4 sm:mb-6 glow-text tracking-wide break-words"
               style={{
                 background: 'linear-gradient(135deg, var(--color-white) 0%, var(--color-purple-primary) 50%, var(--color-purple-glow) 100%)',
                 WebkitBackgroundClip: 'text',
@@ -66,7 +66,7 @@ export default function HeroSection() {
               Dharshini<br />Creations
             </h1>
 
-            <p className="text-base md:text-lg mb-8 max-w-lg leading-relaxed font-normal" style={{ color: 'var(--color-gray-soft)' }}>
+            <p className="text-sm sm:text-base md:text-lg mb-6 sm:mb-8 max-w-lg leading-relaxed font-normal" style={{ color: 'var(--color-gray-soft)' }}>
               Handcrafted Embroidery & Fabric Art — where every thread is woven with passion and every brushstroke tells a unique story of elegance and luxury.
             </p>
 
@@ -78,7 +78,7 @@ export default function HeroSection() {
 
             {/* Stats */}
             <motion.div
-              className="flex gap-10 mt-16 pt-8"
+              className="flex flex-wrap gap-4 sm:gap-6 md:gap-10 mt-8 sm:mt-12 md:mt-16 pt-6 sm:pt-8"
               style={{ borderTop: '1px solid var(--color-border-light, var(--color-border-light))' }}
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -99,12 +99,12 @@ export default function HeroSection() {
 
           {/* Right - 3D Shirt Mockup Area */}
           <motion.div
-            className="relative flex items-center justify-center"
+            className="relative flex items-center justify-center mt-4 lg:mt-0"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="relative w-[320px] h-[400px] md:w-[420px] md:h-[520px]">
+            <div className="relative w-[240px] h-[300px] sm:w-[320px] sm:h-[400px] md:w-[420px] md:h-[520px]">
               {/* Glowing ring behind shirt */}
               <div className="absolute inset-0 rounded-full animate-pulse-glow"
                 style={{
@@ -199,7 +199,7 @@ export default function HeroSection() {
 
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-20 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 hidden sm:flex"
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >

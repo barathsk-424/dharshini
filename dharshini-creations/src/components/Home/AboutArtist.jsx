@@ -76,10 +76,10 @@ export default function AboutArtist() {
         </div>
 
         {/* CTA - matches About page CTA */}
-        <div className="text-center glass-card p-12 max-w-2xl mx-auto">
-          <h3 className="font-cinzel text-2xl font-bold mb-4 glow-text" style={{ color: 'var(--color-white)' }}>Let's Collaborate</h3>
+        <div className="text-center glass-card p-6 sm:p-12 max-w-2xl mx-auto">
+          <h3 className="font-cinzel text-xl sm:text-2xl font-bold mb-4 glow-text" style={{ color: 'var(--color-white)' }}>Let's Collaborate</h3>
           <p className="text-sm mb-6" style={{ color: 'var(--color-gray-dark)' }}>Have a special project in mind? Let's create something beautiful together.</p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center">
             <Link to="/contact" className="btn-primary interactive">Start a Project</Link>
             <Link to="/contact" className="btn-ghost interactive">Get in Touch</Link>
           </div>

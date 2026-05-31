@@ -111,10 +111,10 @@ const categoryAccent = {
       <Helmet><title>Shop — Dharshini Creations</title></Helmet>
 
       {/* Hero */}
-      <section className="gradient-mesh min-h-[40vh] flex items-center justify-center">
-        <div className="text-center">
+      <section className="gradient-mesh min-h-[40vh] flex items-center justify-center px-4">
+        <div className="text-center px-2 w-full max-w-lg">
           <motion.p className="font-great-vibes text-2xl mb-2" style={{ color: 'var(--color-purple-glow)' }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>Handcrafted Collection</motion.p>
-          <motion.h1 className="font-cinzel text-4xl md:text-5xl font-bold glow-text" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+          <motion.h1 className="font-cinzel text-3xl sm:text-4xl md:text-5xl font-bold glow-text" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
             style={{ background: 'linear-gradient(135deg, var(--color-white), var(--color-purple-primary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Our Menu</motion.h1>
           <motion.p className="text-sm mt-3 max-w-md mx-auto" style={{ color: 'var(--color-gray-soft)' }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
             Every piece is handcrafted with love. Choose your category and place your order.
@@ -124,14 +124,14 @@ const categoryAccent = {
 
       <div className="section-container" style={{ paddingTop: 40 }}>
         {/* Category Filters */}
-        <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8 sm:mb-12 px-1">
           {['All', 'Fabric Painting', 'Embroidery Works', 'Combo Works'].map((cat) => {
             const isActive = !showWishlistOnly && activeCategory === cat;
             return (
               <button
                 key={cat}
                 onClick={() => handleCategoryClick(cat)}
-                className="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 interactive"
+                className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 interactive"
                 style={{
                   background: isActive ? 'linear-gradient(135deg, var(--color-purple-primary), var(--color-purple-glow))' : 'rgba(255, 255, 255, 0.03)',
                   color: isActive ? 'white' : 'var(--color-gray-dark)',
@@ -145,7 +145,7 @@ const categoryAccent = {
           })}
           <button
             onClick={handleToggleWishlistFilter}
-            className="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 interactive flex items-center gap-2"
+            className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 interactive flex items-center gap-2"
             style={{
               background: showWishlistOnly ? 'linear-gradient(135deg, #EC4899, #F472B6)' : 'rgba(255, 255, 255, 0.03)',
               color: showWishlistOnly ? 'white' : 'var(--color-gray-dark)',

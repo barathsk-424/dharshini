@@ -76,11 +76,11 @@ export default function FeaturedCategories() {
                   <p className="text-sm mb-4 leading-relaxed" style={{ color: '#E5E7EB' }}>
                     {cat.description}
                   </p>
-                  <div className="flex items-center justify-between">
-                    <span className="font-cinzel text-lg font-bold" style={{ color: colors.accent }}>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-cinzel text-base sm:text-lg font-bold" style={{ color: colors.accent }}>
                       Starting ₹{cat.startingPrice}+
                     </span>
-                    <span className="text-xs px-3 py-1 rounded-full"
+                    <span className="text-xs px-3 py-1 rounded-full whitespace-nowrap"
                       style={{ background: colors.bg, color: colors.accent, border: `1px solid ${colors.border}` }}>
                       View Pricing →
                     </span>
@@ -105,7 +105,7 @@ export default function FeaturedCategories() {
               onClick={() => setSelectedCategory(null)}
             >
               <motion.div
-                className="glass-card p-8 max-w-lg w-full mx-4 relative"
+                className="glass-card p-6 sm:p-8 max-w-lg w-full mx-4 relative max-h-[90vh] overflow-y-auto"
                 style={{ background: 'rgba(10, 5, 20, 0.95)', border: `1px solid ${colors.border}` }}
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -133,7 +133,7 @@ export default function FeaturedCategories() {
                   {selectedCategory.items.map((item, idx) => (
                     <motion.div
                       key={item.name}
-                      className="flex items-center justify-between py-3 px-4 rounded-xl transition-colors"
+                      className="flex flex-wrap items-center justify-between gap-2 py-3 px-4 rounded-xl transition-colors"
                       style={{
                         background: colors.glow,
                         borderBottom: `1px solid ${colors.border}`,

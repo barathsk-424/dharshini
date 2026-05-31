@@ -35,13 +35,13 @@ export default function InstagramFeed() {
           </h2>
         </motion.div>
         
-        <div className="overflow-x-auto pb-4 -mx-6 px-6" style={{ scrollbarWidth: 'none' }}>
-          <div className="flex gap-5" style={{ width: 'max-content' }}>
+        <div className="overflow-x-auto pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 scrollbar-hide" style={{ scrollbarWidth: 'none' }}>
+          <div className="flex gap-4 sm:gap-5" style={{ width: 'max-content' }}>
             {instagramPosts.map((post, i) => {
               const accent = postAccents[i % postAccents.length];
               return (
                 <motion.a key={post.id} href={post.permalink} target="_blank" rel="noopener noreferrer"
-                  className="glass-card overflow-hidden flex-shrink-0 group interactive" style={{ width: 260 }}
+                  className="glass-card overflow-hidden flex-shrink-0 group interactive w-[min(260px,calc(100vw-3rem))]"
                   initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -6 }}>
                   <div className="relative h-60 overflow-hidden">

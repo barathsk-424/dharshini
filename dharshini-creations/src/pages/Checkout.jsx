@@ -77,7 +77,7 @@ export default function Checkout() {
         className="min-h-[80vh] flex items-center justify-center section-container py-16"
       >
         <Helmet><title>Order Successful — Dharshini Creations</title></Helmet>
-        <div className="glass-card p-10 md:p-16 max-w-2xl w-full text-center relative overflow-hidden">
+        <div className="glass-card p-6 sm:p-10 md:p-16 max-w-2xl w-full text-center relative overflow-hidden">
           {/* Confetti/Sparkles decorative background */}
           <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-500 via-transparent to-transparent" />
           
@@ -169,12 +169,12 @@ export default function Checkout() {
         <FiChevronLeft size={16} /> Back to Shop
       </Link>
 
-      <div className="text-center mb-12">
-        <h1 className="font-cinzel text-4xl font-bold text-white mb-2 glow-text">Secure Checkout</h1>
+      <div className="text-center mb-8 sm:mb-12">
+        <h1 className="font-cinzel text-2xl sm:text-4xl font-bold text-white mb-2 glow-text">Secure Checkout</h1>
         <p className="text-gray-400 font-poppins">Complete your order directly through our website</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10">
         
         {/* Left Column: Form */}
         <div className="lg:col-span-7 space-y-8">

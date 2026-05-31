@@ -27,10 +27,10 @@ export default function About() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <Helmet><title>About — Dharshini Creations</title></Helmet>
-      <section className="gradient-mesh min-h-[50vh] flex items-center justify-center">
-        <div className="text-center max-w-2xl mx-auto px-6">
+      <section className="gradient-mesh min-h-[50vh] flex items-center justify-center px-4">
+        <div className="text-center max-w-2xl mx-auto w-full">
           <motion.p className="font-great-vibes text-2xl mb-2" style={{ color: 'var(--color-purple-glow)' }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>Our Story</motion.p>
-          <motion.h1 className="font-cinzel text-4xl md:text-5xl font-bold glow-text mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+          <motion.h1 className="font-cinzel text-3xl sm:text-4xl md:text-5xl font-bold glow-text mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
             style={{ background: 'linear-gradient(135deg, var(--color-white), var(--color-purple-primary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>About Dharshini Creations</motion.h1>
           <motion.p className="text-base leading-relaxed" style={{ color: 'var(--color-gray-dark)' }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
             Born from a passion for needlework and fabric art, Dharshini Creations transforms ordinary fabric into extraordinary wearable art. Every piece is a labor of love, handcrafted in Tamil Nadu, India.
@@ -103,10 +103,10 @@ export default function About() {
         </div>
 
         {/* CTA */}
-        <div className="text-center glass-card p-12 max-w-2xl mx-auto">
+        <div className="text-center glass-card p-6 sm:p-12 max-w-2xl mx-auto">
           <h3 className="font-cinzel text-2xl font-bold mb-4 glow-text" style={{ color: 'var(--color-white)' }}>Let's Collaborate</h3>
           <p className="text-sm mb-6" style={{ color: 'var(--color-gray-dark)' }}>Have a special project in mind? Let's create something beautiful together.</p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/contact" className="btn-primary interactive">Start a Project</Link>
             <Link to="/contact" className="btn-ghost interactive">Get in Touch</Link>
           </div>

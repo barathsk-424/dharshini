@@ -52,14 +52,14 @@ export default function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
-        <div className="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-2">
 
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 interactive group">
-            <Logo size={40} className="flex-shrink-0 group-hover:rotate-12 transition-transform duration-500" />
-            <div className="relative leading-tight">
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 interactive group min-w-0">
+            <Logo size={40} className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 group-hover:rotate-12 transition-transform duration-500" />
+            <div className="relative leading-tight min-w-0">
               <span
-                className="font-cinzel text-lg md:text-xl font-black tracking-wider block transition-all duration-300 group-hover:scale-105"
+                className="font-cinzel text-base sm:text-lg md:text-xl font-black tracking-wider block transition-all duration-300 group-hover:scale-105 truncate"
                 style={{
                   background: 'linear-gradient(135deg, var(--color-white), var(--color-purple-glow))',
                   WebkitBackgroundClip: 'text',
@@ -103,7 +103,7 @@ export default function Navbar() {
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
 
             {/* Admin Dashboard icon — only shown to admins */}
             {currentUser && isAdmin && (
@@ -212,7 +212,7 @@ export default function Navbar() {
           >
             <div className="absolute inset-0 bg-black/85 backdrop-blur-lg" onClick={() => setMobileOpen(false)} />
             <motion.div
-              className="absolute right-0 top-0 bottom-0 w-80 pt-24 px-6 flex flex-col gap-1"
+              className="absolute right-0 top-0 bottom-0 w-full max-w-[min(320px,85vw)] pt-20 sm:pt-24 px-4 sm:px-6 flex flex-col gap-1 overflow-y-auto"
               style={{
                 background:  'linear-gradient(180deg, rgba(12,8,22,0.98), rgba(3,2,6,0.98))',
                 borderLeft:  '1px solid rgba(255,255,255,0.05)',

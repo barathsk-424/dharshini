@@ -39,8 +39,8 @@ export default function ShippingTracker() {
         </motion.div>
 
         <motion.div className="max-w-3xl mx-auto mt-8" initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.2 }}>
-          <div className="glass-card p-8">
-            <div className="flex gap-3 mb-8">
+          <div className="glass-card p-4 sm:p-6 md:p-8">
+            <div className="flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8">
               <input type="text" value={orderId} onChange={e => setOrderId(e.target.value)} placeholder="Enter Order ID (e.g. DC-001)"
                 className="flex-1 px-5 py-3 rounded-xl text-sm bg-white/5 border outline-none focus:border-purple-500 transition-colors"
                 style={{ borderColor: 'rgba(56,189,248,0.3)', color: '#F5F5F5' }} onKeyDown={e => e.key === 'Enter' && handleTrack()} />
@@ -79,13 +79,14 @@ export default function ShippingTracker() {
                 </div>
 
                 {/* Status timeline */}
-                <div className="flex items-center justify-between relative">
+                <div className="overflow-x-auto pb-2 -mx-1 px-1">
+                <div className="flex items-center justify-between relative min-w-[280px] px-1 sm:px-0">
                   <div className="absolute top-5 left-0 right-0 h-0.5" style={{ background: 'rgba(56,189,248,0.2)' }} />
                   <motion.div className="absolute top-5 left-0 h-0.5" style={{ background: 'linear-gradient(90deg, #0EA5E9, #38BDF8)', width: `${((statusIndex + 1) / steps.length) * 100}%` }}
                     initial={{ width: 0 }} animate={{ width: `${((statusIndex + 1) / steps.length) * 100}%` }} transition={{ duration: 1 }} />
                   {steps.map((step, i) => (
                     <div key={step.key} className="relative z-10 flex flex-col items-center gap-2">
-                      <motion.div className="w-10 h-10 rounded-full flex items-center justify-center text-lg"
+                      <motion.div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm sm:text-lg"
                         style={{
                           background: i <= statusIndex ? `linear-gradient(135deg, ${step.color}cc, ${step.color})` : 'rgba(20,10,40,0.8)',
                           border: `2px solid ${i <= statusIndex ? step.color : 'rgba(56,189,248,0.3)'}`,
@@ -93,9 +94,10 @@ export default function ShippingTracker() {
                         initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: i * 0.2 }}>
                         {step.emoji}
                       </motion.div>
-                      <span className="text-[10px] font-poppins text-center max-w-[70px]" style={{ color: i <= statusIndex ? step.color : 'var(--color-gray-dark)' }}>{step.label}</span>
+                      <span className="text-[9px] sm:text-[10px] font-poppins text-center max-w-[56px] sm:max-w-[70px] leading-tight hyphens-auto" style={{ color: i <= statusIndex ? step.color : 'var(--color-gray-dark)' }}>{step.label}</span>
                     </div>
                   ))}
+                </div>
                 </div>
 
                 <div className="mt-6 text-center">

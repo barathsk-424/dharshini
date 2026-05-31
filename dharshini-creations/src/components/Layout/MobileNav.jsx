@@ -25,14 +25,15 @@ export default function MobileNav() {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-50 lg:hidden"
+      className="fixed bottom-0 left-0 right-0 z-50 lg:hidden mobile-safe-bottom"
       style={{
         background:   'rgba(5, 5, 5, 0.92)',
         backdropFilter: 'blur(20px)',
         borderTop:    '1px solid rgba(106, 13, 173, 0.2)',
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
     >
-      <div className="flex items-center justify-around py-2 px-2 max-w-md mx-auto">
+      <div className="flex items-center justify-around py-2 px-1 sm:px-2 max-w-md mx-auto w-full">
         {tabs.map((tab) => {
           const isActive = location.pathname === tab.path ||
             (tab.path === '/admin' && location.pathname.startsWith('/admin'));

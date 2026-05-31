@@ -118,7 +118,7 @@ export default function GallerySection() {
           const accent = categoryAccent[lightbox.category] || '#B266FF';
           return (
             <motion.div className="modal-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => setLightbox(null)}>
-              <div className="relative max-w-2xl w-full mx-4 glass-card p-6" onClick={e => e.stopPropagation()}>
+              <div className="relative max-w-2xl w-full mx-2 sm:mx-4 glass-card p-4 sm:p-6" onClick={e => e.stopPropagation()}>
                 <button onClick={() => setLightbox(null)} className="absolute top-3 right-3 p-2 rounded-full hover:bg-white/10 z-10"><FiX size={20} color="var(--color-gray-dark)" /></button>
                 <div className="aspect-video rounded-2xl overflow-hidden mb-4 border border-white/10">
                   <img src={lightbox.src} alt={lightbox.title} className="w-full h-full object-cover" onError={e => { e.target.style.display = 'none'; }} />
